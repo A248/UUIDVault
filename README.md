@@ -28,8 +28,10 @@ to display month-old bans using player display names.
 
 Also, plugins which take a player name as a command parameter need to find the player's UUID when storing data.
 If the player is online, the UUID can be found easily. But if the player is offline and hasn't joined in other a
-month, the plugin can't find
-Because of this, many plugins maintain their own UUID-name cache.
+month, the plugin can't find the player's UUID so easily.
+
+Furthermore, server owners sometimes delete the usercache.json. The usercache can also become corrupt
+if your server didn't shutdown properly. Because of this, many plugins maintain their own UUID-name cache.
 
 ## Consolidating
 

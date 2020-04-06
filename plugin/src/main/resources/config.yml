@@ -3,8 +3,8 @@
 # Plugin version: ${core.version}
 #
 
-# If enabled, UUIDVault will inform hooked plugins of uuid/name mappings if they
-# couldn't find a mapping but another plugin did. Plugins can choose to ignore this.
+# If enabled, UUIDVault will inform a hooked plugin of a uuid/name mapping if it
+# couldn't find the mapping but another plugin did. Plugins can choose to ignore this.
 # 
 # Can help reduce reliance on specific plugins by spreading the information around,
 # but will increase the size of uuid/name databases consequently.

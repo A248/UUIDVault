@@ -106,6 +106,7 @@
 	
 	<modules>
 		<module>api</module>
+		<module>hooks</module>
 		<module>plugin</module>
 	</modules>
 	

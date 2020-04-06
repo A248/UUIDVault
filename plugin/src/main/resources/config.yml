@@ -8,6 +8,8 @@
 # 
 # Can help reduce reliance on specific plugins by spreading the information around,
 # but will increase the size of uuid/name databases consequently.
+# Careful: if 1 plugin goes "rogue" or isn't working, this option may pollute the others
+# It is therefore recommended to only enable this option on fully-configured servers
 mutual-updating: false
 
 # don't ever touch this

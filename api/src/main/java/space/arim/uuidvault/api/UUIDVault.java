@@ -53,6 +53,26 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	}
 	
 	/**
+	 * Expands a shortened version of a UUID. <br>
+	 * <br>
+	 * Each form is unique. However, it is simpler to store UUIDs in short form
+	 * and expand them into long form when needed. Accordingly, many plugins
+	 * store short forms, and sometimes we need to get the long form. <br>
+	 * <br>
+	 * Example long form: ed5f12cd-6007-45d9-a4b9-940524ddaecf <br>
+	 * Example short form: ed5f12cd600745d9a4b9940524ddaecf <br>
+	 * <br>
+	 * You most likely won't need  this. It is here for convenience.
+	 * 
+	 * @param uuid the string based short uuid
+	 * @return the lengthened uuid string
+	 */
+	public static String expandUUID(String uuid) {
+		return uuid.substring(0, 8) + "-" + uuid.substring(8, 12) + "-" + uuid.substring(12, 16)
+		+ "-" + uuid.substring(16, 20) + "-" + uuid.substring(20, 32);
+	}
+	
+	/**
 	 * Gets the asynchronous Executor on which CompletableFuture's are run. <br>
 	 * This is most likely just the Bukkit executor
 	 * 

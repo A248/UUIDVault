@@ -46,7 +46,7 @@ public interface BaseUUIDResolution {
 	UUID resolveImmediately(String name);
 	
 	/**
-	 * 
+	 * See respective subinterfaces.
 	 * 
 	 * @param uuid the uuid of the player whose name to find
 	 * @return a completable future which returns the corresponding playername or <code>null</code> if it did not find one
@@ -54,7 +54,7 @@ public interface BaseUUIDResolution {
 	CompletableFuture<String> resolve(UUID uuid);
 	
 	/**
-	 * 
+	 * See respective subinterfaces.
 	 * 
 	 * @param uuid the uuid of the player whose name to find
 	 * @return the corresponding playername or <code>null</code> if not found without blocking

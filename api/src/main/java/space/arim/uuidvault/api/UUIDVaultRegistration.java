@@ -30,7 +30,7 @@ public interface UUIDVaultRegistration {
 	/**
 	 * Unregisters the implementation.
 	 * 
-	 * @return false if already unregistered, true otherwise
+	 * @return true if the implementation was registered and is now unregistered, false otherwise
 	 */
 	boolean unregister();
 	

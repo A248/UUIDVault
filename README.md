@@ -1,2 +1,2 @@
 # UUIDVault
-Many plugins store UUID-name mappings. It's time this data is consolidated.
+Many Spigot plugins store UUID-name mappings. It's about time this practice was consolidated.

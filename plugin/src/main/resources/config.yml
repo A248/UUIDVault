@@ -1,7 +1,10 @@
 #
+#
 # UUIDVault configuration
 # Plugin version: ${core.version}
 #
+#
+# Changes only take effect on server restart
 
 # If enabled, UUIDVault will inform a hooked plugin of a uuid/name mapping if it
 # couldn't find the mapping but another plugin did. Plugins can choose to ignore this.

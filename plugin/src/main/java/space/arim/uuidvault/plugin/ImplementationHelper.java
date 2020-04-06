@@ -51,6 +51,11 @@ public abstract class ImplementationHelper extends UUIDVault {
 	boolean unregister(JavaPlugin plugin, UUIDResolution resolver) {
 		return resolvers.remove(plugin, resolver);
 	}
+	
+	@Override
+	public Executor getAsyncExecutor() {
+		return bukkitAsyncExecutor;
+	}
 
 	@Override
 	public CompletableFuture<UUID> resolve(String name) {

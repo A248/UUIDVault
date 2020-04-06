@@ -1,4 +1,4 @@
-name: ${plugin.name}
+name: UUIDVaultPlugin
 main: ${project.groupId}.plugin.UUIDVaultPlugin
 version: ${plugin.version}
 author: ${plugin.author}

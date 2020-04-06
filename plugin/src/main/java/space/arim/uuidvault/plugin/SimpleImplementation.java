@@ -19,6 +19,7 @@
 package space.arim.uuidvault.plugin;
 
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -34,10 +35,14 @@ public class SimpleImplementation extends ImplementationHelper {
 	UUID resolveAsynced(String name) {
 		for (UUIDResolution resolver : resolvers.values()) {
 
-			UUID uuid = resolver.resolve(name).join();
-			if (uuid != null) {
-				return uuid;
+			CompletableFuture<UUID> future = resolver.resolve(name);
+			if (future != null) {
+				UUID uuid = future.join();
+				if (uuid != null) {
+					return uuid;
+				}
 			}
+
 		}
 		return null;
 	}
@@ -46,9 +51,12 @@ public class SimpleImplementation extends ImplementationHelper {
 	String resolveAsynced(UUID uuid) {
 		for (UUIDResolution resolver : resolvers.values()) {
 
-			String name = resolver.resolve(uuid).join();
-			if (name != null) {
-				return name;
+			CompletableFuture<String> future = resolver.resolve(uuid);
+			if (future != null) {
+				String name = future.join();
+				if (name != null) {
+					return name;
+				}
 			}
 		}
 		return null;

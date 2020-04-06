@@ -20,6 +20,7 @@ package space.arim.uuidvault.plugin;
 
 import java.util.HashSet;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -36,10 +37,13 @@ public class MutuallyUpdatingImplementation extends ImplementationHelper {
 		HashSet<UUIDResolution> updateMe = new HashSet<UUIDResolution>();
 		for (UUIDResolution resolver : resolvers.values()) {
 
-			UUID uuid = resolver.resolve(name).join();
-			if (uuid != null) {
-				updateMe.forEach((didntFind) -> didntFind.update(uuid, name, false));
-				return uuid;
+			CompletableFuture<UUID> future = resolver.resolve(name);
+			if (future != null) {
+				UUID uuid = future.join();
+				if (uuid != null) {
+					updateMe.forEach((didntFind) -> didntFind.update(uuid, name, false));
+					return uuid;
+				}
 			}
 			updateMe.add(resolver);
 		}
@@ -51,10 +55,13 @@ public class MutuallyUpdatingImplementation extends ImplementationHelper {
 		HashSet<UUIDResolution> updateMe = new HashSet<UUIDResolution>();
 		for (UUIDResolution resolver : resolvers.values()) {
 
-			String name = resolver.resolve(uuid).join();
-			if (name != null) {
-				updateMe.forEach((didntFind) -> didntFind.update(uuid, name, false));
-				return name;
+			CompletableFuture<String> future = resolver.resolve(uuid);
+			if (future != null) {
+				String name = future.join();
+				if (name != null) {
+					updateMe.forEach((didntFind) -> didntFind.update(uuid, name, false));
+					return name;
+				}
 			}
 			updateMe.add(resolver);
 		}

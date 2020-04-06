@@ -65,6 +65,7 @@
 							<artifactSet>
 								<includes>
 									<include>space.arim.uuidvault:api</include>
+									<include>space.arim.uuidvault:hooks</include>
 								</includes>
 							</artifactSet>
 						</configuration>
@@ -85,6 +86,10 @@
 		<dependency>
 			<groupId>space.arim.uuidvault</groupId>
 			<artifactId>api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>space.arim.uuidvault</groupId>
+			<artifactId>hooks</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.spigotmc</groupId>

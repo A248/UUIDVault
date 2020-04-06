@@ -29,7 +29,7 @@
 		<plugin.name>${project.name}</plugin.name>
 		<plugin.version>${core.version}</plugin.version>
 		<plugin.author>${core.author}</plugin.author>
-		<plugin.url>${project.url}</plugin.url>
+		<plugin.url>https://github.com/A248/UUIDVault</plugin.url>
 		<plugin.description>${project.description}</plugin.description>
 	</properties>
 	

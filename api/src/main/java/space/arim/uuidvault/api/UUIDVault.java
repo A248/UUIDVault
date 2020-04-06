@@ -20,6 +20,7 @@ package space.arim.uuidvault.api;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -50,6 +51,14 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	public static UUIDVault get() {
 		return inst;
 	}
+	
+	/**
+	 * Gets the asynchronous Executor on which CompletableFuture's are run. <br>
+	 * This is most likely just the Bukkit executor
+	 * 
+	 * @return the executor
+	 */
+	public abstract Executor getAsyncExecutor();
 	
 	/**
 	 * Registers a {@link UUIDResolution} implementation with an associated plugin. <br>

@@ -1,5 +1,5 @@
-name: UUIDVaultPlugin
-main: ${project.groupId}.plugin.UUIDVaultPlugin
+name: UUIDVault
+main: ${project.groupId}.plugin.spigot.UUIDVaultSpigotPlugin
 version: ${plugin.version}
 author: ${plugin.author}
 website: ${plugin.url}

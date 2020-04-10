@@ -20,7 +20,7 @@ package space.arim.uuidvault.api;
 
 /**
  * Represents a successfully registered UUIDResolver implementation. <br>
- * See {@link UUIDVault#register(UUIDResolution, org.bukkit.plugin.java.JavaPlugin)}.
+ * See {@link UUIDVault#register(UUIDResolution, Class)}.
  * 
  * @author A248
  *

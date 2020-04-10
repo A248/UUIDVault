@@ -20,99 +20,59 @@ package space.arim.uuidvault.plugin;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executor;
 
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import space.arim.uuidvault.api.UUIDResolution;
 import space.arim.uuidvault.api.UUIDVault;
-import space.arim.uuidvault.api.UUIDVaultRegistration;
 
 public abstract class ImplementationHelper extends UUIDVault {
 
-	private final Executor bukkitAsyncExecutor;
-	final ConcurrentMap<JavaPlugin, UUIDResolution> resolvers = new ConcurrentHashMap<>();
+	private final Executor asyncExecutor;
 
-	ImplementationHelper(JavaPlugin plugin) {
-		bukkitAsyncExecutor = (cmd) -> Bukkit.getScheduler().runTaskAsynchronously(plugin, cmd);
-	}
-
-	@Override
-	public UUIDVaultRegistration register(UUIDResolution resolver, JavaPlugin plugin) {
-		UUIDResolution existing = resolvers.putIfAbsent(plugin, resolver);
-		return (existing == null) ?  new RegistrationImpl(this, plugin, resolver) : null;
-	}
-
-	boolean unregister(JavaPlugin plugin, UUIDResolution resolver) {
-		return resolvers.remove(plugin, resolver);
+	ImplementationHelper(Executor asyncExecutor) {
+		this.asyncExecutor = asyncExecutor;
 	}
 	
 	@Override
 	public Executor getAsyncExecutor() {
-		return bukkitAsyncExecutor;
+		return asyncExecutor;
 	}
 
 	@Override
 	public CompletableFuture<UUID> resolve(String name) {
 		UUID immediate = resolveImmediately(name);
 		return (immediate != null) ? CompletableFuture.completedFuture(immediate)
-				: CompletableFuture.supplyAsync(() -> resolveAsynced(name), bukkitAsyncExecutor);
+				: CompletableFuture.supplyAsync(() -> resolveAsyncedFromRegistered(name), asyncExecutor);
 	}
 
 	@Override
 	public UUID resolveImmediately(String name) {
-		Player player = Bukkit.getPlayer(name);
-		if (player != null) {
-			return player.getUniqueId();
-		}
-		for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
-			if (offlinePlayer.getName().equalsIgnoreCase(name)) {
-				return offlinePlayer.getUniqueId();
-			}
-		}
-		for (UUIDResolution resolver : resolvers.values()) {
-			UUID uuid = resolver.resolveImmediately(name);
-			if (uuid != null) {
-				return uuid;
-			}
-		}
-		return null;
+		UUID uuid = resolveNatively(name);
+		return (uuid != null) ? uuid : resolveImmediatelyFromRegistered(name);
 	}
 	
 	@Override
 	public CompletableFuture<String> resolve(UUID uuid) {
 		String immediate = resolveImmediately(uuid);
 		return (immediate != null) ? CompletableFuture.completedFuture(immediate)
-				: CompletableFuture.supplyAsync(() -> resolveAsynced(uuid), bukkitAsyncExecutor);
+				: CompletableFuture.supplyAsync(() -> resolveAsyncedFromRegistered(uuid), asyncExecutor);
 	}
 	
 	@Override
 	public String resolveImmediately(UUID uuid) {
-		Player player = Bukkit.getPlayer(uuid);
-		if (player != null) {
-			return player.getName();
-		}
-		for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
-			if (offlinePlayer.getUniqueId().equals(uuid)) {
-				return offlinePlayer.getName();
-			}
-		}
-		for (UUIDResolution resolver : resolvers.values()) {
-			String name = resolver.resolveImmediately(uuid);
-			if (name != null) {
-				return name;
-			}
-		}
-		return null;
+		String name = resolveNatively(uuid);
+		return (name != null) ? name : resolveImmediatelyFromRegistered(uuid);
 	}
+	
+	abstract UUID resolveImmediatelyFromRegistered(String name);
+	
+	abstract String resolveImmediatelyFromRegistered(UUID uuid);
 
-	abstract UUID resolveAsynced(String name);
+	abstract UUID resolveAsyncedFromRegistered(String name);
 
-	abstract String resolveAsynced(UUID uuid);
+	abstract String resolveAsyncedFromRegistered(UUID uuid);
+	
+	protected abstract UUID resolveNatively(String name);
+	
+	protected abstract String resolveNatively(UUID uuid);
 
 }

@@ -9,15 +9,27 @@
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 	
-	<artifactId>plugin</artifactId>
+	<artifactId>spigot</artifactId>
 	
-	<name>UUIDVault-plugin</name>
-	<description>Core implementation of UUIDVault.</description>
+	<name>UUIDVault-spigot</name>
+	<description>Spigot component of UUIDVault.</description>
 	
 	<dependencies>
 		<dependency>
 			<groupId>space.arim.uuidvault</groupId>
-			<artifactId>api</artifactId>
+			<artifactId>plugin</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-api</artifactId>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
+	
+	<repositories>
+		<repository>
+			<id>spigot-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+		</repository>
+	</repositories>
 </project>

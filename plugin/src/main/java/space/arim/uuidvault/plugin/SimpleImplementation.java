@@ -20,19 +20,60 @@ package space.arim.uuidvault.plugin;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-
-import org.bukkit.plugin.java.JavaPlugin;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.Executor;
 
 import space.arim.uuidvault.api.UUIDResolution;
+import space.arim.uuidvault.api.UUIDVaultRegistration;
 
-public class SimpleImplementation extends ImplementationHelper {
+public abstract class SimpleImplementation extends ImplementationHelper {
 
-	SimpleImplementation(JavaPlugin plugin) {
-		super(plugin);
+	private final ConcurrentMap<Class<?>, UUIDResolution> resolvers = new ConcurrentHashMap<>();
+	
+	protected SimpleImplementation(Executor asyncExecutor) {
+		super(asyncExecutor);
+	}
+	
+	@Override
+	public UUIDVaultRegistration register(UUIDResolution resolver, Class<?> pluginClass) {
+		if (!verifyNativePluginClass(pluginClass)) {
+			throw new IllegalStateException("Plugin class is invalid!");
+		}
+		UUIDResolution existing = resolvers.putIfAbsent(pluginClass, resolver);
+		return (existing == null) ?  new Registration(this, pluginClass, resolver) : null;
+	}
+	
+	protected abstract boolean verifyNativePluginClass(Class<?> pluginClass);
+
+	boolean unregister(Class<?> pluginClass, UUIDResolution resolver) {
+		return resolvers.remove(pluginClass, resolver);
+	}
+	
+	@Override
+	UUID resolveImmediatelyFromRegistered(String name) {
+		for (UUIDResolution resolver : resolvers.values()) {
+			UUID uuid = resolver.resolveImmediately(name);
+			if (uuid != null) {
+				return uuid;
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	String resolveImmediatelyFromRegistered(UUID uuid) {
+		for (UUIDResolution resolver : resolvers.values()) {
+			String name = resolver.resolveImmediately(uuid);
+			if (name != null) {
+				return name;
+			}
+		}
+		return null;
 	}
 
 	@Override
-	UUID resolveAsynced(String name) {
+	UUID resolveAsyncedFromRegistered(String name) {
 		for (UUIDResolution resolver : resolvers.values()) {
 
 			CompletableFuture<UUID> future = resolver.resolve(name);
@@ -48,7 +89,7 @@ public class SimpleImplementation extends ImplementationHelper {
 	}
 
 	@Override
-	String resolveAsynced(UUID uuid) {
+	String resolveAsyncedFromRegistered(UUID uuid) {
 		for (UUIDResolution resolver : resolvers.values()) {
 
 			CompletableFuture<String> future = resolver.resolve(uuid);

@@ -22,8 +22,6 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
-import org.bukkit.plugin.java.JavaPlugin;
-
 /**
  * UUIDVault main API class. <br>
  * Plugins wishing to utilise UUIDVault should use this class to
@@ -74,23 +72,22 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	
 	/**
 	 * Gets the asynchronous Executor on which CompletableFuture's are run. <br>
-	 * This is most likely just the Bukkit executor
+	 * This is most likely just the platform executor, i.e. the Bukkit scheduler on Spigot
 	 * 
 	 * @return the executor
 	 */
 	public abstract Executor getAsyncExecutor();
 	
 	/**
-	 * Registers a {@link UUIDResolution} implementation with an associated plugin. <br>
+	 * Registers a {@link UUIDResolution} implementation with the associated plugin's main class. <br>
 	 * <br>
-	 * The plugin is used to ensure that no duplicate implementations are registered. <br>
-	 * Its details may also be used to display a user-friendly information to server administrators.
+	 * The plugin class is used as an identifier and ensures that no duplicate implementations are registered.
 	 * 
 	 * @param resolver the resolution implementation
-	 * @param plugin the associated plugin which takes care of the data
+	 * @param pluginClazz the main class of the associated plugin which takes care of the data
 	 * @return a registration if successfully registered, null if the operation failed for some reason
 	 */
-	public abstract UUIDVaultRegistration register(UUIDResolution resolver, JavaPlugin plugin);
+	public abstract UUIDVaultRegistration register(UUIDResolution resolver, Class<?> pluginClazz);
 	
 	/**
 	 * Begins a full name lookup asynchronously. <br>

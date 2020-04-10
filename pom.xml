@@ -106,8 +106,9 @@
 	
 	<modules>
 		<module>api</module>
-		<module>hooks</module>
 		<module>plugin</module>
+		<module>spigot</module>
+		<module>assemble</module>
 	</modules>
 	
 	<distributionManagement>
@@ -137,6 +138,31 @@
 			</dependency>
 			<dependency>
 				<groupId>space.arim.uuidvault</groupId>
+				<artifactId>plugin</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>space.arim.uuidvault</groupId>
+				<artifactId>spigot</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>space.arim.uuidvault</groupId>
+				<artifactId>bungee</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>space.arim.uuidvault</groupId>
+				<artifactId>sponge</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>space.arim.uuidvault</groupId>
+				<artifactId>velocity</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>space.arim.uuidvault</groupId>
 				<artifactId>hooks</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -153,10 +179,6 @@
 		<repository>
 			<id>arim-repo</id>
 			<url>https://dl.cloudsmith.io/public/anand-beh/arim-repo/maven/</url>
-		</repository>
-		<repository>
-			<id>spigot-repo</id>
-			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
 	</repositories>
 </project>

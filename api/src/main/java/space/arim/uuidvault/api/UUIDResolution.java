@@ -47,7 +47,7 @@ import java.util.concurrent.CompletableFuture;
  * @author A248
  *
  */
-public interface UUIDResolution {
+public interface UUIDResolution extends BaseUUIDResolution {
 
 	/**
 	 * Resolves a playername to a UUID. <br>
@@ -62,6 +62,7 @@ public interface UUIDResolution {
 	 * @param name the name of the player whose uuid to find
 	 * @return a completable future which returns a corresponding uuid or <code>null</code> if it did not find one
 	 */
+	@Override
 	CompletableFuture<UUID> resolve(String name);
 	
 	/**
@@ -80,6 +81,7 @@ public interface UUIDResolution {
 	 * @param name the name of the player whose uuid to find
 	 * @return a corresponding uuid or <code>null</code> if not found without blocking
 	 */
+	@Override
 	UUID resolveImmediately(String name);
 	
 	/**
@@ -95,6 +97,7 @@ public interface UUIDResolution {
 	 * @param uuid the uuid of the player whose name to find
 	 * @return a completable future which returns the corresponding playername or <code>null</code> if it did not find one
 	 */
+	@Override
 	CompletableFuture<String> resolve(UUID uuid);
 	
 	/**
@@ -113,6 +116,7 @@ public interface UUIDResolution {
 	 * @param uuid the uuid of the player whose name to find
 	 * @return the corresponding playername or <code>null</code> if not found without blocking
 	 */
+	@Override
 	String resolveImmediately(UUID uuid);
 	
 	/**
@@ -123,10 +127,8 @@ public interface UUIDResolution {
 	 * There is no contract of this method. Of course, callers gain nothing
 	 * by supplying inaccurate information. <br>
 	 * <br>
-	 * If the <code>force</code> option is specified, it indicates that the caller
-	 * has strong knowledge that the UUID correctly maps to the given name. (For example
-	 * if the caller has received information from another server in a BungeeCord network
-	 * which has specifically encountered the player with the UUID and name)
+	 * If the <code>force</code> option is specified, it indicates that the
+	 * mapping is strongly suggested to be added. (It is still a suggestion)
 	 * 
 	 * @param uuid the player uuid
 	 * @param name the player's actual name

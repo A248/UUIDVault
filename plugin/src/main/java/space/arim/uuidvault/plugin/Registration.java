@@ -18,26 +18,24 @@
  */
 package space.arim.uuidvault.plugin;
 
-import org.bukkit.plugin.java.JavaPlugin;
-
 import space.arim.uuidvault.api.UUIDResolution;
 import space.arim.uuidvault.api.UUIDVaultRegistration;
 
-class RegistrationImpl implements UUIDVaultRegistration {
+class Registration implements UUIDVaultRegistration {
 
-	private final ImplementationHelper core;
-	private final JavaPlugin plugin;
+	private final SimpleImplementation core;
+	private final Class<?> pluginClass;
 	private final UUIDResolution resolver;
 	
-	RegistrationImpl(ImplementationHelper core, JavaPlugin plugin, UUIDResolution resolver) {
+	Registration(SimpleImplementation core, Class<?> pluginClass, UUIDResolution resolver) {
 		this.core = core;
-		this.plugin = plugin;
+		this.pluginClass = pluginClass;
 		this.resolver = resolver;
 	}
 	
 	@Override
 	public boolean unregister() {
-		return core.unregister(plugin, resolver);
+		return core.unregister(pluginClass, resolver);
 	}
 
 }

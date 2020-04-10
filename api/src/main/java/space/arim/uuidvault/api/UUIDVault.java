@@ -85,9 +85,11 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	 * 
 	 * @param resolver the resolution implementation
 	 * @param pluginClazz the main class of the associated plugin which takes care of the data
+	 * @param defaultPriority the byte based priority of the resolver, higher priorities are queried first
+	 * @param name a user friendly name for the resolver
 	 * @return a registration if successfully registered, null if the operation failed for some reason
 	 */
-	public abstract UUIDVaultRegistration register(UUIDResolution resolver, Class<?> pluginClazz);
+	public abstract UUIDVaultRegistration register(UUIDResolution resolver, Class<?> pluginClazz, byte defaultPriority, String name);
 	
 	/**
 	 * Begins a full name lookup asynchronously. <br>

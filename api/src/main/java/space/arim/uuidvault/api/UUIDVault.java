@@ -79,9 +79,19 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	public abstract Executor getAsyncExecutor();
 	
 	/**
+	 * Whether UUIDVault is accepting more implementation registrations.
+	 * 
+	 * @return true if accepting, false otherwise
+	 */
+	public abstract boolean isAcceptingRegistrations();
+	
+	/**
 	 * Registers a {@link UUIDResolution} implementation with the associated plugin's main class. <br>
+	 * Remember to check {@link #isAcceptingRegistrations()} first! <br>
 	 * <br>
-	 * The plugin class is used as an identifier and ensures that no duplicate implementations are registered.
+	 * The plugin class is used as an identifier and ensures that no duplicate implementations are registered. <br>
+	 * If there is already a registration using the same plugin class, the operation will fail and this will
+	 * return <code>null</code>.
 	 * 
 	 * @param resolver the resolution implementation
 	 * @param pluginClazz the main class of the associated plugin which takes care of the data

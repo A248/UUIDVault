@@ -21,21 +21,32 @@ package space.arim.uuidvault.plugin;
 import space.arim.uuidvault.api.UUIDResolution;
 import space.arim.uuidvault.api.UUIDVaultRegistration;
 
-class Registration implements UUIDVaultRegistration {
+class Registration implements UUIDVaultRegistration, Comparable<Registration> {
 
 	private final SimpleImplementation core;
-	private final Class<?> pluginClass;
-	private final UUIDResolution resolver;
+	final Class<?> pluginClass;
+	final UUIDResolution resolver;
+	private volatile byte priority;
 	
-	Registration(SimpleImplementation core, Class<?> pluginClass, UUIDResolution resolver) {
+	Registration(SimpleImplementation core, Class<?> pluginClass, UUIDResolution resolver, byte priority) {
 		this.core = core;
 		this.pluginClass = pluginClass;
 		this.resolver = resolver;
+		this.priority = priority;
+	}
+	
+	void changePriority(byte priority) {
+		this.priority = priority;
 	}
 	
 	@Override
 	public boolean unregister() {
-		return core.unregister(pluginClass, resolver);
+		return core.unregister(this);
+	}
+
+	@Override
+	public int compareTo(Registration o) {
+		return priority - o.priority;
 	}
 
 }

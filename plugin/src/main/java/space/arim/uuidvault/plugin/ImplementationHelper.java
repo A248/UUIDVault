@@ -28,6 +28,8 @@ public abstract class ImplementationHelper extends UUIDVault {
 
 	private final Executor asyncExecutor;
 
+	volatile boolean accepting = true;
+
 	ImplementationHelper(Executor asyncExecutor) {
 		this.asyncExecutor = asyncExecutor;
 	}
@@ -35,6 +37,11 @@ public abstract class ImplementationHelper extends UUIDVault {
 	@Override
 	public Executor getAsyncExecutor() {
 		return asyncExecutor;
+	}
+
+	@Override
+	public boolean isAcceptingRegistrations() {
+		return accepting;
 	}
 
 	@Override
@@ -49,30 +56,37 @@ public abstract class ImplementationHelper extends UUIDVault {
 		UUID uuid = resolveNatively(name);
 		return (uuid != null) ? uuid : resolveImmediatelyFromRegistered(name);
 	}
-	
+
 	@Override
 	public CompletableFuture<String> resolve(UUID uuid) {
 		String immediate = resolveImmediately(uuid);
 		return (immediate != null) ? CompletableFuture.completedFuture(immediate)
 				: CompletableFuture.supplyAsync(() -> resolveAsyncedFromRegistered(uuid), asyncExecutor);
 	}
-	
+
 	@Override
 	public String resolveImmediately(UUID uuid) {
 		String name = resolveNatively(uuid);
 		return (name != null) ? name : resolveImmediatelyFromRegistered(uuid);
 	}
-	
+
 	abstract UUID resolveImmediatelyFromRegistered(String name);
-	
+
 	abstract String resolveImmediatelyFromRegistered(UUID uuid);
 
 	abstract UUID resolveAsyncedFromRegistered(String name);
 
 	abstract String resolveAsyncedFromRegistered(UUID uuid);
-	
+
+	abstract void onStartupCompletion();
+
 	protected abstract UUID resolveNatively(String name);
-	
+
 	protected abstract String resolveNatively(UUID uuid);
+
+	protected void completeNativeStartup() {
+		accepting = false;
+		onStartupCompletion();
+	}
 
 }

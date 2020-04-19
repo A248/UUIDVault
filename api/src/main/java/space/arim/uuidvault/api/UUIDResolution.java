@@ -119,21 +119,4 @@ public interface UUIDResolution extends BaseUUIDResolution {
 	@Override
 	String resolveImmediately(UUID uuid);
 	
-	/**
-	 * Suggests that the given UUID maps to the specified name. <br>
-	 * Implementations may choose to ignore this method or to incorporate its
-	 * results into their uuid/name storage backend. <br>
-	 * <br>
-	 * There is no contract of this method. Of course, callers gain nothing
-	 * by supplying inaccurate information. <br>
-	 * <br>
-	 * If the <code>force</code> option is specified, it indicates that the
-	 * mapping is strongly suggested to be added. (It is still a suggestion)
-	 * 
-	 * @param uuid the player uuid
-	 * @param name the player's actual name
-	 * @param force whether to suggest strongly that the UUID map to the given name
-	 */
-	void update(UUID uuid, String name, boolean force);
-	
 }

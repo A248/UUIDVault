@@ -1,9 +1,11 @@
 # UUIDVault
 Many Spigot plugins store UUID-name mappings. It's about time this practice was consolidated.
 
-## Introduction
+## What is it?
 
-See [Why UUIDVault](https://github.com/A248/UUIDVault/wiki/Why-UUIDVault)
+UUIDVault implements an API to bridge the various fragmented uuid-name caches. UUIDVault doesn't store UUIDs itself, because that would defeat the purpose by introducing yet another uuid/name resolver. Instead, UUIDVault hooks into various plugins to utilise their own caches.
+
+More information: [Why UUIDVault](https://github.com/A248/UUIDVault/wiki/Why-UUIDVault)
 
 ## Advantages of UUIDVault
 
@@ -31,8 +33,7 @@ See [API Usage](https://github.com/A248/UUIDVault/wiki/API-Usage)
 See [Making an Implementation](https://github.com/A248/UUIDVault/wiki/Making-an-Implementation)
 
 Even if your plugin is already implemented, you might want to have control of the implementation
-yourself so that you can make API changes and have your implementation up-to-date. If this is the case,
-create a Github issue and include in it your implementation.
+to ensure it is up-to-date. If this is the case, feel free to create a Github issue / PR.
 
 ## License
 

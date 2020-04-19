@@ -14,8 +14,8 @@ More information: [Why UUIDVault](https://github.com/A248/UUIDVault/wiki/Why-UUI
 * Server agnostic! It doesn't matter whether your plugin is for Spigot, BungeeCord, Sponge, or Velocity.
 (This means if your project has a "common" or "shared" implementation, you can use UUIDVault directly there.)
 
-* Highly documented. The javadoc has almost as much detail as the JDK. I haven't ever seen a single
-Minecraft-related project with more documentation than UUIDVault to date. And even if you don't like the javadoc,
+* Highly documented. The javadoc has almost as much detail as the JDK. I honestly haven't seen a single
+Minecraft-related project with more documentation than UUIDVault. And even if you don't like the javadoc,
 nearly all of the information is also explained in the wiki.
 
 ## Server Owners

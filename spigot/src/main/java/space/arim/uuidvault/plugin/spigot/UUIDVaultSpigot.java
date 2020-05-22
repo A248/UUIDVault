@@ -45,6 +45,11 @@ public class UUIDVaultSpigot extends SimpleImplementation {
 	}
 	
 	@Override
+	protected void notifyException(UUIDResolution resolver, Throwable throwable) {
+		logger.log(Level.WARNING, "Another plugin encountered an error while resolving a UUID/name:", throwable);
+	}
+	
+	@Override
 	protected UUID resolveNatively(String name) {
 		Player player = Bukkit.getPlayer(name);
 		if (player != null) {
@@ -70,11 +75,6 @@ public class UUIDVaultSpigot extends SimpleImplementation {
 			}
 		}
 		return null;
-	}
-	
-	@Override
-	protected void notifyException(UUIDResolution resolver, Throwable throwable) {
-		logger.log(Level.WARNING, "Another plugin encountered an error while resolving a UUID/name:", throwable);
 	}
 	
 	// Re-overriding this ensures it is visible to UUIDVaultSpigotPlugin

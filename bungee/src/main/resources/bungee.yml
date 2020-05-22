@@ -1,0 +1,7 @@
+name: UUIDVault
+main: ${project.groupId}.plugin.bungee.UUIDVaultBungeePlugin
+version: ${plugin.version}
+author: ${plugin.author}
+website: ${plugin.url}
+description: ${plugin.description}
+load: STARTUP

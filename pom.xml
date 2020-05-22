@@ -25,6 +25,7 @@
     	<core.author>A248</core.author>
 		<universal.version>0.8.1-SNAPSHOT</universal.version>
 		<spigot.version>1.8.8-R0.1-SNAPSHOT</spigot.version>
+		<bungee.version>1.15-SNAPSHOT</bungee.version>
 		
 		<plugin.name>${project.name}</plugin.name>
 		<plugin.version>${core.version}</plugin.version>
@@ -108,6 +109,7 @@
 		<module>api</module>
 		<module>plugin</module>
 		<module>spigot</module>
+		<module>bungee</module>
 		<module>assemble</module>
 	</modules>
 	
@@ -131,6 +133,7 @@
 				<type>zip</type>
 				<scope>provided</scope>
 			</dependency>
+			<!-- Core API and implementation -->
 			<dependency>
 				<groupId>space.arim.uuidvault</groupId>
 				<artifactId>api</artifactId>
@@ -141,6 +144,7 @@
 				<artifactId>plugin</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<!-- Environment-specific modules -->
 			<dependency>
 				<groupId>space.arim.uuidvault</groupId>
 				<artifactId>spigot</artifactId>
@@ -161,15 +165,17 @@
 				<artifactId>velocity</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>space.arim.uuidvault</groupId>
-				<artifactId>hooks</artifactId>
-				<version>${project.version}</version>
-			</dependency>
+			<!-- Environment dependencies -->
 			<dependency>
 				<groupId>org.spigotmc</groupId>
 				<artifactId>spigot-api</artifactId>
 				<version>${spigot.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>net.md-5</groupId>
+				<artifactId>bungeecord-api</artifactId>
+				<version>${bungee.version}</version>
 				<scope>provided</scope>
 			</dependency>
 		</dependencies>

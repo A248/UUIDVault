@@ -33,7 +33,7 @@ import space.arim.uuidvault.api.UUIDVaultRegistration;
 
 public abstract class SimpleImplementation extends ImplementationHelper {
 	
-	private final ConcurrentMap<Class<?>, Registration> registrations = new ConcurrentHashMap<>();
+	private final ConcurrentMap<Class<?>, Registration> registrations = new ConcurrentHashMap<>(8, 0.9f, 1);
 	/**
 	 * If we've finished startup, this list will be nonnull
 	 * and we will iterate over it.

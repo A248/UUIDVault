@@ -41,8 +41,8 @@ import java.util.concurrent.CompletableFuture;
  * (or Mojang API proxies thereof, e.g. https://github.com/Electroid/mojang-api). Thus, some
  * implementations may continue to store months old mappings. This is a feature, not a bug;
  * it enables plugins to have a wide breadth of information from which to draw on. For example,
- * in punishment plugins, a Moderator might find evidence of a rule breaker a month after the event,
- * and desire to punish such player by their name. Ideally, the name of the player maps to the correct UUID.
+ * in punishment plugins, a moderator might find evidence of a rule breaker a month after the event,
+ * and desire to punish such player by their name. Ideally, the name of the player maps to a UUID.
  * 
  * @author A248
  *
@@ -56,11 +56,13 @@ public interface UUIDResolution extends BaseUUIDResolution {
 	 * any sort of resources available in order to find a UUID whose corresponding playername
 	 * is the specified string. <br>
 	 * <br>
-	 * Note that implementations do not need to perform the same lookups they would otherwise
-	 * in {@link #resolveImmediately(String)}.
+	 * Note that implementations do NOT need to perform the same lookups they would otherwise
+	 * in {@link #resolveImmediately(String)}. This is done automatically. <br>
+	 * <br>
+	 * If no mapping was found, the returned future or its result may be null.
 	 * 
 	 * @param name the name of the player whose uuid to find
-	 * @return a completable future which returns a corresponding uuid or <code>null</code> if it did not find one
+	 * @return a nullable completable future which returns a corresponding uuid or <code>null</code> if it did not find one
 	 */
 	@Override
 	CompletableFuture<UUID> resolve(String name);
@@ -69,14 +71,10 @@ public interface UUIDResolution extends BaseUUIDResolution {
 	 * Avoids blocking operations and directly resolves the uuid
 	 * from an in-memory cache. This method should never block. <br>
 	 * <br>
-	 * Note that it is possible for this method to return <code>null</code> even if calling {@link #resolve(String)}
-	 * would return a completablefuture which yields a nonnull uuid, since the other method may run network queries
-	 * and database operations at will. <br>
-	 * <br>
-	 * If an implementation fails to find a uuid immediately, it should simply return <code>null</code>.
+	 * If an implementation fails to find a uuid immediately, it should simply return <code>null</code>
+	 * and stop all execution. <br>
 	 * Implementations SHOULD NOT attempt to continue finding a mapping (e.g., in an async thread)
-	 * after returning a null result. Therefore it is <i>improper</i> to implement this method like so:
-	 * <code>return resolve(name).getNow(null)</code>, because this would trigger a more expansive lookup.
+	 * after returning a null result.
 	 * 
 	 * @param name the name of the player whose uuid to find
 	 * @return a corresponding uuid or <code>null</code> if not found without blocking
@@ -91,11 +89,13 @@ public interface UUIDResolution extends BaseUUIDResolution {
 	 * any sort of resources available in order to find the playername of the player represented
 	 * by this UUID. <br>
 	 * <br>
-	 * Note that implementations do not need to perform the same lookups they would otherwise
-	 * in {@link #resolveImmediately(UUID)}.
+	 * Note that implementations do NOT need to perform the same lookups they would otherwise
+	 * in {@link #resolveImmediately(UUID)}. This is done automatically. <br>
+	 * <br>
+	 * If no mapping was found, the returned future OR its result may be null.
 	 * 
 	 * @param uuid the uuid of the player whose name to find
-	 * @return a completable future which returns the corresponding playername or <code>null</code> if it did not find one
+	 * @return a nullable completable future which returns the corresponding playername or <code>null</code> if it did not find one
 	 */
 	@Override
 	CompletableFuture<String> resolve(UUID uuid);
@@ -104,14 +104,10 @@ public interface UUIDResolution extends BaseUUIDResolution {
 	 * Avoids blocking operations and directly resolves the name
 	 * from an in-memory cache. This method should never block. <br>
 	 * <br>
-	 * Note that it is possible for this method to return <code>null</code> even if calling {@link #resolve(UUID)}
-	 * would return a completablefuture which yields a nonnull name, since the other method may run network queries
-	 * and database operations at will. <br>
-	 * <br>
-	 * If an implementation fails to find a name immediately, it should simply return <code>null</code>.
+	 * If an implementation fails to find a name immediately, it should simply return <code>null</code>
+	 * and stop all execution. <br>
 	 * Implementations SHOULD NOT attempt to continue finding a mapping (e.g., in an async thread)
-	 * after returning a null result. Therefore it is <i>improper</i> to implement this method like so:
-	 * <code>return resolve(uuid).getNow(null)</code>, because this would trigger a more expansive lookup.
+	 * after returning a null result.
 	 * 
 	 * @param uuid the uuid of the player whose name to find
 	 * @return the corresponding playername or <code>null</code> if not found without blocking

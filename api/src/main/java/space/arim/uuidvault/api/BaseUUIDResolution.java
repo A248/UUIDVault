@@ -42,7 +42,7 @@ public interface BaseUUIDResolution {
 	 * See respective subinterfaces.
 	 * 
 	 * @param name the name of the player whose uuid to find
-	 * @return a corresponding uuid or <code>null</code> if not found without blocking
+	 * @return a corresponding uuid or <code>null</code> if not found
 	 */
 	UUID resolveImmediately(String name);
 	
@@ -58,7 +58,7 @@ public interface BaseUUIDResolution {
 	 * See respective subinterfaces.
 	 * 
 	 * @param uuid the uuid of the player whose name to find
-	 * @return the corresponding playername or <code>null</code> if not found without blocking
+	 * @return the corresponding playername or <code>null</code> if not found
 	 */
 	String resolveImmediately(UUID uuid);
 	

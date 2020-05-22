@@ -58,19 +58,22 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	/**
 	 * Expands a shortened version of a UUID. <br>
 	 * <br>
-	 * Each form is unique. However, it is simpler to store UUIDs in short form
-	 * and expand them into long form when needed. Accordingly, many plugins
-	 * store short forms, and sometimes we need to get the long form. <br>
+	 * Each form is unique. However, it is possible to store UUIDs in short form
+	 * and expand them into long form when needed. <br>
 	 * <br>
-	 * Example long form: ed5f12cd-6007-45d9-a4b9-940524ddaecf <br>
-	 * Example short form: ed5f12cd600745d9a4b9940524ddaecf <br>
+	 * Example long form (36 chars): ed5f12cd-6007-45d9-a4b9-940524ddaecf <br>
+	 * Example short form (32 chars): ed5f12cd600745d9a4b9940524ddaecf <br>
 	 * <br>
-	 * You most likely won't need  this. It is here for convenience.
+	 * You most likely won't need this. It is here for convenience.
 	 * 
 	 * @param uuid the string based short uuid
 	 * @return the lengthened uuid string
+	 * @throws IllegalArgumentException if the input is not of length 32
 	 */
 	public static String expandUUID(String uuid) {
+		if (uuid.length() != 32) {
+			throw new IllegalArgumentException("Cannot expand " + uuid);
+		}
 		return uuid.substring(0, 8) + "-" + uuid.substring(8, 12) + "-" + uuid.substring(12, 16)
 		+ "-" + uuid.substring(16, 20) + "-" + uuid.substring(20, 32);
 	}
@@ -84,7 +87,9 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	public abstract Executor getAsyncExecutor();
 	
 	/**
-	 * Whether UUIDVault is accepting more implementation registrations.
+	 * Whether UUIDVault is accepting more implementation registrations. <br>
+	 * If not accepting registrations, calls to {@link #register(UUIDResolution, Class, byte, String)}
+	 * will throw an exception.
 	 * 
 	 * @return true if accepting, false otherwise
 	 */
@@ -101,53 +106,63 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	 * @param resolver the resolution implementation
 	 * @param pluginClazz the main class of the associated plugin which takes care of the data
 	 * @param defaultPriority the byte based priority of the resolver, higher priorities are queried first
-	 * @param name a user friendly name for the resolver
+	 * @param name an optional user friendly name for the resolver, may be null or empty
 	 * @return a registration if successfully registered, null if the operation failed for some reason
 	 */
 	public abstract UUIDVaultRegistration register(UUIDResolution resolver, Class<?> pluginClazz, byte defaultPriority, String name);
 	
 	/**
-	 * Begins a full name lookup asynchronously. <br>
+	 * Begins a full name lookup. <br>
 	 * <br>
-	 * The completable future, once completed, will <code>null</code> if no mapping was found. <br>
+	 * The completable future, once completed, will produce <code>null</code> if no mapping was found.
+	 * The future <i>itself</i> will never be null. <br>
 	 * <br>
 	 * UUIDVault will draw information from its variety of registered resolution implementations.
 	 * 
+	 * @param name the name of the player whose uuid to find
+	 * @return a nonnull completable future which returns a corresponding uuid or <code>null</code> if none was found
 	 */
 	@Override
 	public abstract CompletableFuture<UUID> resolve(String name);
 	
 	/**
-	 * Resolves a UUID immediately. This will only check in-memory caches. <br>
+	 * Resolves a UUID immediately. This will only check in{@literal -}memory caches. <br>
 	 * <br>
 	 * Returns <code>null</code> to indicate not found.
 	 * <br>
 	 * UUIDVault will first check against online players, to see if any of them
 	 * have the name specified. Then it will turn to resolution implementations.
 	 * 
+	 * @param name the name of the player whose uuid to find
+	 * @return a corresponding uuid or <code>null</code> if not found
 	 */
 	@Override
 	public abstract UUID resolveImmediately(String name);
 	
 	/**
-	 * Begins a full uuid lookup asynchronously. <br>
+	 * Begins a full uuid lookup. <br>
 	 * <br>
 	 * The completable future, once completed, will <code>null</code> if no mapping was found.
+	 * The future <i>itself</i> will never be null. <br>
 	 * <br>
 	 * UUIDVault will draw information from its variety of registered resolution implementations.
 	 * 
+	 * @param uuid the uuid of the player whose name to find
+	 * @return a nonnull completable future which returns a corresponding name or <code>null</code> if none was found
 	 */
 	@Override
 	public abstract CompletableFuture<String> resolve(UUID uuid);
 	
 	/**
-	 * Resolves a name immediately. This will only check in-memory caches. <br>
+	 * Resolves a name immediately. This will only check in{@literal -}memory caches. <br>
 	 * <br>
 	 * Returns <code>null</code> to indicate not found.
 	 * <br>
 	 * UUIDVault will first check against online players, to see if any of them
 	 * have the uuid specified. Then it will turn to resolution implementations. <br>
 	 * 
+	 * @param uuid the uuid of the player whose name to find
+	 * @return the corresponding playername or <code>null</code> if not found
 	 */
 	@Override
 	public abstract String resolveImmediately(UUID uuid);

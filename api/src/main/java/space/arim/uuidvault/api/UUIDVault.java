@@ -23,9 +23,14 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
 /**
- * UUIDVault main API class. <br>
- * Plugins wishing to utilise UUIDVault should use this class to
- * lookup uuid/name mappings.
+ * UUIDVault's main API class. <br>
+ * Dependents wishing to utilise UUIDVault should use this class to
+ * lookup uuid/name mappings. <br>
+ * <br>
+ * <b>Usage</b> <br>
+ * Most usage will begin with getting the instance via <code>UUIDVault.get()</code>. <br>
+ * When finding UUIDs or names, the caller does NOT need to check against the current
+ * active playerlist or builtin server caches. UUIDVault will check these automatically.
  * 
  * @author A248
  *

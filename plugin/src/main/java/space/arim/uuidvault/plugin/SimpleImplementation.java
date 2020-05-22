@@ -21,6 +21,7 @@ package space.arim.uuidvault.plugin;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -69,6 +70,8 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 	
 	@Override
 	public UUIDVaultRegistration register(UUIDResolution resolver, Class<?> pluginClass, byte defaultPriority, String name) {
+		Objects.requireNonNull(resolver, "Resolver must not be null");
+		Objects.requireNonNull(pluginClass, "Plugin class must not be null");
 		if (!verifyNativePluginClass(pluginClass)) {
 			throw new IllegalArgumentException("Plugin class is invalid!");
 		} else if (!isAcceptingRegistrations()) {
@@ -86,8 +89,10 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 		}
 		return success;
 	}
-
+	
 	protected abstract boolean verifyNativePluginClass(Class<?> pluginClass);
+	
+	protected abstract void notifyException(UUIDResolution resolver, Throwable throwable);
 	
 	@Override
 	UUID resolveImmediatelyFromRegistered(String name) {
@@ -150,7 +155,5 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 			return value;
 		});
 	}
-	
-	protected abstract void notifyException(UUIDResolution resolver, Throwable throwable);
 
 }

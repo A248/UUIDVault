@@ -32,13 +32,18 @@ import java.util.concurrent.Executor;
  */
 public abstract class UUIDVault implements BaseUUIDResolution {
 
-	private static UUIDVault inst;
+	private static volatile UUIDVault inst;
 	
 	protected UUIDVault() {
-		if (inst != null) {
-			throw new IllegalStateException("Only 1 UUIDVault implementation allowed!");
+		if (inst == null) {
+			synchronized (inst) {
+				if (inst == null) {
+					inst = this;
+					return;
+				}
+			}
 		}
-		inst = this;
+		throw new IllegalStateException("Only 1 UUIDVault implementation allowed!");
 	}
 	
 	/**

@@ -35,7 +35,6 @@ public class UUIDVaultSpigot extends SimpleImplementation {
 	private final Logger logger;
 	
 	UUIDVaultSpigot(JavaPlugin plugin) {
-		super((cmd) -> Bukkit.getScheduler().runTaskAsynchronously(plugin, cmd));
 		logger = plugin.getLogger();
 	}
 	

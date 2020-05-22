@@ -27,7 +27,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.Executor;
 
 import space.arim.uuidvault.api.UUIDResolution;
 import space.arim.uuidvault.api.UUIDVaultRegistration;
@@ -42,8 +41,8 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 	 */
 	private volatile CopyOnWriteArrayList<UUIDResolution> resolvers;
 	
-	protected SimpleImplementation(Executor asyncExecutor) {
-		super(asyncExecutor);
+	protected SimpleImplementation() {
+		
 	}
 	
 	private List<UUIDResolution> makeResolverList() {

@@ -34,7 +34,6 @@ public class UUIDVaultBungee extends SimpleImplementation {
 	private final Logger logger;
 	
 	UUIDVaultBungee(Plugin plugin) {
-		super((cmd) -> ProxyServer.getInstance().getScheduler().runAsync(plugin, cmd));
 		logger = plugin.getLogger();
 	}
 

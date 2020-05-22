@@ -20,23 +20,15 @@ package space.arim.uuidvault.plugin;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 
 import space.arim.uuidvault.api.UUIDVault;
 
 public abstract class ImplementationHelper extends UUIDVault {
 
-	private final Executor asyncExecutor;
+	private volatile boolean accepting = true;
 
-	volatile boolean accepting = true;
-
-	ImplementationHelper(Executor asyncExecutor) {
-		this.asyncExecutor = asyncExecutor;
-	}
-	
-	@Override
-	public Executor getAsyncExecutor() {
-		return asyncExecutor;
+	ImplementationHelper() {
+		
 	}
 
 	@Override
@@ -84,6 +76,10 @@ public abstract class ImplementationHelper extends UUIDVault {
 
 	protected abstract String resolveNatively(UUID uuid);
 
+	/**
+	 * Must be called, NOT overridden
+	 * 
+	 */
 	protected void completeNativeStartup() {
 		accepting = false;
 		onStartupCompletion();

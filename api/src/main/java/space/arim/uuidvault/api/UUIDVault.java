@@ -20,7 +20,6 @@ package space.arim.uuidvault.api;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 
 /**
  * UUIDVault's main API class. <br>
@@ -82,14 +81,6 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 		return uuid.substring(0, 8) + "-" + uuid.substring(8, 12) + "-" + uuid.substring(12, 16)
 		+ "-" + uuid.substring(16, 20) + "-" + uuid.substring(20, 32);
 	}
-	
-	/**
-	 * Gets the asynchronous Executor on which CompletableFuture's are run. <br>
-	 * This is most likely just the platform executor, i.e. the Bukkit scheduler on Spigot
-	 * 
-	 * @return the executor
-	 */
-	public abstract Executor getAsyncExecutor();
 	
 	/**
 	 * Whether UUIDVault is accepting more implementation registrations. <br>

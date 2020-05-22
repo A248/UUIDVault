@@ -41,7 +41,7 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	
 	protected UUIDVault() {
 		if (inst == null) {
-			synchronized (inst) {
+			synchronized (UUIDVault.class) {
 				if (inst == null) {
 					inst = this;
 					return;

@@ -72,8 +72,10 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 	public UUIDVaultRegistration register(UUIDResolution resolver, Class<?> pluginClass, byte defaultPriority, String name) {
 		Objects.requireNonNull(resolver, "Resolver must not be null");
 		Objects.requireNonNull(pluginClass, "Plugin class must not be null");
+
 		if (!verifyNativePluginClass(pluginClass)) {
 			throw new IllegalArgumentException("Plugin class is invalid!");
+
 		} else if (!isAcceptingRegistrations()) {
 			throw new IllegalStateException("UUIDVault is not accepting registrations!");
 		}
@@ -126,10 +128,10 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 				result = handle(resolver.resolve(name), resolver);
 				continue;
 			}
-			result = result.thenCompose(
-					(uuid) -> (uuid != null) ? CompletableFuture.completedFuture(uuid) : handle(resolver.resolve(name), resolver));
+			result = result.thenCompose((uuid) -> (uuid != null) ? CompletableFuture.completedFuture(uuid)
+					: wrapNullableAsCompletedNull(handle(resolver.resolve(name), resolver)));
 		}
-		return (result == null) ? CompletableFuture.completedFuture(null) : result;
+		return wrapNullableAsCompletedNull(result);
 	}
 	
 	@Override
@@ -140,13 +142,23 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 				result = handle(resolver.resolve(uuid), resolver);
 				continue;
 			}
-			result = result.thenCompose(
-					(name) -> (name != null) ? CompletableFuture.completedFuture(name) : handle(resolver.resolve(uuid), resolver));
+			result = result.thenCompose((name) -> (name != null) ? CompletableFuture.completedFuture(name)
+					: wrapNullableAsCompletedNull(handle(resolver.resolve(uuid), resolver)));
 		}
-		return (result == null) ? CompletableFuture.completedFuture(null) : result;
+		return wrapNullableAsCompletedNull(result);
+	}
+	
+	private static <T> CompletableFuture<T> wrapNullableAsCompletedNull(CompletableFuture<T> nullableFuture) {
+		if (nullableFuture == null) {
+			return CompletableFuture.completedFuture(null);
+		}
+		return nullableFuture;
 	}
 	
 	private <T> CompletableFuture<T> handle(CompletableFuture<T> future, UUIDResolution resolver) {
+		if (future == null) {
+			return null;
+		}
 		return future.handle((value, throwable) -> {
 			if (throwable != null) {
 				notifyException(resolver, throwable);

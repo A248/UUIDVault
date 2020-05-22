@@ -22,7 +22,8 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Base class for {@link UUIDResolution} and {@link UUIDVault}.
+ * Base class for {@link UUIDResolution} and {@link UUIDVault}. <br>
+ * The meanings and contracts of each method differ based on their respective subinterfaces.
  * 
  * @author A248
  *

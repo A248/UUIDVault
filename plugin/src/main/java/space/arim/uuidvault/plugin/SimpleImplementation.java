@@ -73,11 +73,10 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 		Objects.requireNonNull(resolver, "Resolver must not be null");
 		Objects.requireNonNull(pluginClass, "Plugin class must not be null");
 
-		if (!verifyNativePluginClass(pluginClass)) {
-			throw new IllegalArgumentException("Plugin class is invalid!");
-
-		} else if (!isAcceptingRegistrations()) {
+		if (!isAcceptingRegistrations()) {
 			throw new IllegalStateException("UUIDVault is not accepting registrations!");
+		} else if (!verifyNativePluginClass(pluginClass)) {
+			throw new IllegalArgumentException("Plugin class is invalid!");
 		}
 		Registration regis = new Registration(this, pluginClass, resolver, defaultPriority);
 		Registration existing = registrations.putIfAbsent(pluginClass, regis);

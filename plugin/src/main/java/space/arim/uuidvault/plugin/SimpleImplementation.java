@@ -114,34 +114,43 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 	}
 
 	@Override
-	UUID resolveAsyncedFromRegistered(String name) {
+	CompletableFuture<UUID> resolveLaterFromRegistered(String name) {
+		CompletableFuture<UUID> result = null;
 		for (UUIDResolution resolver : getResolverList()) {
-
-			CompletableFuture<UUID> future = resolver.resolve(name);
-			if (future != null) {
-				UUID uuid = future.join();
-				if (uuid != null) {
-					return uuid;
-				}
+			if (result == null) {
+				result = handle(resolver.resolve(name), resolver);
+				continue;
 			}
-
+			result = result.thenCompose(
+					(uuid) -> (uuid != null) ? CompletableFuture.completedFuture(uuid) : handle(resolver.resolve(name), resolver));
 		}
-		return null;
+		return (result == null) ? CompletableFuture.completedFuture(null) : result;
 	}
-
+	
 	@Override
-	String resolveAsyncedFromRegistered(UUID uuid) {
+	CompletableFuture<String> resolveLaterFromRegistered(UUID uuid) {
+		CompletableFuture<String> result = null;
 		for (UUIDResolution resolver : getResolverList()) {
-
-			CompletableFuture<String> future = resolver.resolve(uuid);
-			if (future != null) {
-				String name = future.join();
-				if (name != null) {
-					return name;
-				}
+			if (result == null) {
+				result = handle(resolver.resolve(uuid), resolver);
+				continue;
 			}
+			result = result.thenCompose(
+					(name) -> (name != null) ? CompletableFuture.completedFuture(name) : handle(resolver.resolve(uuid), resolver));
 		}
-		return null;
+		return (result == null) ? CompletableFuture.completedFuture(null) : result;
 	}
+	
+	private <T> CompletableFuture<T> handle(CompletableFuture<T> future, UUIDResolution resolver) {
+		return future.handle((value, throwable) -> {
+			if (throwable != null) {
+				notifyException(resolver, throwable);
+				return null;
+			}
+			return value;
+		});
+	}
+	
+	protected abstract void notifyException(UUIDResolution resolver, Throwable throwable);
 
 }

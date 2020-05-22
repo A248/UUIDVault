@@ -19,17 +19,24 @@
 package space.arim.uuidvault.plugin.spigot;
 
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import space.arim.uuidvault.api.UUIDResolution;
 import space.arim.uuidvault.plugin.SimpleImplementation;
 
 public class UUIDVaultSpigot extends SimpleImplementation {
 
+	private final Logger logger;
+	
 	UUIDVaultSpigot(JavaPlugin plugin) {
 		super((cmd) -> Bukkit.getScheduler().runTaskAsynchronously(plugin, cmd));
+		logger = plugin.getLogger();
 	}
 	
 	@Override
@@ -63,6 +70,11 @@ public class UUIDVaultSpigot extends SimpleImplementation {
 			}
 		}
 		return null;
+	}
+	
+	@Override
+	protected void notifyException(UUIDResolution resolver, Throwable throwable) {
+		logger.log(Level.WARNING, "Another plugin encountered an error while resolving a UUID/name:", throwable);
 	}
 	
 	// Re-overriding this ensures it is visible to UUIDVaultSpigotPlugin

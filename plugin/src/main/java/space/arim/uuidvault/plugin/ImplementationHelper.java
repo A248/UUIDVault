@@ -48,7 +48,7 @@ public abstract class ImplementationHelper extends UUIDVault {
 	public CompletableFuture<UUID> resolve(String name) {
 		UUID immediate = resolveImmediately(name);
 		return (immediate != null) ? CompletableFuture.completedFuture(immediate)
-				: CompletableFuture.supplyAsync(() -> resolveAsyncedFromRegistered(name), asyncExecutor);
+				: resolveLaterFromRegistered(name);
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public abstract class ImplementationHelper extends UUIDVault {
 	public CompletableFuture<String> resolve(UUID uuid) {
 		String immediate = resolveImmediately(uuid);
 		return (immediate != null) ? CompletableFuture.completedFuture(immediate)
-				: CompletableFuture.supplyAsync(() -> resolveAsyncedFromRegistered(uuid), asyncExecutor);
+				: resolveLaterFromRegistered(uuid);
 	}
 
 	@Override
@@ -74,9 +74,9 @@ public abstract class ImplementationHelper extends UUIDVault {
 
 	abstract String resolveImmediatelyFromRegistered(UUID uuid);
 
-	abstract UUID resolveAsyncedFromRegistered(String name);
+	abstract CompletableFuture<UUID> resolveLaterFromRegistered(String name);
 
-	abstract String resolveAsyncedFromRegistered(UUID uuid);
+	abstract CompletableFuture<String> resolveLaterFromRegistered(UUID uuid);
 
 	abstract void onStartupCompletion();
 

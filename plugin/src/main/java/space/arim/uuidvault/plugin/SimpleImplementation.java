@@ -45,26 +45,25 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 		
 	}
 	
-	private List<UUIDResolution> makeResolverList() {
+	private <T extends List<UUIDResolution>> T makeResolverList(T resultToPopulate) {
 
-		List<Registration> tempList = new ArrayList<>();
+		List<Registration> tempList = new ArrayList<>(registrations.size());
 		registrations.forEach((c, r) -> tempList.add(r));
 		tempList.sort(Comparator.reverseOrder());
 
-		List<UUIDResolution> result = new ArrayList<>();
-		tempList.forEach((regis) -> result.add(regis.resolver));
-		return result;
+		tempList.forEach((regis) -> resultToPopulate.add(regis.resolver));
+		return resultToPopulate;
 	}
 	
 	private List<UUIDResolution> getResolverList() {
 		// if we're still starting up, resolvers will be null, so we create a temporary list
-		return (resolvers != null) ? resolvers : makeResolverList();
+		return (resolvers != null) ? resolvers : makeResolverList(new ArrayList<>());
 	}
 	
 	@Override
 	void onStartupCompletion() {
 		// now that the registrations are finalised, we can cache this list and use it all the time
-		resolvers = new CopyOnWriteArrayList<>(makeResolverList());
+		resolvers = makeResolverList(new CopyOnWriteArrayList<>());
 	}
 	
 	@Override

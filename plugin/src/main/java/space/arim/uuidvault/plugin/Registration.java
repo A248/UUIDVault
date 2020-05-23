@@ -27,12 +27,14 @@ class Registration implements UUIDVaultRegistration, Comparable<Registration> {
 	final Class<?> pluginClass;
 	final UUIDResolution resolver;
 	private volatile byte priority;
+	final String name;
 	
-	Registration(SimpleImplementation core, Class<?> pluginClass, UUIDResolution resolver, byte priority) {
+	Registration(SimpleImplementation core, Class<?> pluginClass, UUIDResolution resolver, byte priority, String name) {
 		this.core = core;
 		this.pluginClass = pluginClass;
 		this.resolver = resolver;
 		this.priority = priority;
+		this.name = name;
 	}
 	
 	void changePriority(byte priority) {

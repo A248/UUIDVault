@@ -18,6 +18,7 @@
  */
 package space.arim.uuidvault.plugin.spigot;
 
+import java.lang.reflect.Modifier;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,9 +26,9 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import space.arim.uuidvault.api.UUIDResolution;
 import space.arim.uuidvault.plugin.SimpleImplementation;
 
 public class UUIDVaultSpigot extends SimpleImplementation {
@@ -38,19 +39,40 @@ public class UUIDVaultSpigot extends SimpleImplementation {
 		logger = plugin.getLogger();
 	}
 	
-	@Override
-	protected boolean verifyNativePluginClass(Class<?> pluginClass) {
-		return !JavaPlugin.class.equals(pluginClass) && JavaPlugin.class.isAssignableFrom(pluginClass);
+	private JavaPlugin getPluginFor(Class<?> pluginClass) {
+		// Not using JavaPlugin#getPlugin because it may throw exceptions for invalid plugin classes
+		for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
+			if (plugin instanceof JavaPlugin && plugin.getClass().equals(pluginClass)) {
+				return (JavaPlugin) plugin;
+			}
+		}
+		return null;
 	}
 	
 	@Override
-	protected void notifyException(UUIDResolution resolver, Throwable throwable) {
-		logger.log(Level.WARNING, "Another plugin encountered an error while resolving a UUID/name:", throwable);
+	protected boolean verifyNativePluginClass(Class<?> pluginClass) {
+		return !JavaPlugin.class.equals(pluginClass) && JavaPlugin.class.isAssignableFrom(pluginClass)
+				&& !Modifier.isAbstract(pluginClass.getModifiers()) && getPluginFor(pluginClass) != null;
+	}
+	
+	@Override
+	protected String getDescriptiveName(Class<?> pluginClass) {
+		JavaPlugin plugin = getPluginFor(pluginClass);
+		if (plugin == null) {
+			// plugin was unloaded?
+			return null;
+		}
+		return plugin.getDescription().getFullName();
+	}
+	
+	@Override
+	protected void logException(String message, Throwable throwable) {
+		logger.log(Level.WARNING, message, throwable);
 	}
 	
 	@Override
 	protected UUID resolveNatively(String name) {
-		Player player = Bukkit.getPlayer(name);
+		Player player = Bukkit.getPlayerExact(name);
 		if (player != null) {
 			return player.getUniqueId();
 		}

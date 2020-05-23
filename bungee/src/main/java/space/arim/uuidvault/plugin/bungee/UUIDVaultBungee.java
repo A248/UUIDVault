@@ -18,6 +18,7 @@
  */
 package space.arim.uuidvault.plugin.bungee;
 
+import java.lang.reflect.Modifier;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,8 +26,8 @@ import java.util.logging.Logger;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.api.plugin.PluginDescription;
 
-import space.arim.uuidvault.api.UUIDResolution;
 import space.arim.uuidvault.plugin.SimpleImplementation;
 
 public class UUIDVaultBungee extends SimpleImplementation {
@@ -37,14 +38,35 @@ public class UUIDVaultBungee extends SimpleImplementation {
 		logger = plugin.getLogger();
 	}
 
+	private Plugin getPluginFor(Class<?> pluginClass) {
+		for (Plugin plugin : ProxyServer.getInstance().getPluginManager().getPlugins()) {
+			if (plugin.getClass().equals(pluginClass)) {
+				return plugin;
+			}
+		}
+		return null;
+	}
+	
 	@Override
 	protected boolean verifyNativePluginClass(Class<?> pluginClass) {
-		return !Plugin.class.equals(pluginClass) && Plugin.class.isAssignableFrom(pluginClass);
+		return !Plugin.class.equals(pluginClass) && Plugin.class.isAssignableFrom(pluginClass)
+				&& !Modifier.isAbstract(pluginClass.getModifiers()) && getPluginFor(pluginClass) != null;
 	}
 
 	@Override
-	protected void notifyException(UUIDResolution resolver, Throwable throwable) {
-		logger.log(Level.WARNING, "Another plugin encountered an error while resolving a UUID/name:", throwable);
+	protected String getDescriptiveName(Class<?> pluginClass) {
+		Plugin plugin = getPluginFor(pluginClass);
+		if (plugin == null) {
+			// plugin was unloaded?
+			return null;
+		}
+		PluginDescription description = plugin.getDescription();
+		return description.getName() + " v" + description.getVersion();
+	}
+	
+	@Override
+	protected void logException(String message, Throwable throwable) {
+		logger.log(Level.WARNING, message, throwable);
 	}
 
 	@Override

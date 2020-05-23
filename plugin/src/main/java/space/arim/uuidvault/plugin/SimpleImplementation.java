@@ -76,7 +76,7 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 		} else if (!verifyNativePluginClass(pluginClass)) {
 			throw new IllegalArgumentException("Plugin class is invalid!");
 		}
-		Registration regis = new Registration(this, pluginClass, resolver, defaultPriority);
+		Registration regis = new Registration(this, pluginClass, resolver, defaultPriority, name);
 		Registration existing = registrations.putIfAbsent(pluginClass, regis);
 		return (existing == null) ? regis : null;
 	}
@@ -91,7 +91,9 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 	
 	protected abstract boolean verifyNativePluginClass(Class<?> pluginClass);
 	
-	protected abstract void notifyException(UUIDResolution resolver, Throwable throwable);
+	protected abstract String getDescriptiveName(Class<?> pluginClass);
+	
+	protected abstract void logException(String message, Throwable throwable);
 	
 	@Override
 	UUID resolveImmediatelyFromRegistered(String name) {
@@ -158,11 +160,32 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 		}
 		return future.handle((value, throwable) -> {
 			if (throwable != null) {
-				notifyException(resolver, throwable);
+
+				recordException(resolver, throwable);
 				return null;
 			}
 			return value;
 		});
+	}
+	
+	private void recordException(UUIDResolution resolver, Throwable throwable) {
+		Class<?> pluginClass = null;
+		String name = null;
+		for (Registration registration : registrations.values()) {
+			if (registration.resolver == resolver) {
+				pluginClass = registration.pluginClass;
+				name = registration.name;
+				break;
+			}
+		}
+		String message;
+		if (pluginClass == null) {
+			message = "Unknown resolver encountered an error while resolving a UUID or name";
+		} else {
+			message = "Resolver '" + ((name == null || name.isEmpty()) ? "Unnamed" : name) + "' from "
+					+ getDescriptiveName(pluginClass) + " encountered an error while resolving a UUID or name";
+		}
+		logException(message, throwable);
 	}
 
 }

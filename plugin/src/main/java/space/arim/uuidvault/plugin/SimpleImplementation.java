@@ -124,11 +124,11 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 		CompletableFuture<UUID> result = null;
 		for (UUIDResolution resolver : getResolverList()) {
 			if (result == null) {
-				result = handle(resolver.resolve(name), resolver);
+				result = safelyHandle(resolver.resolve(name), resolver);
 				continue;
 			}
 			result = result.thenCompose((uuid) -> (uuid != null) ? CompletableFuture.completedFuture(uuid)
-					: wrapNullableAsCompletedNull(handle(resolver.resolve(name), resolver)));
+					: wrapNullableAsCompletedNull(safelyHandle(resolver.resolve(name), resolver)));
 		}
 		return wrapNullableAsCompletedNull(result);
 	}
@@ -138,11 +138,11 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 		CompletableFuture<String> result = null;
 		for (UUIDResolution resolver : getResolverList()) {
 			if (result == null) {
-				result = handle(resolver.resolve(uuid), resolver);
+				result = safelyHandle(resolver.resolve(uuid), resolver);
 				continue;
 			}
 			result = result.thenCompose((name) -> (name != null) ? CompletableFuture.completedFuture(name)
-					: wrapNullableAsCompletedNull(handle(resolver.resolve(uuid), resolver)));
+					: wrapNullableAsCompletedNull(safelyHandle(resolver.resolve(uuid), resolver)));
 		}
 		return wrapNullableAsCompletedNull(result);
 	}
@@ -154,17 +154,13 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 		return nullableFuture;
 	}
 	
-	private <T> CompletableFuture<T> handle(CompletableFuture<T> future, UUIDResolution resolver) {
+	private <T> CompletableFuture<T> safelyHandle(CompletableFuture<T> future, UUIDResolution resolver) {
 		if (future == null) {
 			return null;
 		}
-		return future.handle((value, throwable) -> {
-			if (throwable != null) {
-
-				recordException(resolver, throwable);
-				return null;
-			}
-			return value;
+		return future.exceptionally((throwable) -> {
+			recordException(resolver, throwable);
+			return null;
 		});
 	}
 	

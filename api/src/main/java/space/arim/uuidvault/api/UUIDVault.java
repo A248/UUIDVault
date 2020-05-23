@@ -97,12 +97,16 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	 * <br>
 	 * The plugin class is used as an identifier and ensures that no duplicate implementations are registered. <br>
 	 * If there is already a registration using the same plugin class, the operation will fail and this will
-	 * return <code>null</code>.
+	 * return <code>null</code>. <br>
+	 * <br>
+	 * The specified name is optional; it may be null or empty. However, resolvers are encouraged to use an informative,
+	 * user{@literal -}friendly name, which is ideally similar to the name of the plugin. If the resolver generates
+	 * an exception, this name will be used in log messages.
 	 * 
-	 * @param resolver the resolution implementation
-	 * @param pluginClazz the main class of the associated plugin which takes care of the data
+	 * @param resolver the resolution implementation, must not be null
+	 * @param pluginClazz the main class of the associated plugin which stores the mappings, must not be null
 	 * @param defaultPriority the byte based priority of the resolver, higher priorities are queried first
-	 * @param name an optional user friendly name for the resolver, may be null or empty
+	 * @param name a user friendly name for the resolver, can be null or empty but an informative name is encouraged
 	 * @return a registration if successfully registered, null if the operation failed for some reason
 	 */
 	public abstract UUIDVaultRegistration register(UUIDResolution resolver, Class<?> pluginClazz, byte defaultPriority, String name);
@@ -115,7 +119,7 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	 * <br>
 	 * UUIDVault will draw information from its variety of registered resolution implementations.
 	 * 
-	 * @param name the name of the player whose uuid to find
+	 * @param name the name of the player whose uuid to find, must not be null
 	 * @return a nonnull completable future which returns a corresponding uuid or <code>null</code> if none was found
 	 */
 	@Override
@@ -129,7 +133,7 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	 * UUIDVault will first check against online players, to see if any of them
 	 * have the name specified. Then it will turn to resolution implementations.
 	 * 
-	 * @param name the name of the player whose uuid to find
+	 * @param name the name of the player whose uuid to find, must not be null
 	 * @return a corresponding uuid or <code>null</code> if not found
 	 */
 	@Override
@@ -143,7 +147,7 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	 * <br>
 	 * UUIDVault will draw information from its variety of registered resolution implementations.
 	 * 
-	 * @param uuid the uuid of the player whose name to find
+	 * @param uuid the uuid of the player whose name to find, must not be null
 	 * @return a nonnull completable future which returns a corresponding name or <code>null</code> if none was found
 	 */
 	@Override
@@ -157,7 +161,7 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	 * UUIDVault will first check against online players, to see if any of them
 	 * have the uuid specified. Then it will turn to resolution implementations. <br>
 	 * 
-	 * @param uuid the uuid of the player whose name to find
+	 * @param uuid the uuid of the player whose name to find, must not be null
 	 * @return the corresponding playername or <code>null</code> if not found
 	 */
 	@Override

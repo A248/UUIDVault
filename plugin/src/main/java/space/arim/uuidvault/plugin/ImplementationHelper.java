@@ -18,6 +18,7 @@
  */
 package space.arim.uuidvault.plugin;
 
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -35,9 +36,14 @@ public abstract class ImplementationHelper extends UUIDVault {
 	public boolean isAcceptingRegistrations() {
 		return accepting;
 	}
-
+	
 	@Override
 	public CompletableFuture<UUID> resolve(String name) {
+		Objects.requireNonNull(name);
+		if (name.isEmpty() || name.indexOf(' ') != -1) {
+			return null;
+		}
+
 		UUID immediate = resolveImmediately(name);
 		return (immediate != null) ? CompletableFuture.completedFuture(immediate)
 				: resolveLaterFromRegistered(name);
@@ -45,12 +51,19 @@ public abstract class ImplementationHelper extends UUIDVault {
 
 	@Override
 	public UUID resolveImmediately(String name) {
+		Objects.requireNonNull(name);
+		if (name.isEmpty() || name.indexOf(' ') != -1) {
+			return null;
+		}
+
 		UUID uuid = resolveNatively(name);
 		return (uuid != null) ? uuid : resolveImmediatelyFromRegistered(name);
 	}
 
 	@Override
 	public CompletableFuture<String> resolve(UUID uuid) {
+		Objects.requireNonNull(uuid);
+
 		String immediate = resolveImmediately(uuid);
 		return (immediate != null) ? CompletableFuture.completedFuture(immediate)
 				: resolveLaterFromRegistered(uuid);
@@ -58,6 +71,8 @@ public abstract class ImplementationHelper extends UUIDVault {
 
 	@Override
 	public String resolveImmediately(UUID uuid) {
+		Objects.requireNonNull(uuid);
+
 		String name = resolveNatively(uuid);
 		return (name != null) ? name : resolveImmediatelyFromRegistered(uuid);
 	}

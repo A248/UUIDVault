@@ -5,8 +5,6 @@ Many Spigot plugins store UUID-name mappings. It's about time this practice was 
 
 UUIDVault implements an API to bridge the various fragmented uuid-name caches. UUIDVault doesn't store UUIDs itself, because that would defeat the purpose by introducing yet another uuid/name resolver. Instead, UUIDVault hooks into various plugins to utilise their own caches.
 
-More information: [Why UUIDVault](https://github.com/A248/UUIDVault/wiki/Why-UUIDVault)
-
 ## Advantages of UUIDVault
 
 * Improved efficiency: you don't need multiple plugins storing UUID/name information.
@@ -14,9 +12,11 @@ More information: [Why UUIDVault](https://github.com/A248/UUIDVault/wiki/Why-UUI
 * Server agnostic! It doesn't matter whether your plugin is for Spigot, BungeeCord, Sponge, or Velocity.
 (This means if your project has a "common" or "shared" implementation, you can use UUIDVault directly there.)
 
-* Highly documented. The javadoc has almost as much detail as the JDK. I honestly haven't seen a single
-Minecraft-related project with more documentation than UUIDVault. And even if you don't like the javadoc,
-nearly all of the information is also explained in the wiki.
+* Highly documented. The javadoc is well-detailed. I honestly haven't seen a single Minecraft-related project with more documentation than UUIDVault. And even if you don't like the javadoc, nearly all of the information is also explained in the wiki.
+
+More information: [How It Works](https://github.com/A248/UUIDVault/wiki/How-It-Works)
+
+If you're still not convinced: [Why UUIDVault](https://github.com/A248/UUIDVault/wiki/Why-UUIDVault)
 
 ## Server Owners
 

@@ -101,7 +101,7 @@ public class UUIDVaultSpigot extends SimpleImplementation {
 		return null;
 	}
 	
-	// Re-overriding this ensures it is visible to UUIDVaultSpigotPlugin
+	// Re-overriding this ensures it is visible
 	@Override
 	protected void completeNativeStartup() {
 		super.completeNativeStartup();

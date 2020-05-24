@@ -82,7 +82,7 @@ public class UUIDVaultBungee extends SimpleImplementation {
 		return (player == null) ? null : player.getName();
 	}
 	
-	// Re-overriding this ensures it is visible to UUIDVaultBungeePlugin
+	// Re-overriding this ensures it is visible
 	@Override
 	protected void completeNativeStartup() {
 		super.completeNativeStartup();

@@ -21,6 +21,9 @@ package space.arim.uuidvault.plugin.velocity;
 import org.slf4j.Logger;
 
 import com.google.inject.Inject;
+import com.velocitypowered.api.event.PostOrder;
+import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
 
@@ -33,6 +36,11 @@ public class UUIDVaultVelocityPlugin {
 	@Inject
 	public UUIDVaultVelocityPlugin(ProxyServer server, Logger logger) {
 		uvv = new UUIDVaultVelocity(server, logger);
+	}
+	
+	@Subscribe(order = PostOrder.LAST)
+	public void triggerStartupCompletion(@SuppressWarnings("unused") ProxyInitializeEvent evt) {
+		uvv.completeNativeStartup();
 	}
 	
 }

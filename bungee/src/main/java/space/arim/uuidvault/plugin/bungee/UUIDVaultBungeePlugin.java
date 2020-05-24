@@ -41,8 +41,9 @@ public class UUIDVaultBungeePlugin extends Plugin implements Listener {
 		getProxy().getPluginManager().registerListener(this, this);
 	}
 	
+	// This is how startup completion must be detected on BungeeCord
 	@EventHandler(priority = (byte) -128)
-	public void howStartupCompletionIsDetected(@SuppressWarnings("unused") PreLoginEvent evt) {
+	public void triggerStartupCompletion(@SuppressWarnings("unused") PreLoginEvent evt) {
 		if (hasStarted.compareAndSet(false, true)) {
 			uvb.completeNativeStartup();
 		}

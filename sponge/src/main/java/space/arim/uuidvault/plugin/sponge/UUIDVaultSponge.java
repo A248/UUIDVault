@@ -90,4 +90,10 @@ public class UUIDVaultSponge extends SimpleImplementation {
 		return (profile == null) ? null : profile.getName().orElse(null);
 	}
 	
+	// Re-overriding this ensures it is visible
+	@Override
+	protected void completeNativeStartup() {
+		super.completeNativeStartup();
+	}
+	
 }

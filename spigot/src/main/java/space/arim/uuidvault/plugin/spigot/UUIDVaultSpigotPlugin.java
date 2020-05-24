@@ -35,6 +35,7 @@ public class UUIDVaultSpigotPlugin extends JavaPlugin {
 	
 	@Override
 	public void onEnable() {
+		// Trigger startup completion
 		getServer().getScheduler().runTaskLater(this, uvs::completeNativeStartup, 1L);
 	}
 	

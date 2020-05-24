@@ -83,5 +83,11 @@ public class UUIDVaultVelocity extends SimpleImplementation {
 		Player player = server.getPlayer(uuid).orElse(null);
 		return (player == null) ? null : player.getUsername();
 	}
+	
+	// Re-overriding this ensures it is visible
+	@Override
+	protected void completeNativeStartup() {
+		super.completeNativeStartup();
+	}
 
 }

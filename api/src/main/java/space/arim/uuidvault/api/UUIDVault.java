@@ -117,7 +117,7 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	 * The completable future, once completed, will produce <code>null</code> if no mapping was found.
 	 * The future <i>itself</i> will never be null. <br>
 	 * <br>
-	 * UUIDVault will draw information from its variety of registered resolution implementations.
+	 * UUIDVault will draw information from its variety of registered resolvers.
 	 * 
 	 * @param name the name of the player whose uuid to find, must not be null
 	 * @return a nonnull completable future which returns a corresponding uuid or <code>null</code> if none was found
@@ -131,7 +131,7 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	 * Returns <code>null</code> to indicate not found.
 	 * <br>
 	 * UUIDVault will first check against online players, to see if any of them
-	 * have the name specified. Then it will turn to resolution implementations.
+	 * have the name specified. Then it will turn to the resolvers.
 	 * 
 	 * @param name the name of the player whose uuid to find, must not be null
 	 * @return a corresponding uuid or <code>null</code> if not found
@@ -142,10 +142,10 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	/**
 	 * Begins a full uuid lookup. <br>
 	 * <br>
-	 * The completable future, once completed, will <code>null</code> if no mapping was found.
+	 * The completable future, once completed, will produce <code>null</code> if no mapping was found.
 	 * The future <i>itself</i> will never be null. <br>
 	 * <br>
-	 * UUIDVault will draw information from its variety of registered resolution implementations.
+	 * UUIDVault will draw information from its variety of registered resolvers.
 	 * 
 	 * @param uuid the uuid of the player whose name to find, must not be null
 	 * @return a nonnull completable future which returns a corresponding name or <code>null</code> if none was found
@@ -159,7 +159,7 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	 * Returns <code>null</code> to indicate not found.
 	 * <br>
 	 * UUIDVault will first check against online players, to see if any of them
-	 * have the uuid specified. Then it will turn to resolution implementations. <br>
+	 * have the uuid specified. Then it will turn to the resolvers. <br>
 	 * 
 	 * @param uuid the uuid of the player whose name to find, must not be null
 	 * @return the corresponding playername or <code>null</code> if not found

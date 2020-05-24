@@ -71,13 +71,13 @@ public class UUIDVaultBungee extends SimpleImplementation {
 	}
 
 	@Override
-	public UUID resolveNatively(String name) {
+	protected UUID resolveNativelyDirectly(String name) {
 		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(name);
 		return (player == null) ? null : player.getUniqueId();
 	}
 
 	@Override
-	public String resolveNatively(UUID uuid) {
+	protected String resolveNativelyDirectly(UUID uuid) {
 		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
 		return (player == null) ? null : player.getName();
 	}

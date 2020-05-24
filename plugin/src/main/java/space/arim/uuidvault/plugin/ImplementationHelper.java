@@ -43,10 +43,31 @@ public abstract class ImplementationHelper extends UUIDVault {
 		return mustCallNativeResolutionSync;
 	}
 	
+	private static boolean fastEscapeInvalidNameArgument(String name) {
+		return name.isEmpty() || name.indexOf(' ') != -1;
+	}
+	
+	@Override
+	public UUID resolveNatively(String name) {
+		Objects.requireNonNull(name, "Name must not be null");
+		if (fastEscapeInvalidNameArgument(name)) {
+			return null;
+		}
+
+		return resolveNativelyDirectly(name);
+	}
+	
+	@Override
+	public String resolveNatively(UUID uuid) {
+		Objects.requireNonNull(uuid, "UUID must not be null");
+
+		return resolveNativelyDirectly(uuid);
+	}
+	
 	@Override
 	public CompletableFuture<UUID> resolve(String name) {
 		Objects.requireNonNull(name);
-		if (name.isEmpty() || name.indexOf(' ') != -1) {
+		if (fastEscapeInvalidNameArgument(name)) {
 			return null;
 		}
 
@@ -58,7 +79,7 @@ public abstract class ImplementationHelper extends UUIDVault {
 	@Override
 	public UUID resolveImmediately(String name) {
 		Objects.requireNonNull(name);
-		if (name.isEmpty() || name.indexOf(' ') != -1) {
+		if (fastEscapeInvalidNameArgument(name)) {
 			return null;
 		}
 
@@ -80,6 +101,10 @@ public abstract class ImplementationHelper extends UUIDVault {
 
 		return resolveImmediatelyFromRegistered(uuid);
 	}
+
+	protected abstract UUID resolveNativelyDirectly(String name);
+
+	protected abstract String resolveNativelyDirectly(UUID uuid);
 
 	abstract UUID resolveImmediatelyFromRegistered(String name);
 

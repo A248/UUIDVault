@@ -72,7 +72,7 @@ public class UUIDVaultSpigot extends SimpleImplementation {
 	}
 	
 	@Override
-	public UUID resolveNatively(String name) {
+	protected UUID resolveNativelyDirectly(String name) {
 
 		Player player = Bukkit.getPlayerExact(name);
 		if (player != null) {
@@ -87,7 +87,7 @@ public class UUIDVaultSpigot extends SimpleImplementation {
 	}
 
 	@Override
-	public String resolveNatively(UUID uuid) {
+	protected String resolveNativelyDirectly(UUID uuid) {
 
 		Player player = Bukkit.getPlayer(uuid);
 		if (player != null) {

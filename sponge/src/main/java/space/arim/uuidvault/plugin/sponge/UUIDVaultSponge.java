@@ -69,8 +69,8 @@ public class UUIDVaultSponge extends SimpleImplementation {
 	}
 
 	@Override
-	public UUID resolveNatively(String name) {
-		
+	protected UUID resolveNativelyDirectly(String name) {
+
 		Player player = Sponge.getServer().getPlayer(name).orElse(null);
 		if (player != null) {
 			return player.getUniqueId();
@@ -80,8 +80,8 @@ public class UUIDVaultSponge extends SimpleImplementation {
 	}
 
 	@Override
-	public String resolveNatively(UUID uuid) {
-		
+	protected String resolveNativelyDirectly(UUID uuid) {
+
 		Player player = Sponge.getServer().getPlayer(uuid).orElse(null);
 		if (player != null) {
 			return player.getName();

@@ -35,6 +35,7 @@ public class UUIDVaultBungee extends SimpleImplementation {
 	private final Logger logger;
 	
 	UUIDVaultBungee(Plugin plugin) {
+		super(false);
 		logger = plugin.getLogger();
 	}
 
@@ -70,13 +71,13 @@ public class UUIDVaultBungee extends SimpleImplementation {
 	}
 
 	@Override
-	protected UUID resolveNatively(String name) {
+	public UUID resolveNatively(String name) {
 		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(name);
 		return (player == null) ? null : player.getUniqueId();
 	}
 
 	@Override
-	protected String resolveNatively(UUID uuid) {
+	public String resolveNatively(UUID uuid) {
 		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
 		return (player == null) ? null : player.getName();
 	}

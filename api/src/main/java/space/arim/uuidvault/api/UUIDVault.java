@@ -28,8 +28,17 @@ import java.util.concurrent.CompletableFuture;
  * <br>
  * <b>Usage</b> <br>
  * Most usage will begin with getting the instance via <code>UUIDVault.get()</code>. <br>
- * When finding UUIDs or names, the caller does NOT need to check against the current
- * active playerlist or builtin server caches. UUIDVault will check these automatically.
+ * All methods are thread safe unless specified otherwise. <br>
+ * All name lookups are case insensitive. <br>
+ * <br>
+ * One should generally begin by checking native server information, namely online players and the offline player cache,
+ * for players matching the UUID or name. This may be done at the caller's discretion - either automatically using
+ * {@link #resolveNatively(String)} and {@link #resolveNatively(UUID)}, or manually, using environment-specific APIs. <br>
+ * <br>
+ * Then, one may proceed to check the registered resolvers. If the caller needs an immediate result,
+ * {@link #resolveImmediately(String)} and {@link #resolveImmediately(UUID)} may be used. Otherwise, if the caller wants a full
+ * result using all information from resolvers, {@link #resolve(String)} and {@link #resolve(UUID)}, will return
+ * <code>CompletableFuture</code>s.
  * 
  * @author A248
  *
@@ -72,11 +81,11 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	 * 
 	 * @param uuid the string based short uuid
 	 * @return the lengthened uuid string
-	 * @throws IllegalArgumentException if the input is not of length 32
+	 * @throws IndexOutOfBoundsException if the input is not of length 32
 	 */
 	public static String expandUUID(String uuid) {
 		if (uuid.length() != 32) {
-			throw new IllegalArgumentException("Cannot expand " + uuid);
+			throw new IndexOutOfBoundsException("Cannot expand 32-char " + uuid);
 		}
 		return uuid.substring(0, 8) + "-" + uuid.substring(8, 12) + "-" + uuid.substring(12, 16)
 		+ "-" + uuid.substring(16, 20) + "-" + uuid.substring(20, 32);
@@ -112,7 +121,45 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	public abstract UUIDVaultRegistration register(UUIDResolution resolver, Class<?> pluginClazz, byte defaultPriority, String name);
 	
 	/**
-	 * Begins a full name lookup. <br>
+	 * Whether the resolveNatively methods must be called from the server's main thread. <br>
+	 * See {@link #resolveNatively(String)} and {@link #resolveNatively(UUID)} <br>
+	 * <br>
+	 * Will return <code>false</code> on servers which allow safe <i>asynchronous</i> calls to their APIs.
+	 * 
+	 * @return true if resolveNatively methods must be called <i>synchronously</i>, false otherwise
+	 */
+	public abstract boolean mustCallNativeResolutionSync();
+	
+	/**
+	 * Checks online players, and the offline player cache if applicable,
+	 * for players matching the specified name. <br>
+	 * If a player is found, the UUID is returned. Else, <code>null</code> is returned. <br>
+	 * <br>
+	 * <b>Must be called from the main thread if {@link #mustCallNativeResolutionSync()} is true</b> <br>
+	 * Note that the offline player cache is not available on proxy servers.
+	 * 
+	 * @param name the name of the player whose uuid to find
+	 * @return a nonnull uuid if found, else <code>null</code>
+	 * @implSpec thread safety depends on {@link #mustCallNativeResolutionSync()}
+	 */
+	public abstract UUID resolveNatively(String name);
+	
+	/**
+	 * Checks online players, and the offline player cache if applicable,
+	 * for players matching the specified UUID. <br>
+	 * If a player is found, the name is returned. Else, <code>null</code> is returned. <br>
+	 * <br>
+	 * <b>Must be called from the main thread if {@link #mustCallNativeResolutionSync()} is true</b> <br>
+	 * Note that the offline player cache is not available on proxy servers.
+	 * 
+	 * @param uuid the uuid of the player whose name to find
+	 * @return a nonnull name if found, else <code>null</code>
+	 * @implSpec thread safety depends on {@link #mustCallNativeResolutionSync()}
+	 */
+	public abstract String resolveNatively(UUID uuid);
+	
+	/**
+	 * Begins a full name lookup, checking all resolvers until one of them finds a result. <br>
 	 * <br>
 	 * The completable future, once completed, will produce <code>null</code> if no mapping was found.
 	 * The future <i>itself</i> will never be null. <br>
@@ -126,12 +173,12 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	public abstract CompletableFuture<UUID> resolve(String name);
 	
 	/**
-	 * Resolves a UUID immediately. This will only check in{@literal -}memory caches. <br>
+	 * Resolves a UUID immediately from in{@literal -}memory caches. <br>
+	 * UUIDVault will call each registered resolver's equivalent method
+	 * until it finds a result. <br>
 	 * <br>
-	 * Returns <code>null</code> to indicate not found.
-	 * <br>
-	 * UUIDVault will first check against online players, to see if any of them
-	 * have the name specified. Then it will turn to the resolvers.
+	 * Returns <code>null</code> to indicate not found; that is, if no resolver
+	 * was able to find a result.
 	 * 
 	 * @param name the name of the player whose uuid to find, must not be null
 	 * @return a corresponding uuid or <code>null</code> if not found
@@ -140,7 +187,7 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	public abstract UUID resolveImmediately(String name);
 	
 	/**
-	 * Begins a full uuid lookup. <br>
+	 * Begins a full uuid lookup, checking all resolvers until on of them finds a result. <br>
 	 * <br>
 	 * The completable future, once completed, will produce <code>null</code> if no mapping was found.
 	 * The future <i>itself</i> will never be null. <br>
@@ -154,12 +201,12 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	public abstract CompletableFuture<String> resolve(UUID uuid);
 	
 	/**
-	 * Resolves a name immediately. This will only check in{@literal -}memory caches. <br>
+	 * Resolves a name immediately from in{@literal -}memory caches. <br>
+	 * UUIDVault will call each registered resolver's equivalent method
+	 * until it finds a result. <br>
 	 * <br>
-	 * Returns <code>null</code> to indicate not found.
-	 * <br>
-	 * UUIDVault will first check against online players, to see if any of them
-	 * have the uuid specified. Then it will turn to the resolvers. <br>
+	 * Returns <code>null</code> to indicate not found; that is, if no resolver
+	 * was able to find a result.
 	 * 
 	 * @param uuid the uuid of the player whose name to find, must not be null
 	 * @return the corresponding playername or <code>null</code> if not found

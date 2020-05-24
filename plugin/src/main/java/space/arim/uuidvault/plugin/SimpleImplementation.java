@@ -32,7 +32,7 @@ import space.arim.uuidvault.api.UUIDResolution;
 import space.arim.uuidvault.api.UUIDVaultRegistration;
 
 public abstract class SimpleImplementation extends ImplementationHelper {
-	
+
 	private final ConcurrentMap<Class<?>, Registration> registrations = new ConcurrentHashMap<>(8, 0.9f, 1);
 	/**
 	 * If we've finished startup, this list will be nonnull
@@ -41,8 +41,8 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 	 */
 	private volatile CopyOnWriteArrayList<UUIDResolution> resolvers;
 	
-	protected SimpleImplementation() {
-		
+	protected SimpleImplementation(boolean mustCallNativeResolutionSync) {
+		super(mustCallNativeResolutionSync);
 	}
 	
 	private <T extends List<UUIDResolution>> T makeResolverList(T resultToPopulate) {

@@ -36,6 +36,7 @@ public class UUIDVaultSpigot extends SimpleImplementation {
 	private final Logger logger;
 	
 	UUIDVaultSpigot(JavaPlugin plugin) {
+		super(true);
 		logger = plugin.getLogger();
 	}
 	
@@ -71,8 +72,7 @@ public class UUIDVaultSpigot extends SimpleImplementation {
 	}
 	
 	@Override
-	protected UUID resolveNatively(String name) {
-		if (!Bukkit.isPrimaryThread()) return null;
+	public UUID resolveNatively(String name) {
 
 		Player player = Bukkit.getPlayerExact(name);
 		if (player != null) {
@@ -87,8 +87,7 @@ public class UUIDVaultSpigot extends SimpleImplementation {
 	}
 
 	@Override
-	protected String resolveNatively(UUID uuid) {
-		if (!Bukkit.isPrimaryThread()) return null;
+	public String resolveNatively(UUID uuid) {
 
 		Player player = Bukkit.getPlayer(uuid);
 		if (player != null) {

@@ -34,6 +34,7 @@ public class UUIDVaultSponge extends SimpleImplementation {
 	private final Logger logger;
 	
 	UUIDVaultSponge(PluginContainer plugin) {
+		super(true);
 		logger = plugin.getLogger();
 	}
 	
@@ -68,8 +69,7 @@ public class UUIDVaultSponge extends SimpleImplementation {
 	}
 
 	@Override
-	protected UUID resolveNatively(String name) {
-		if (!Sponge.getServer().isMainThread()) return null;
+	public UUID resolveNatively(String name) {
 		
 		Player player = Sponge.getServer().getPlayer(name).orElse(null);
 		if (player != null) {
@@ -80,8 +80,7 @@ public class UUIDVaultSponge extends SimpleImplementation {
 	}
 
 	@Override
-	protected String resolveNatively(UUID uuid) {
-		if (!Sponge.getServer().isMainThread()) return null;
+	public String resolveNatively(UUID uuid) {
 		
 		Player player = Sponge.getServer().getPlayer(uuid).orElse(null);
 		if (player != null) {

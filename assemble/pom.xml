@@ -81,5 +81,9 @@
 			<groupId>space.arim.uuidvault</groupId>
 			<artifactId>sponge</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>space.arim.uuidvault</groupId>
+			<artifactId>velocity</artifactId>
+		</dependency>
 	</dependencies>
 </project>

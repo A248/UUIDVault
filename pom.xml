@@ -26,6 +26,7 @@
 		<spigot.version>1.8.8-R0.1-SNAPSHOT</spigot.version>
 		<bungee.version>1.15-SNAPSHOT</bungee.version>
 		<sponge.version>7.2.0</sponge.version>
+		<velocity.version>1.1.0-SNAPSHOT</velocity.version>
 		
 		<plugin.name>UUIDVault</plugin.name>
 		<plugin.annotationId>uuidvault</plugin.annotationId>
@@ -115,6 +116,7 @@
 		<module>spigot</module>
 		<module>bungee</module>
 		<module>sponge</module>
+		<module>velocity</module>
 		<module>assemble</module>
 	</modules>
 	
@@ -187,6 +189,12 @@
 				<groupId>org.spongepowered</groupId>
 				<artifactId>spongeapi</artifactId>
 				<version>${sponge.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.velocitypowered</groupId>
+				<artifactId>velocity-api</artifactId>
+				<version>${velocity.version}</version>
 				<scope>provided</scope>
 			</dependency>
 		</dependencies>

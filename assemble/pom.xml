@@ -16,7 +16,7 @@
 	
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
-		<finalName>${project.name}_v${core.version}</finalName>
+		<finalName>${project.name}_v${plugin.version}</finalName>
 		<resources>
 			<resource>
 				<directory>${project.build.directory}/shared-resources</directory>
@@ -24,7 +24,6 @@
 			</resource>
 		</resources>
 		<plugins>
-		
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
@@ -43,8 +42,6 @@
 							<includes>LICENSE.txt</includes>
 							<includeGroupIds>space.arim</includeGroupIds>
 							<includeArtifactIds>universal-gpl</includeArtifactIds>
-							<!--  <includeGroupIds>space.arim,space.arim.uuidvault</includeGroupIds>
-							<includeArtifactIds>universal-gpl,spigot</includeArtifactIds>-->
 						</configuration>
 					</execution>
 				</executions>
@@ -58,15 +55,6 @@
 						<goals>
 							<goal>shade</goal>
 						</goals>
-						<configuration>
-							<artifactSet>
-								<includes>
-									<include>space.arim.uuidvault:api</include>
-									<include>space.arim.uuidvault:plugin</include>
-									<include>space.arim.uuidvault:spigot</include>
-								</includes>
-							</artifactSet>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -80,6 +68,18 @@
 			<type>zip</type>
 			<optional>true</optional>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>space.arim.uuidvault</groupId>
+			<artifactId>spigot</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>space.arim.uuidvault</groupId>
+			<artifactId>bungee</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>space.arim.uuidvault</groupId>
+			<artifactId>sponge</artifactId>
 		</dependency>
 	</dependencies>
 </project>

@@ -124,7 +124,7 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	 * Whether the resolveNatively methods must be called from the server's main thread. <br>
 	 * See {@link #resolveNatively(String)} and {@link #resolveNatively(UUID)} <br>
 	 * <br>
-	 * Will return <code>false</code> on servers which allow safe <i>asynchronous</i> calls to their APIs.
+	 * Will return <code>false</code> on servers which allow safe <i>asynchronous</i> calls to the necessary APIs.
 	 * 
 	 * @return true if resolveNatively methods must be called <i>synchronously</i>, false otherwise
 	 */
@@ -140,7 +140,6 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	 * 
 	 * @param name the name of the player whose uuid to find
 	 * @return a nonnull uuid if found, else <code>null</code>
-	 * @implSpec thread safety depends on {@link #mustCallNativeResolutionSync()}
 	 */
 	public abstract UUID resolveNatively(String name);
 	
@@ -149,12 +148,11 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	 * for players matching the specified UUID. <br>
 	 * If a player is found, the name is returned. Else, <code>null</code> is returned. <br>
 	 * <br>
-	 * <b>Must be called from the main thread if {@link #mustCallNativeResolutionSync()} is true</b> <br>
+	 * <b>Must be called from the main thread if {@link #mustCallNativeResolutionSync()} is true</b>. <br>
 	 * Note that the offline player cache is not available on proxy servers.
 	 * 
 	 * @param uuid the uuid of the player whose name to find
 	 * @return a nonnull name if found, else <code>null</code>
-	 * @implSpec thread safety depends on {@link #mustCallNativeResolutionSync()}
 	 */
 	public abstract String resolveNatively(UUID uuid);
 	

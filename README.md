@@ -26,7 +26,7 @@ See [Requirements and Installation](https://github.com/A248/UUIDVault/wiki/Requi
 
 ### API Usage
 
-The API is simple and clean, yet powerful. See [API Usage](https://github.com/A248/UUIDVault/wiki/API-Usage)
+The API is simple and clean, yet powerful. See [Developer Setup](https://github.com/A248/UUIDVault/wiki/Developer-Setup) and [API Usage](https://github.com/A248/UUIDVault/wiki/API-Usage)
 
 ### Implementing Plugins
 

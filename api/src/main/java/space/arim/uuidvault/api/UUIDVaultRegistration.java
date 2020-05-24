@@ -20,7 +20,7 @@ package space.arim.uuidvault.api;
 
 /**
  * Represents a successfully registered UUIDResolver implementation. <br>
- * See {@link UUIDVault#register(UUIDResolution, Class, byte, String)}.
+ * See {@link UUIDVault#register(UUIDResolver, Class, byte, String)}.
  * 
  * @author A248
  *

@@ -9,7 +9,7 @@ UUIDVault implements an API to bridge the various fragmented uuid-name caches. U
 
 * Improved efficiency: you don't need multiple plugins storing UUID/name information.
 
-* Server agnostic! It doesn't matter whether your plugin is for Spigot, BungeeCord, Sponge, or Velocity.
+* Server agnostic! If you are a developer, it doesn't matter whether your plugin is for Spigot, BungeeCord, Sponge, or Velocity.
 (This means if your project has a "common" or "shared" module, you can use UUIDVault directly there.)
 
 * Highly documented. The javadoc is well-detailed. I honestly haven't seen a single Minecraft-related project with more documentation than UUIDVault. And even if you don't like the javadoc, nearly all of the information is also explained in the wiki.

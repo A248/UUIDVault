@@ -12,9 +12,9 @@
 	<version>0.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
-	<name>UUIDVault</name>
-	<description>Many Spigot plugins store UUID-name mappings. It's about time this practice was consolidated.</description>
-	<url>https://github.com/A248/UUIDVault</url>
+	<name>${plugin.name}</name>
+	<description>${plugin.description}</description>
+	<url>${plugin.url}</url>
 	<inceptionYear>2020</inceptionYear>
 	
 	<properties>
@@ -27,12 +27,12 @@
 		<bungee.version>1.15-SNAPSHOT</bungee.version>
 		<sponge.version>7.2.0</sponge.version>
 		
-		<plugin.name>${project.name}</plugin.name>
+		<plugin.name>UUIDVault</plugin.name>
 		<plugin.annotationId>uuidvault</plugin.annotationId>
 		<plugin.version>0.1.0</plugin.version>
 		<plugin.author>A248</plugin.author>
 		<plugin.url>https://github.com/A248/UUIDVault</plugin.url>
-		<plugin.description>${project.description}</plugin.description>
+		<plugin.description>Many Spigot plugins store UUID-name mappings. It's about time this practice was consolidated.</plugin.description>
 	</properties>
 	
 	<licenses>

@@ -18,18 +18,18 @@
  */
 package space.arim.uuidvault.plugin;
 
-import space.arim.uuidvault.api.UUIDResolution;
+import space.arim.uuidvault.api.UUIDResolver;
 import space.arim.uuidvault.api.UUIDVaultRegistration;
 
 class Registration implements UUIDVaultRegistration, Comparable<Registration> {
 
 	private final SimpleImplementation core;
 	final Class<?> pluginClass;
-	final UUIDResolution resolver;
+	final UUIDResolver resolver;
 	private volatile byte priority;
 	final String name;
 	
-	Registration(SimpleImplementation core, Class<?> pluginClass, UUIDResolution resolver, byte priority, String name) {
+	Registration(SimpleImplementation core, Class<?> pluginClass, UUIDResolver resolver, byte priority, String name) {
 		this.core = core;
 		this.pluginClass = pluginClass;
 		this.resolver = resolver;

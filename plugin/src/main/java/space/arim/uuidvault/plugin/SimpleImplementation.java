@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import space.arim.uuidvault.api.UUIDResolution;
+import space.arim.uuidvault.api.UUIDResolver;
 import space.arim.uuidvault.api.UUIDVaultRegistration;
 
 public abstract class SimpleImplementation extends ImplementationHelper {
@@ -39,13 +39,13 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 	 * and we will iterate over it.
 	 * 
 	 */
-	private volatile CopyOnWriteArrayList<UUIDResolution> resolvers;
+	private volatile CopyOnWriteArrayList<UUIDResolver> resolvers;
 	
 	protected SimpleImplementation(boolean mustCallNativeResolutionSync) {
 		super(mustCallNativeResolutionSync);
 	}
 	
-	private <T extends List<UUIDResolution>> T makeResolverList(T resultToPopulate) {
+	private <T extends List<UUIDResolver>> T makeResolverList(T resultToPopulate) {
 
 		List<Registration> tempList = new ArrayList<>(registrations.size());
 		registrations.forEach((c, r) -> tempList.add(r));
@@ -55,7 +55,7 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 		return resultToPopulate;
 	}
 	
-	private List<UUIDResolution> getResolverList() {
+	private List<UUIDResolver> getResolverList() {
 		// if we're still starting up, resolvers will be null, so we create a temporary list
 		return (resolvers != null) ? resolvers : makeResolverList(new ArrayList<>());
 	}
@@ -67,7 +67,7 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 	}
 	
 	@Override
-	public UUIDVaultRegistration register(UUIDResolution resolver, Class<?> pluginClass, byte defaultPriority, String name) {
+	public UUIDVaultRegistration register(UUIDResolver resolver, Class<?> pluginClass, byte defaultPriority, String name) {
 		Objects.requireNonNull(resolver, "Resolver must not be null");
 		Objects.requireNonNull(pluginClass, "Plugin class must not be null");
 
@@ -97,7 +97,7 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 	
 	@Override
 	UUID resolveImmediatelyFromRegistered(String name) {
-		for (UUIDResolution resolver : getResolverList()) {
+		for (UUIDResolver resolver : getResolverList()) {
 
 			UUID uuid = resolver.resolveImmediately(name);
 			if (uuid != null) {
@@ -109,7 +109,7 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 	
 	@Override
 	String resolveImmediatelyFromRegistered(UUID uuid) {
-		for (UUIDResolution resolver : getResolverList()) {
+		for (UUIDResolver resolver : getResolverList()) {
 
 			String name = resolver.resolveImmediately(uuid);
 			if (name != null) {
@@ -122,7 +122,7 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 	@Override
 	CompletableFuture<UUID> resolveLaterFromRegistered(String name) {
 		CompletableFuture<UUID> result = null;
-		for (UUIDResolution resolver : getResolverList()) {
+		for (UUIDResolver resolver : getResolverList()) {
 			if (result == null) {
 				result = safelyHandle(resolver.resolve(name), resolver);
 				continue;
@@ -136,7 +136,7 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 	@Override
 	CompletableFuture<String> resolveLaterFromRegistered(UUID uuid) {
 		CompletableFuture<String> result = null;
-		for (UUIDResolution resolver : getResolverList()) {
+		for (UUIDResolver resolver : getResolverList()) {
 			if (result == null) {
 				result = safelyHandle(resolver.resolve(uuid), resolver);
 				continue;
@@ -154,7 +154,7 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 		return nullableFuture;
 	}
 	
-	private <T> CompletableFuture<T> safelyHandle(CompletableFuture<T> future, UUIDResolution resolver) {
+	private <T> CompletableFuture<T> safelyHandle(CompletableFuture<T> future, UUIDResolver resolver) {
 		if (future == null) {
 			return null;
 		}
@@ -164,7 +164,7 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 		});
 	}
 	
-	private void recordException(UUIDResolution resolver, Throwable throwable) {
+	private void recordException(UUIDResolver resolver, Throwable throwable) {
 		Class<?> pluginClass = null;
 		String name = null;
 		for (Registration registration : registrations.values()) {

@@ -43,7 +43,7 @@ import java.util.concurrent.CompletableFuture;
  * @author A248
  *
  */
-public abstract class UUIDVault implements BaseUUIDResolution {
+public abstract class UUIDVault implements BaseUUIDResolver {
 
 	private static volatile UUIDVault inst;
 	
@@ -93,7 +93,7 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	
 	/**
 	 * Whether UUIDVault is accepting more implementation registrations. <br>
-	 * If not accepting registrations, calls to {@link #register(UUIDResolution, Class, byte, String)}
+	 * If not accepting registrations, calls to {@link #register(UUIDResolver, Class, byte, String)}
 	 * will throw an exception.
 	 * 
 	 * @return true if accepting, false otherwise
@@ -101,7 +101,7 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	public abstract boolean isAcceptingRegistrations();
 	
 	/**
-	 * Registers a {@link UUIDResolution} implementation with the associated plugin's main class. <br>
+	 * Registers a {@link UUIDResolver} implementation with the associated plugin's main class. <br>
 	 * Remember to check {@link #isAcceptingRegistrations()} first! <br>
 	 * <br>
 	 * The plugin class is used as an identifier and ensures that no duplicate implementations are registered. <br>
@@ -118,7 +118,7 @@ public abstract class UUIDVault implements BaseUUIDResolution {
 	 * @param name a user friendly name for the resolver, can be null or empty but an informative name is encouraged
 	 * @return a registration if successfully registered, null if the operation failed for some reason
 	 */
-	public abstract UUIDVaultRegistration register(UUIDResolution resolver, Class<?> pluginClazz, byte defaultPriority, String name);
+	public abstract UUIDVaultRegistration register(UUIDResolver resolver, Class<?> pluginClazz, byte defaultPriority, String name);
 	
 	/**
 	 * Whether the resolveNatively methods must be called from the server's main thread. <br>

@@ -53,7 +53,7 @@ import java.util.concurrent.CompletableFuture;
  * @author A248
  *
  */
-public interface UUIDResolution extends BaseUUIDResolution {
+public interface UUIDResolver extends BaseUUIDResolver {
 
 	/**
 	 * Resolves a playername to a UUID. <br>

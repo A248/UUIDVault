@@ -69,29 +69,6 @@ public abstract class UUIDVault implements BaseUUIDResolver {
 	}
 	
 	/**
-	 * Expands a shortened version of a UUID. <br>
-	 * <br>
-	 * Each form is unique. However, it is possible to store UUIDs in short form
-	 * and expand them into long form when needed. <br>
-	 * <br>
-	 * Example long form (36 chars): ed5f12cd-6007-45d9-a4b9-940524ddaecf <br>
-	 * Example short form (32 chars): ed5f12cd600745d9a4b9940524ddaecf <br>
-	 * <br>
-	 * You most likely won't need this. It is here for convenience.
-	 * 
-	 * @param uuid the string based short uuid
-	 * @return the lengthened uuid string
-	 * @throws IndexOutOfBoundsException if the input is not of length 32
-	 */
-	public static String expandUUID(String uuid) {
-		if (uuid.length() != 32) {
-			throw new IndexOutOfBoundsException("Cannot expand 32-char " + uuid);
-		}
-		return uuid.substring(0, 8) + "-" + uuid.substring(8, 12) + "-" + uuid.substring(12, 16)
-		+ "-" + uuid.substring(16, 20) + "-" + uuid.substring(20, 32);
-	}
-	
-	/**
 	 * Whether UUIDVault is accepting more implementation registrations. <br>
 	 * If not accepting registrations, calls to {@link #register(UUIDResolver, Class, byte, String)}
 	 * will throw an exception.

@@ -18,6 +18,8 @@
  */
 package space.arim.uuidvault.api;
 
+import java.util.UUID;
+
 /**
  * Utility class with convenience methods for manipulating UUIDs. <br>
  * May be useful for resolvers.
@@ -47,6 +49,19 @@ public class UUIDUtil {
 		}
 		return shortUuid.substring(0, 8) + "-" + shortUuid.substring(8, 12) + "-" + shortUuid.substring(12, 16)
 		+ "-" + shortUuid.substring(16, 20) + "-" + shortUuid.substring(20, 32);
+	}
+	
+	/**
+	 * Nearly identical to {@link #expand(String)}, however, this adds the additional
+	 * operation of parsing the result string into a full UUID.
+	 * 
+	 * @param shortUuid the short uuid string
+	 * @return the parsed UUID
+	 * @throws IndexOutOfBoundsException if the input is not of length 32
+	 * @throws IllegalArgumentException if {@link UUID#fromString(String)} threw IAE
+	 */
+	public static UUID expandAndParse(String shortUuid) {
+		return UUID.fromString(expand(shortUuid));
 	}
 	
 }

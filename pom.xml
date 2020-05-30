@@ -9,7 +9,7 @@
 		1. Update property plugin.version
 		2. Update versions in all child modules
 	-->
-	<version>0.1.0-SNAPSHOT</version>
+	<version>0.2.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
 	<name>${plugin.name}</name>
@@ -31,7 +31,7 @@
 		
 		<plugin.name>UUIDVault</plugin.name>
 		<plugin.annotationId>uuidvault</plugin.annotationId>
-		<plugin.version>0.1.0</plugin.version>
+		<plugin.version>0.2.0</plugin.version>
 		<plugin.author>A248</plugin.author>
 		<plugin.url>https://github.com/A248/UUIDVault</plugin.url>
 		<plugin.description>Many Spigot plugins store UUID-name mappings. It's about time this practice was consolidated.</plugin.description>

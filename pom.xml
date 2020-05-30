@@ -22,6 +22,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
     	<maven.compiler.target>1.8</maven.compiler.target>
 		<universal.version>0.8.1-SNAPSHOT</universal.version>
+		<junit.version>5.6.2</junit.version>
 		
 		<spigot.version>1.8.8-R0.1-SNAPSHOT</spigot.version>
 		<bungee.version>1.15-SNAPSHOT</bungee.version>
@@ -73,6 +74,11 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-shade-plugin</artifactId>
 					<version>3.2.3</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.0.0-M4</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -150,6 +156,19 @@
 				<groupId>space.arim.uuidvault</groupId>
 				<artifactId>plugin</artifactId>
 				<version>${project.version}</version>
+			</dependency>
+			<!-- Test Dependencies -->
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-api</artifactId>
+				<version>${junit.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-engine</artifactId>
+				<version>${junit.version}</version>
+				<scope>test</scope>
 			</dependency>
 			<!-- Environment-specific modules -->
 			<dependency>

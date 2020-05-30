@@ -18,6 +18,7 @@
  */
 package space.arim.uuidvault.api;
 
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -62,6 +63,61 @@ public class UUIDUtil {
 	 */
 	public static UUID expandAndParse(String shortUuid) {
 		return UUID.fromString(expand(shortUuid));
+	}
+	
+	/**
+	 * Serialises a UUID to a byte array. Since a UUID is 128 bits,
+	 * it may be stored in a byte array of length 16.
+	 * 
+	 * @param uuid the UUID
+	 * @return the byte array, will always be length 16
+	 * @throws NullPointerException if uuid is null
+	 */
+	public static byte[] byteArrayFromUUID(UUID uuid) {
+		Objects.requireNonNull(uuid, "UUID must not be null");
+		return byteArrayFrom2Longs(uuid.getMostSignificantBits(), uuid.getLeastSignificantBits());
+	}
+	
+	private static byte[] byteArrayFrom2Longs(long msb, long lsb) {
+		byte[] result = new byte[16];
+		for (int i = 7; i >= 0; i--) {
+			result[i] = (byte) (msb & 0xffL);
+			msb >>= 8;
+		}
+		for (int i = 15; i >= 8; i--) {
+			result[i] = (byte) (lsb & 0xffL);
+			lsb >>= 8;
+		}
+		return result;
+	}
+	
+	/**
+	 * Deserialises a UUID from a byte array. This is the inverse operation
+	 * of {@link #byteArrayFromUUID(UUID)}.
+	 * 
+	 * @param data the byte array, must be of length 16
+	 * @return the UUID
+	 * @throws NullPointerException if data is null
+	 * @throws IndexOutOfBoundsException if the array length is not 16
+	 */
+	public static UUID uuidFromByteArray(byte[] data) {
+		if (Objects.requireNonNull(data, "data must not be null").length != 16) {
+			throw new IndexOutOfBoundsException();
+		}
+		return new UUID(
+				longFromBytes(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7]),
+				longFromBytes(data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15]));
+	}
+	
+	private static long longFromBytes(byte b1, byte b2, byte b3, byte b4, byte b5, byte b6, byte b7, byte b8) {
+		return (b1 & 0xffL) << 56
+				| (b2 & 0xffL) << 48
+				| (b3 & 0xffL) << 40
+				| (b4 & 0xffL) << 32
+				| (b5 & 0xffL) << 24
+				| (b6 & 0xffL) << 16
+				| (b7 & 0xffL) << 8
+				| (b8 & 0xffL);
 	}
 	
 }

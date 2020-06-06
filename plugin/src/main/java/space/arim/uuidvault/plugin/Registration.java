@@ -26,7 +26,7 @@ class Registration implements UUIDVaultRegistration, Comparable<Registration> {
 	private final SimpleImplementation core;
 	final Class<?> pluginClass;
 	final UUIDResolver resolver;
-	private volatile byte priority;
+	private final byte priority;
 	final String name;
 	
 	Registration(SimpleImplementation core, Class<?> pluginClass, UUIDResolver resolver, byte priority, String name) {
@@ -37,10 +37,6 @@ class Registration implements UUIDVaultRegistration, Comparable<Registration> {
 		this.name = name;
 	}
 	
-	void changePriority(byte priority) {
-		this.priority = priority;
-	}
-	
 	@Override
 	public boolean unregister() {
 		return core.unregister(this);
@@ -49,6 +45,26 @@ class Registration implements UUIDVaultRegistration, Comparable<Registration> {
 	@Override
 	public int compareTo(Registration o) {
 		return priority - o.priority;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + pluginClass.hashCode();
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Registration)) {
+			return false;
+		}
+		Registration other = (Registration) obj;
+		return pluginClass == other.pluginClass;
 	}
 
 }

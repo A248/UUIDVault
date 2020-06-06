@@ -44,7 +44,8 @@ class Registration implements UUIDVaultRegistration, Comparable<Registration> {
 
 	@Override
 	public int compareTo(Registration o) {
-		return priority - o.priority;
+		// Higher priorities first
+		return o.priority - priority;
 	}
 
 	@Override
@@ -64,7 +65,7 @@ class Registration implements UUIDVaultRegistration, Comparable<Registration> {
 			return false;
 		}
 		Registration other = (Registration) obj;
-		return pluginClass == other.pluginClass;
+		return pluginClass.equals(other.pluginClass);
 	}
 
 }

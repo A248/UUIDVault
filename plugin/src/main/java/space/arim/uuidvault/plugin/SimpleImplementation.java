@@ -18,17 +18,18 @@
  */
 package space.arim.uuidvault.plugin;
 
+import java.util.Arrays;
 import java.util.Objects;
-import java.util.SortedSet;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.atomic.AtomicReference;
+
 import space.arim.uuidvault.api.UUIDResolver;
 import space.arim.uuidvault.api.UUIDVaultRegistration;
 
 public abstract class SimpleImplementation extends ImplementationHelper {
-
-	private final SortedSet<Registration> registrations = new ConcurrentSkipListSet<>();
+	
+	private final AtomicReference<Registration[]> registrations = new AtomicReference<>(new Registration[] {});
 	
 	protected SimpleImplementation(boolean mustCallNativeResolutionSync) {
 		super(mustCallNativeResolutionSync);
@@ -42,12 +43,42 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 		if (!verifyNativePluginClass(pluginClass)) {
 			throw new IllegalArgumentException("Plugin class is invalid!");
 		}
-		Registration regis = new Registration(this, pluginClass, resolver, defaultPriority, name);
-		return (registrations.add(regis)) ? regis : null;
+		Registration regisToAdd = new Registration(this, pluginClass, resolver, defaultPriority, name);
+		Registration[] existing;
+		Registration[] updated;
+		do {
+			existing = registrations.get();
+			for (Registration registration : existing) {
+				if (registration.pluginClass == pluginClass) {
+					return null;
+				}
+			}
+			updated = Arrays.copyOf(existing, existing.length + 1);
+			updated[existing.length]= regisToAdd; 
+			Arrays.sort(updated);
+		} while (!registrations.compareAndSet(existing, updated));
+		return regisToAdd;
 	}
 
-	boolean unregister(Registration regis) {
-		return registrations.remove(regis);
+	boolean unregister(Registration regisToRemove) {
+		Registration[] existing;
+		Registration[] updated;
+		do {
+			existing = registrations.get();
+			updated = new Registration[existing.length - 1];
+			boolean found = false;
+			for (int n = 0; n < existing.length; n++) {
+				if (existing[n] == regisToRemove) {
+					found = true;
+				} else {
+					updated[found ? n - 1 : n] = existing[n];
+				}
+			}
+			if (!found) {
+				return false;
+			}
+		} while (!registrations.compareAndSet(existing, updated));
+		return true;
 	}
 	
 	protected abstract boolean verifyNativePluginClass(Class<?> pluginClass);
@@ -58,7 +89,7 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 	
 	@Override
 	UUID resolveImmediatelyFromRegistered(String name) {
-		for (Registration registration : registrations) {
+		for (Registration registration : registrations.get()) {
 			UUIDResolver resolver = registration.resolver;
 
 			UUID uuid = resolver.resolveImmediately(name);
@@ -71,7 +102,7 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 	
 	@Override
 	String resolveImmediatelyFromRegistered(UUID uuid) {
-		for (Registration registration : registrations) {
+		for (Registration registration : registrations.get()) {
 			UUIDResolver resolver = registration.resolver;
 
 			String name = resolver.resolveImmediately(uuid);
@@ -85,7 +116,7 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 	@Override
 	CompletableFuture<UUID> resolveLaterFromRegistered(String name) {
 		CompletableFuture<UUID> result = null;
-		for (Registration registration : registrations) {
+		for (Registration registration : registrations.get()) {
 			UUIDResolver resolver = registration.resolver;
 
 			if (result == null) {
@@ -101,7 +132,7 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 	@Override
 	CompletableFuture<String> resolveLaterFromRegistered(UUID uuid) {
 		CompletableFuture<String> result = null;
-		for (Registration registration : registrations) {
+		for (Registration registration : registrations.get()) {
 			UUIDResolver resolver = registration.resolver;
 
 			if (result == null) {

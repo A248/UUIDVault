@@ -27,15 +27,9 @@ import space.arim.uuidvault.api.UUIDVault;
 public abstract class ImplementationHelper extends UUIDVault {
 
 	private final boolean mustCallNativeResolutionSync;
-	private volatile boolean accepting = true;
 
 	ImplementationHelper(boolean mustCallNativeResolutionSync) {
 		this.mustCallNativeResolutionSync = mustCallNativeResolutionSync;
-	}
-
-	@Override
-	public boolean isAcceptingRegistrations() {
-		return accepting;
 	}
 	
 	@Override
@@ -113,16 +107,5 @@ public abstract class ImplementationHelper extends UUIDVault {
 	abstract CompletableFuture<UUID> resolveLaterFromRegistered(String name);
 
 	abstract CompletableFuture<String> resolveLaterFromRegistered(UUID uuid);
-
-	abstract void onStartupCompletion();
-
-	/**
-	 * Must be called, NOT overridden
-	 * 
-	 */
-	protected void completeNativeStartup() {
-		accepting = false;
-		onStartupCompletion();
-	}
 
 }

@@ -62,7 +62,7 @@ public abstract class ImplementationHelper extends UUIDVault {
 	public CompletableFuture<UUID> resolve(String name) {
 		Objects.requireNonNull(name, "Name must not be null");
 		if (fastEscapeInvalidNameArgument(name)) {
-			return null;
+			return CompletableFuture.completedFuture(null);
 		}
 
 		UUID immediate = resolveImmediately(name);

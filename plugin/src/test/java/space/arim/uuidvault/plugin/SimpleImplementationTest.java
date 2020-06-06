@@ -38,15 +38,18 @@ public class SimpleImplementationTest {
 	}
 	
 	private byte randomPriority() {
-		return (byte) (ThreadLocalRandom.current().nextInt(-Byte.MIN_VALUE + Byte.MAX_VALUE) + Byte.MIN_VALUE);
+		return (byte) (ThreadLocalRandom.current().nextInt(-2*Byte.MIN_VALUE) + Byte.MIN_VALUE);
 	}
 	
 	@Test
-	public void testDuplicateRegistrations() {
+	public void testDuplicateRegistrationsAndNullFutures() {
 		UUIDVaultRegistration nullResolver = impl.register(new NullResolver(), NullResolver.class, randomPriority(), null);
 		UUIDVaultRegistration emptyResolver = impl.register(new EmptyResolver(), EmptyResolver.class, randomPriority(), "");
 		assertNotNull(nullResolver, "Original registration should be nonnull");
 		assertNotNull(emptyResolver, "Original registration should be nonnull");
+
+		assertNotNull(impl.resolve("A248"), "#resolve should return a completed null instead of null future");
+		assertNotNull(impl.resolve(new UUID(0, 0)), "#resolve should return a completed null instead of null future");
 
 		UUIDVaultRegistration duplicateNullResolver = impl.register(new NullResolver(), NullResolver.class, randomPriority(), null);
 		UUIDVaultRegistration duplicateEmptyResolver = impl.register(new EmptyResolver(), EmptyResolver.class, randomPriority(), "");
@@ -58,15 +61,20 @@ public class SimpleImplementationTest {
 	}
 	
 	@Test
-	public void testBasicResolution() {
+	public void testBasicResolutionAndUnregister() {
 		UUID uuid = UUID.fromString("ed5f12cd-6007-45d9-a4b9-940524ddaecf");
 		String name = "A248";
 		SingleImmediateResolver resolver = new SingleImmediateResolver(uuid, name);
-		impl.register(resolver, SingleImmediateResolver.class, randomPriority(), "");
+		UUIDVaultRegistration registration = impl.register(resolver, SingleImmediateResolver.class, randomPriority(), "");
 		assertEquals(uuid, impl.resolveImmediately(name), "Must immediately resolve to correct uuid");
 		assertEquals(name, impl.resolveImmediately(uuid), "Must immediately resolve to correct name");
 		assertEquals(uuid, impl.resolve(name).getNow(null), "Must immediately resolve to correct uuid");
 		assertEquals(name, impl.resolve(uuid).getNow(null), "Must immediately resolve to correct name");
+		registration.unregister();
+		assertNull(impl.resolveImmediately(name), "Must not query unregistered resolver for uuid");
+		assertNull(impl.resolveImmediately(uuid), "Must not query unregistered resolver for name");
+		assertNull(impl.resolve(name).join(), "Must not query unregistered resolver for uuid");
+		assertNull(impl.resolve(uuid).join(), "Must not query unregistered resolver for name");
 	}
 	
 }

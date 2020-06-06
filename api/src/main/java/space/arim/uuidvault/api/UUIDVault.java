@@ -78,17 +78,7 @@ public abstract class UUIDVault implements BaseUUIDResolver {
 	}
 	
 	/**
-	 * Whether UUIDVault is accepting more implementation registrations. <br>
-	 * If not accepting registrations, calls to {@link #register(UUIDResolver, Class, byte, String)}
-	 * will throw an exception.
-	 * 
-	 * @return true if accepting, false otherwise
-	 */
-	public abstract boolean isAcceptingRegistrations();
-	
-	/**
 	 * Registers a {@link UUIDResolver} implementation with the associated plugin's main class. <br>
-	 * Remember to check {@link #isAcceptingRegistrations()} first! <br>
 	 * <br>
 	 * The plugin class is used as an identifier and ensures that no duplicate implementations are registered. <br>
 	 * If there is already a registration using the same plugin class, the operation will fail and this will

@@ -20,35 +20,53 @@ package space.arim.uuidvault.plugin;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeAll;
+import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import space.arim.uuidvault.api.UUIDVaultPriority;
 import space.arim.uuidvault.api.UUIDVaultRegistration;
 
 public class SimpleImplementationTest {
-
-	private static SimpleImplementation impl;
 	
-	@BeforeAll
-	public static void setup() {
+	private SimpleImplementation impl;
+	
+	@BeforeEach
+	public void setup() {
 		impl = new TestingImplementation();
+	}
+	
+	private byte randomPriority() {
+		return (byte) (ThreadLocalRandom.current().nextInt(-Byte.MIN_VALUE + Byte.MAX_VALUE) + Byte.MIN_VALUE);
 	}
 	
 	@Test
 	public void testDuplicateRegistrations() {
-		UUIDVaultRegistration nullResolver = impl.register(new NullResolver(), NullResolver.class, UUIDVaultPriority.NORMAL, null);
-		UUIDVaultRegistration emptyResolver = impl.register(new EmptyResolver(), EmptyResolver.class, UUIDVaultPriority.NORMAL, "");
+		UUIDVaultRegistration nullResolver = impl.register(new NullResolver(), NullResolver.class, randomPriority(), null);
+		UUIDVaultRegistration emptyResolver = impl.register(new EmptyResolver(), EmptyResolver.class, randomPriority(), "");
 		assertNotNull(nullResolver, "Original registration should be nonnull");
 		assertNotNull(emptyResolver, "Original registration should be nonnull");
 
-		UUIDVaultRegistration duplicateNullResolver = impl.register(new NullResolver(), NullResolver.class, UUIDVaultPriority.NORMAL, null);
-		UUIDVaultRegistration duplicateEmptyResolver = impl.register(new EmptyResolver(), EmptyResolver.class, UUIDVaultPriority.NORMAL, "");
+		UUIDVaultRegistration duplicateNullResolver = impl.register(new NullResolver(), NullResolver.class, randomPriority(), null);
+		UUIDVaultRegistration duplicateEmptyResolver = impl.register(new EmptyResolver(), EmptyResolver.class, randomPriority(), "");
 		assertNull(duplicateNullResolver, "Duplicate registration should be null");
 		assertNull(duplicateEmptyResolver, "Duplicate registration should be null");
 		
 		assertTrue(nullResolver.unregister(), "Original registration should unregister properly");
 		assertTrue(emptyResolver.unregister(), "Original registration should unregister properly");
+	}
+	
+	@Test
+	public void testBasicResolution() {
+		UUID uuid = UUID.fromString("ed5f12cd-6007-45d9-a4b9-940524ddaecf");
+		String name = "A248";
+		SingleImmediateResolver resolver = new SingleImmediateResolver(uuid, name);
+		impl.register(resolver, SingleImmediateResolver.class, randomPriority(), "");
+		assertEquals(uuid, impl.resolveImmediately(name), "Must immediately resolve to correct uuid");
+		assertEquals(name, impl.resolveImmediately(uuid), "Must immediately resolve to correct name");
+		assertEquals(uuid, impl.resolve(name).getNow(null), "Must immediately resolve to correct uuid");
+		assertEquals(name, impl.resolve(uuid).getNow(null), "Must immediately resolve to correct name");
 	}
 	
 }

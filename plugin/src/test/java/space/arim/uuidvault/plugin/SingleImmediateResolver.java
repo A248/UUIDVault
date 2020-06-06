@@ -19,43 +19,38 @@
 package space.arim.uuidvault.plugin;
 
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
-public class TestingImplementation extends SimpleImplementation {
+import space.arim.uuidvault.api.UUIDResolver;
 
-	protected TestingImplementation() {
-		super(false);
-	}
+public class SingleImmediateResolver implements UUIDResolver {
 
-	@Override
-	protected boolean verifyNativePluginClass(Class<?> pluginClass) {
-		return true;
-	}
-
-	@Override
-	protected String getDescriptiveName(Class<?> pluginClass) {
-		return "Plugin v1.0";
-	}
-
-	@Override
-	protected void logException(String message, Throwable throwable) {
-		System.err.println(message);
-		throwable.printStackTrace();
-	}
-
-	@Override
-	protected UUID resolveNativelyDirectly(String name) {
-		return null;
-	}
-
-	@Override
-	protected String resolveNativelyDirectly(UUID uuid) {
-		return null;
-	}
+	private final UUID uuid;
+	private final String name;
 	
-	// Re-overriding this ensures it is visible
+	SingleImmediateResolver(UUID uuid, String name) {
+		this.uuid = uuid;
+		this.name = name;
+	}
+
 	@Override
-	protected void setInstance() {
-		super.setInstance();
+	public CompletableFuture<UUID> resolve(String name) {
+		return null;
+	}
+
+	@Override
+	public UUID resolveImmediately(String name) {
+		return (name.equalsIgnoreCase(this.name)) ? uuid : null;
+	}
+
+	@Override
+	public CompletableFuture<String> resolve(UUID uuid) {
+		return null;
+	}
+
+	@Override
+	public String resolveImmediately(UUID uuid) {
+		return (uuid.equals(this.uuid)) ? name : null;
 	}
 	
 }

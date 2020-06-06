@@ -53,9 +53,13 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 					return null;
 				}
 			}
-			updated = Arrays.copyOf(existing, existing.length + 1);
-			updated[existing.length]= regisToAdd; 
-			Arrays.sort(updated);
+			updated = new Registration[existing.length + 1];
+			int binarySearch = Arrays.binarySearch(existing, regisToAdd);
+			int insertionIndex = - (binarySearch + 1);
+			updated[insertionIndex] = regisToAdd;
+			for (int n = 0; n < existing.length; n++) {
+				updated[(n < insertionIndex) ? n : n + 1] = existing[n];
+			}
 		} while (!registrations.compareAndSet(existing, updated));
 		return regisToAdd;
 	}
@@ -65,17 +69,14 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 		Registration[] updated;
 		do {
 			existing = registrations.get();
-			updated = new Registration[existing.length - 1];
-			boolean found = false;
-			for (int n = 0; n < existing.length; n++) {
-				if (existing[n] == regisToRemove) {
-					found = true;
-				} else {
-					updated[found ? n - 1 : n] = existing[n];
-				}
-			}
-			if (!found) {
+			int locationIndex = Arrays.binarySearch(existing, regisToRemove);
+			if (locationIndex < 0) {
+				// not found
 				return false;
+			}
+			updated = new Registration[existing.length - 1];
+			for (int n = 0; n < updated.length; n++) {
+				updated[n] = existing[(n < locationIndex) ? n : n + 1];
 			}
 		} while (!registrations.compareAndSet(existing, updated));
 		return true;

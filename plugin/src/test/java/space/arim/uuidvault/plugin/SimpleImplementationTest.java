@@ -48,7 +48,7 @@ public class SimpleImplementationTest {
 		assertNull(duplicateEmptyResolver, "Duplicate registration should be null");
 		
 		assertTrue(nullResolver.unregister(), "Original registration should unregister properly");
-		assertTrue(nullResolver.unregister(), "Original registration should unregister properly");
+		assertTrue(emptyResolver.unregister(), "Original registration should unregister properly");
 	}
 	
 }

@@ -83,7 +83,7 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 
 	boolean unregister(Registration regis) {
 		boolean success = registrations.remove(regis.pluginClass, regis);
-		if (success) {
+		if (success && resolvers != null) {
 			resolvers.remove(regis.resolver);
 		}
 		return success;

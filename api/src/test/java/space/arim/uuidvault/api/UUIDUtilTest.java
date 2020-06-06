@@ -37,7 +37,7 @@ public class UUIDUtilTest {
 	}
 	
 	@RepeatedTest(10)
-	public void shouldMainUUIDToFromShortForm() {
+	public void shouldMaintainUUIDToFromShortForm() {
 		UUID uuid = UUID.randomUUID();
 		String shortUuid = uuid.toString().replace("-", "");
 		assertEquals(uuid, UUIDUtil.expandAndParse(shortUuid));

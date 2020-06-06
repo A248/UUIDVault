@@ -63,15 +63,8 @@ class Registration implements UUIDVaultRegistration, Comparable<Registration> {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof Registration)) {
-			return false;
-		}
-		Registration other = (Registration) obj;
-		return pluginClass.equals(other.pluginClass);
+	public boolean equals(Object object) {
+		return this == object || object instanceof Registration && pluginClass == ((Registration) object).pluginClass;
 	}
 
 }

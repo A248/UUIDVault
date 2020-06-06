@@ -60,7 +60,7 @@ public abstract class ImplementationHelper extends UUIDVault {
 	
 	@Override
 	public CompletableFuture<UUID> resolve(String name) {
-		Objects.requireNonNull(name);
+		Objects.requireNonNull(name, "Name must not be null");
 		if (fastEscapeInvalidNameArgument(name)) {
 			return null;
 		}
@@ -72,7 +72,7 @@ public abstract class ImplementationHelper extends UUIDVault {
 
 	@Override
 	public UUID resolveImmediately(String name) {
-		Objects.requireNonNull(name);
+		Objects.requireNonNull(name, "Name must not be null");
 		if (fastEscapeInvalidNameArgument(name)) {
 			return null;
 		}
@@ -82,7 +82,7 @@ public abstract class ImplementationHelper extends UUIDVault {
 
 	@Override
 	public CompletableFuture<String> resolve(UUID uuid) {
-		Objects.requireNonNull(uuid);
+		Objects.requireNonNull(uuid, "UUID must not be null");
 
 		String immediate = resolveImmediately(uuid);
 		return (immediate != null) ? CompletableFuture.completedFuture(immediate)
@@ -91,7 +91,7 @@ public abstract class ImplementationHelper extends UUIDVault {
 
 	@Override
 	public String resolveImmediately(UUID uuid) {
-		Objects.requireNonNull(uuid);
+		Objects.requireNonNull(uuid, "UUID must not be null");
 
 		return resolveImmediatelyFromRegistered(uuid);
 	}

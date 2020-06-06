@@ -48,6 +48,15 @@ public abstract class UUIDVault implements BaseUUIDResolver {
 	private static volatile UUIDVault inst;
 	
 	protected UUIDVault() {
+		
+	}
+	
+	/**
+	 * Sets the main instance of UUIDVault to this instance. <br>
+	 * Throws an unchecked exception if the instance is already set
+	 * 
+	 */
+	protected void setInstance() {
 		if (inst == null) {
 			synchronized (UUIDVault.class) {
 				if (inst == null) {

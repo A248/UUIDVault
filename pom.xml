@@ -5,10 +5,7 @@
 	
 	<groupId>space.arim.uuidvault</groupId>
 	<artifactId>parent</artifactId>
-	<!-- Remember to update versions: 
-		1. Update property plugin.version
-		2. Update versions in all child modules
-	-->
+	<!-- Remember to update versions in all child modules -->
 	<version>0.2.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
@@ -31,7 +28,7 @@
 		
 		<plugin.name>UUIDVault</plugin.name>
 		<plugin.annotationId>uuidvault</plugin.annotationId>
-		<plugin.version>0.2.1</plugin.version>
+		<plugin.version>${project.version}</plugin.version>
 		<plugin.author>A248</plugin.author>
 		<plugin.url>https://github.com/A248/UUIDVault</plugin.url>
 		<plugin.description>Many Spigot plugins store UUID-name mappings. It's about time this practice was consolidated.</plugin.description>

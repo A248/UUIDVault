@@ -47,6 +47,12 @@ class Registration implements UUIDVaultRegistration, Comparable<Registration> {
 		// Higher priorities first
 		return o.priority - priority;
 	}
+	
+	@Override
+	public String toString() {
+		return "Registration [pluginClass=" + pluginClass + ", resolver=" + resolver + ", priority=" + priority
+				+ ", name=" + name + "]";
+	}
 
 	@Override
 	public int hashCode() {

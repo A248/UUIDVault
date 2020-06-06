@@ -46,6 +46,9 @@ public class SimpleImplementationTest {
 		UUIDVaultRegistration duplicateEmptyResolver = impl.register(new EmptyResolver(), EmptyResolver.class, UUIDVaultPriority.NORMAL, "");
 		assertNull(duplicateNullResolver, "Duplicate registration should be null");
 		assertNull(duplicateEmptyResolver, "Duplicate registration should be null");
+		
+		assertTrue(nullResolver.unregister(), "Original registration should unregister properly");
+		assertTrue(nullResolver.unregister(), "Original registration should unregister properly");
 	}
 	
 }

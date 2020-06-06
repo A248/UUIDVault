@@ -20,7 +20,6 @@ package space.arim.uuidvault.plugin.sponge;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.game.state.GameLoadCompleteEvent;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.plugin.Plugin;
@@ -35,17 +34,14 @@ public class UUIDVaultSpongePlugin {
 	
 	@Listener
 	public void onLoad(@SuppressWarnings("unused") GamePreInitializationEvent evt) {
-		uvs = new UUIDVaultSponge(Sponge.getPluginManager().fromInstance(this).get());
+		uvs = new UUIDVaultSponge(Sponge.getPluginManager().fromInstance(this)
+				.orElseThrow(() -> new IllegalStateException("No plugin found")));
 	}
 	
 	@Listener
 	public void onEnable(@SuppressWarnings("unused") GamePostInitializationEvent evt) {
 		Sponge.getServiceManager().setProvider(this, UUIDVault.class, uvs);
-	}
-	
-	@Listener
-	public void triggerStartupCompletion(@SuppressWarnings("unused") GameLoadCompleteEvent evt) {
-		uvs.completeNativeStartup();
+		uvs.setInstance();
 	}
 	
 }

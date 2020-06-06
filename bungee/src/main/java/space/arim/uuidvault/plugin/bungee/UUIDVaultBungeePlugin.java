@@ -18,35 +18,15 @@
  */
 package space.arim.uuidvault.plugin.bungee;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import net.md_5.bungee.api.event.PreLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
-import net.md_5.bungee.event.EventHandler;
 
 public class UUIDVaultBungeePlugin extends Plugin implements Listener {
-
-	private UUIDVaultBungee uvb;
-	
-	private final AtomicBoolean hasStarted = new AtomicBoolean(false);
 	
 	@Override
 	public void onLoad() {
-		uvb = new UUIDVaultBungee(this);
-	}
-	
-	@Override
-	public void onEnable() {
-		getProxy().getPluginManager().registerListener(this, this);
-	}
-	
-	// This is how startup completion must be detected on BungeeCord
-	@EventHandler(priority = (byte) -128)
-	public void triggerStartupCompletion(@SuppressWarnings("unused") PreLoginEvent evt) {
-		if (hasStarted.compareAndSet(false, true)) {
-			uvb.completeNativeStartup();
-		}
+		UUIDVaultBungee uvb = new UUIDVaultBungee(this);
+		uvb.setInstance();
 	}
 	
 }

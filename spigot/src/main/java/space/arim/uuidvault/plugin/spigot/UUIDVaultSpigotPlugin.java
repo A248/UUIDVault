@@ -24,19 +24,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import space.arim.uuidvault.api.UUIDVault;
 
 public class UUIDVaultSpigotPlugin extends JavaPlugin {
-
-	private UUIDVaultSpigot uvs;
 	
 	@Override
 	public void onLoad() {
-		uvs = new UUIDVaultSpigot(this);
+		UUIDVaultSpigot uvs = new UUIDVaultSpigot(this);
+		uvs.setInstance();
 		getServer().getServicesManager().register(UUIDVault.class, uvs, this, ServicePriority.Low);
-	}
-	
-	@Override
-	public void onEnable() {
-		// Trigger startup completion
-		getServer().getScheduler().runTaskLater(this, uvs::completeNativeStartup, 1L);
 	}
 	
 }

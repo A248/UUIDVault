@@ -103,8 +103,8 @@ public class UUIDVaultSpigot extends SimpleImplementation {
 	
 	// Re-overriding this ensures it is visible
 	@Override
-	protected void completeNativeStartup() {
-		super.completeNativeStartup();
+	protected void setInstance() {
+		super.setInstance();
 	}
 
 }

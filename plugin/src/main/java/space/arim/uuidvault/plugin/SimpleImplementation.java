@@ -56,10 +56,11 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 			updated = new Registration[existing.length + 1];
 			int binarySearch = Arrays.binarySearch(existing, regisToAdd);
 			int insertionIndex = - (binarySearch + 1);
+
 			updated[insertionIndex] = regisToAdd;
-			for (int n = 0; n < existing.length; n++) {
-				updated[(n < insertionIndex) ? n : n + 1] = existing[n];
-			}
+			System.arraycopy(existing, 0, updated, 0, insertionIndex++);
+			System.arraycopy(existing, insertionIndex - 1, updated, insertionIndex, updated.length - insertionIndex);
+
 		} while (!registrations.compareAndSet(existing, updated));
 		return regisToAdd;
 	}
@@ -75,9 +76,9 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 				return false;
 			}
 			updated = new Registration[existing.length - 1];
-			for (int n = 0; n < updated.length; n++) {
-				updated[n] = existing[(n < locationIndex) ? n : n + 1];
-			}
+			System.arraycopy(existing, 0, updated, 0, locationIndex++);
+			System.arraycopy(existing, locationIndex, updated, locationIndex - 1, existing.length - locationIndex);
+
 		} while (!registrations.compareAndSet(existing, updated));
 		return true;
 	}

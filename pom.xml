@@ -31,7 +31,7 @@
 		<plugin.version>${project.version}</plugin.version>
 		<plugin.author>A248</plugin.author>
 		<plugin.url>https://github.com/A248/UUIDVault</plugin.url>
-		<plugin.description>Many Spigot plugins store UUID-name mappings. It's about time this practice was consolidated.</plugin.description>
+		<plugin.description>Many MC plugins store UUID-name mappings. It is about time this practice was consolidated.</plugin.description>
 	</properties>
 	
 	<licenses>

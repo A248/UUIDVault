@@ -21,13 +21,10 @@ package space.arim.uuidvault.plugin;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.LockSupport;
 
@@ -97,13 +94,12 @@ public class SimpleImplementationTest {
 	@Test
 	public void testConcurrentRegistrationUnregistration() {
 		int NUM_THREADS = 20;
-		Executor executor = Executors.newFixedThreadPool(NUM_THREADS);
-		CompletableFuture<?>[] futures = new CompletableFuture[NUM_THREADS];
+		ExecutorService executor = Executors.newFixedThreadPool(NUM_THREADS);
 
 		final AtomicBoolean start = new AtomicBoolean(false);
 		for (int n = 0; n < NUM_THREADS; n++) {
 
-			futures[n] = CompletableFuture.runAsync(() -> {
+			executor.execute(() -> {
 				NullResolver resolver = new NullResolver();
 				UUIDVaultRegistration regis = null;
 				while (!start.get()) {
@@ -118,13 +114,13 @@ public class SimpleImplementationTest {
 						regis = null;
 					}
 				}
-
-			}, executor);
+			});
 		}
 		start.set(true);
 		try {
-			CompletableFuture.allOf(futures).get(10L, TimeUnit.SECONDS);
-		} catch (InterruptedException | ExecutionException | TimeoutException ex) {
+			executor.shutdown();
+			assertTrue(executor.awaitTermination(10L, TimeUnit.SECONDS), "Executor service used for testing must not timeout");
+		} catch (InterruptedException ex) {
 			fail(ex);
 		}
 	}

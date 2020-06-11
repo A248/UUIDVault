@@ -21,7 +21,15 @@ package space.arim.uuidvault.plugin;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.LockSupport;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,6 +47,15 @@ public class SimpleImplementationTest {
 	
 	private byte randomPriority() {
 		return (byte) (ThreadLocalRandom.current().nextInt(-2*Byte.MIN_VALUE) + Byte.MIN_VALUE);
+	}
+	
+	@Test
+	public void testSamePriority() {
+		byte priority = randomPriority();
+		UUIDVaultRegistration nullResolver = impl.register(new NullResolver(), NullResolver.class, priority, null);
+		UUIDVaultRegistration emptyResolver = impl.register(new EmptyResolver(), EmptyResolver.class, priority, "");
+		assertNotNull(nullResolver, "Original registration should be nonnull");
+		assertNotNull(emptyResolver, "Original registration should be nonnull");
 	}
 	
 	@Test
@@ -75,6 +92,41 @@ public class SimpleImplementationTest {
 		assertNull(impl.resolveImmediately(uuid), "Must not query unregistered resolver for name");
 		assertNull(impl.resolve(name).join(), "Must not query unregistered resolver for uuid");
 		assertNull(impl.resolve(uuid).join(), "Must not query unregistered resolver for name");
+	}
+	
+	@Test
+	public void testConcurrentRegistrationUnregistration() {
+		int NUM_THREADS = 20;
+		Executor executor = Executors.newFixedThreadPool(NUM_THREADS);
+		CompletableFuture<?>[] futures = new CompletableFuture[NUM_THREADS];
+
+		final AtomicBoolean start = new AtomicBoolean(false);
+		for (int n = 0; n < NUM_THREADS; n++) {
+
+			futures[n] = CompletableFuture.runAsync(() -> {
+				NullResolver resolver = new NullResolver();
+				UUIDVaultRegistration regis = null;
+				while (!start.get()) {
+					LockSupport.parkNanos(1L);
+				}
+
+				for (int iteration = 0; iteration < 30; iteration++) {
+					if (regis == null) {
+						regis = impl.register(resolver, NullResolver.class, randomPriority(), null);
+					} else {
+						regis.unregister();
+						regis = null;
+					}
+				}
+
+			}, executor);
+		}
+		start.set(true);
+		try {
+			CompletableFuture.allOf(futures).get(10L, TimeUnit.SECONDS);
+		} catch (InterruptedException | ExecutionException | TimeoutException ex) {
+			fail(ex);
+		}
 	}
 	
 }

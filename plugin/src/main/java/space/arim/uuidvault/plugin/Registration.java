@@ -23,23 +23,16 @@ import space.arim.uuidvault.api.UUIDVaultRegistration;
 
 class Registration implements UUIDVaultRegistration, Comparable<Registration> {
 
-	private transient final SimpleImplementation core;
 	final Class<?> pluginClass;
 	final UUIDResolver resolver;
 	private final byte priority;
 	final String name;
 	
-	Registration(SimpleImplementation core, Class<?> pluginClass, UUIDResolver resolver, byte priority, String name) {
-		this.core = core;
+	Registration(Class<?> pluginClass, UUIDResolver resolver, byte priority, String name) {
 		this.pluginClass = pluginClass;
 		this.resolver = resolver;
 		this.priority = priority;
 		this.name = name;
-	}
-	
-	@Override
-	public boolean unregister() {
-		return core.unregister(this);
 	}
 
 	@Override

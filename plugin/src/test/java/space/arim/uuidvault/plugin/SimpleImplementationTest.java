@@ -73,8 +73,8 @@ public class SimpleImplementationTest {
 		assertNull(duplicateNullResolver, "Duplicate registration should be null");
 		assertNull(duplicateEmptyResolver, "Duplicate registration should be null");
 		
-		assertTrue(nullResolver.unregister(), "Original registration should unregister properly");
-		assertTrue(emptyResolver.unregister(), "Original registration should unregister properly");
+		assertTrue(impl.unregister(nullResolver), "Original registration should unregister properly");
+		assertTrue(impl.unregister(emptyResolver), "Original registration should unregister properly");
 	}
 	
 	@Test
@@ -87,7 +87,7 @@ public class SimpleImplementationTest {
 		assertEquals(name, impl.resolveImmediately(uuid), "Must immediately resolve to correct name");
 		assertEquals(uuid, impl.resolve(name).getNow(null), "Must immediately resolve to correct uuid");
 		assertEquals(name, impl.resolve(uuid).getNow(null), "Must immediately resolve to correct name");
-		registration.unregister();
+		impl.unregister(registration);
 		assertNull(impl.resolveImmediately(name), "Must not query unregistered resolver for uuid");
 		assertNull(impl.resolveImmediately(uuid), "Must not query unregistered resolver for name");
 		assertNull(impl.resolve(name).join(), "Must not query unregistered resolver for uuid");
@@ -114,7 +114,7 @@ public class SimpleImplementationTest {
 					if (regis == null) {
 						regis = impl.register(resolver, NullResolver.class, randomPriority(), null);
 					} else {
-						regis.unregister();
+						impl.unregister(regis);
 						regis = null;
 					}
 				}

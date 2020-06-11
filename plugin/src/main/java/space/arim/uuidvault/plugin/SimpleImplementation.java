@@ -43,7 +43,7 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 		if (!verifyNativePluginClass(pluginClass)) {
 			throw new IllegalArgumentException("Plugin class is invalid!");
 		}
-		Registration regisToAdd = new Registration(this, pluginClass, resolver, defaultPriority, name);
+		Registration regisToAdd = new Registration(pluginClass, resolver, defaultPriority, name);
 		Registration[] existing;
 		Registration[] updated;
 		do {
@@ -65,12 +65,16 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 		return regisToAdd;
 	}
 
-	boolean unregister(Registration regisToRemove) {
+	@Override
+	public boolean unregister(UUIDVaultRegistration registration) {
+		if (!(registration instanceof Registration)) {
+			return false;
+		}
 		Registration[] existing;
 		Registration[] updated;
 		do {
 			existing = registrations.get();
-			int locationIndex = Arrays.binarySearch(existing, regisToRemove);
+			int locationIndex = Arrays.binarySearch(existing, registration);
 			if (locationIndex < 0) {
 				// not found
 				return false;

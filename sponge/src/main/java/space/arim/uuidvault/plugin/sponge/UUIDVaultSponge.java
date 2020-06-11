@@ -27,6 +27,7 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.profile.GameProfile;
+
 import space.arim.uuidvault.plugin.SimpleImplementation;
 
 public class UUIDVaultSponge extends SimpleImplementation {

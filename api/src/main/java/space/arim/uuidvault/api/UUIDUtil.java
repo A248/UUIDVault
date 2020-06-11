@@ -43,8 +43,10 @@ public class UUIDUtil {
 	 * @param shortUuid the short uuid string
 	 * @return the lengthened uuid string
 	 * @throws IndexOutOfBoundsException if the input is not of length 32
+	 * @throws NullPointerException if shortUuid is null
 	 */
 	public static String expand(String shortUuid) {
+		Objects.requireNonNull(shortUuid, "shortUuid must not be null");
 		if (shortUuid.length() != 32) {
 			throw new IndexOutOfBoundsException("Cannot expand 32-char " + shortUuid);
 		}
@@ -59,7 +61,8 @@ public class UUIDUtil {
 	 * @param shortUuid the short uuid string
 	 * @return the parsed UUID
 	 * @throws IndexOutOfBoundsException if the input is not of length 32
-	 * @throws IllegalArgumentException if {@link UUID#fromString(String)} threw IAE
+	 * @throws IllegalArgumentException if thrown by {@link UUID#fromString(String)}
+	 * @throws NullPointerException if shortUuid is null
 	 */
 	public static UUID expandAndParse(String shortUuid) {
 		return UUID.fromString(expand(shortUuid));
@@ -101,7 +104,8 @@ public class UUIDUtil {
 	 * @throws IndexOutOfBoundsException if the array length is not 16
 	 */
 	public static UUID uuidFromByteArray(byte[] data) {
-		if (Objects.requireNonNull(data, "data must not be null").length != 16) {
+		Objects.requireNonNull(data, "data must not be null");
+		if (data.length != 16) {
 			throw new IndexOutOfBoundsException();
 		}
 		return new UUID(

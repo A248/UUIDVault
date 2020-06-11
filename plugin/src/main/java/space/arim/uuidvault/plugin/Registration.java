@@ -23,7 +23,7 @@ import space.arim.uuidvault.api.UUIDVaultRegistration;
 
 class Registration implements UUIDVaultRegistration, Comparable<Registration> {
 
-	private final SimpleImplementation core;
+	private transient final SimpleImplementation core;
 	final Class<?> pluginClass;
 	final UUIDResolver resolver;
 	private final byte priority;
@@ -45,7 +45,12 @@ class Registration implements UUIDVaultRegistration, Comparable<Registration> {
 	@Override
 	public int compareTo(Registration o) {
 		// Higher priorities first
-		return o.priority - priority;
+		int priorityDiff = o.priority - priority;
+		if (priorityDiff == 0) {
+			// Same priority, different registration
+			return o.pluginClass.hashCode() - pluginClass.hashCode();
+		}
+		return priorityDiff;
 	}
 	
 	@Override
@@ -59,12 +64,20 @@ class Registration implements UUIDVaultRegistration, Comparable<Registration> {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + pluginClass.hashCode();
+		result = prime * result + priority;
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object object) {
-		return this == object || object instanceof Registration && pluginClass == ((Registration) object).pluginClass;
+		if (this == object) {
+			return true;
+		}
+		if (!(object instanceof Registration)) {
+			return false;
+		}
+		Registration other = (Registration) object;
+		return priority == other.priority && pluginClass == other.pluginClass;
 	}
 
 }

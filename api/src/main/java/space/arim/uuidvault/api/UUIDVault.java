@@ -97,6 +97,16 @@ public abstract class UUIDVault implements BaseUUIDResolver {
 	public abstract UUIDVaultRegistration register(UUIDResolver resolver, Class<?> pluginClazz, byte defaultPriority, String name);
 	
 	/**
+	 * Unregisters a resolver. The registration to unregister must have been obtained
+	 * with {@link #register(UUIDResolver, Class, byte, String)}. <br>
+	 * <br>
+	 * If the registration is already unregistered, <code>false</code> will be returned.
+	 * 
+	 * @return true if the implementation was registered and is now unregistered, false otherwise
+	 */
+	public abstract boolean unregister(UUIDVaultRegistration registration);
+	
+	/**
 	 * Whether the resolveNatively methods must be called from the server's main thread. <br>
 	 * See {@link #resolveNatively(String)} and {@link #resolveNatively(UUID)} <br>
 	 * <br>

@@ -32,7 +32,12 @@ public interface UUIDVaultRegistration {
 	 * Otherwise, nothing will happen and <code>false</code> will be returned.
 	 * 
 	 * @return true if the implementation was registered and is now unregistered, false otherwise
+	 * 
+	 * @deprecated Use {@link UUIDVault#unregister(UUIDVaultRegistration)} with this object as an argument instead
 	 */
-	boolean unregister();
+	@Deprecated
+	default boolean unregister() {
+		return UUIDVault.get().unregister(this);
+	}
 	
 }

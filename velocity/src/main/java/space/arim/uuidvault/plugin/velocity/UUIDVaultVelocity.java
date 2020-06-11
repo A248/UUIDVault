@@ -64,7 +64,7 @@ public class UUIDVaultVelocity extends SimpleImplementation {
 			return null;
 		}
 		PluginDescription description = plugin.getDescription();
-		return description.getName().orElse(null) + " v" + description.getVersion().orElse(null);
+		return description.getName().orElse(description.getId()) + " v" + description.getVersion().orElse(null);
 	}
 
 	@Override

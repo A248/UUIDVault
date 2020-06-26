@@ -18,29 +18,36 @@
  */
 package space.arim.uuidvault.api;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.UUID;
 
-import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Test;
 
 public class UUIDUtilTest {
 	
-	@RepeatedTest(10)
-	public void shouldMaintainUUIDToFromByteArray() {
-		UUID uuid = UUID.randomUUID();
-		byte[] uuidAsByteArray = UUIDUtil.byteArrayFromUUID(uuid);
-		UUID uuidBack = UUIDUtil.uuidFromByteArray(uuidAsByteArray);
-		assertEquals(uuid, uuidBack);
-		assertArrayEquals(uuidAsByteArray, UUIDUtil.byteArrayFromUUID(uuidBack));
+	private static final UUID uuid = UUID.randomUUID();
+	
+	@Test
+	public void testUUIDStringConversions() {
+		String fullUuid = uuid.toString();
+		String shortUuid = fullUuid.replace("-", "");
+		assertEquals(shortUuid, UUIDUtil.contractFullString(fullUuid));
+		assertEquals(fullUuid, UUIDUtil.expandShortString(shortUuid));
 	}
 	
-	@RepeatedTest(10)
-	public void shouldMaintainUUIDToFromShortForm() {
-		UUID uuid = UUID.randomUUID();
-		String shortUuid = uuid.toString().replace("-", "");
-		assertEquals(uuid, UUIDUtil.expandAndParse(shortUuid));
+	@Test
+	public void testUUIDShortFormConversions() {
+		String shortUuid = UUIDUtil.toShortString(uuid);
+		assertEquals(uuid.toString().replace("-", ""), shortUuid);
+		assertEquals(uuid, UUIDUtil.fromShortString(shortUuid));
+	}
+	
+	@Test
+	public void testUUIDByteArrayConversions() {
+		byte[] byteArray = UUIDUtil.toByteArray(uuid);
+		assertTrue(byteArray.length == 16);
+		assertEquals(uuid, UUIDUtil.fromByteArray(byteArray));
 	}
 	
 }

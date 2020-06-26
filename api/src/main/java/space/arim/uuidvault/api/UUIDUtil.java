@@ -104,7 +104,12 @@ public class UUIDUtil {
 	 * @return the short uuid string
 	 */
 	public static String toShortString(UUID uuid) {
-		return Long.toHexString(uuid.getMostSignificantBits()) + Long.toHexString(uuid.getLeastSignificantBits());
+		return formatAsHex(uuid.getMostSignificantBits()) + formatAsHex(uuid.getLeastSignificantBits());
+	}
+	
+	private static String formatAsHex(long bits) {
+		String hex = Long.toHexString(bits);
+		return ("0000000000000000" + hex).substring(hex.length());
 	}
 	
 	/**

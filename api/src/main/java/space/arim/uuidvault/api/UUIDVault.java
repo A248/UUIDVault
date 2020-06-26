@@ -102,6 +102,7 @@ public abstract class UUIDVault implements BaseUUIDResolver {
 	 * <br>
 	 * If the registration is already unregistered, <code>false</code> will be returned.
 	 * 
+	 * @param registration the resolver registration to unregister
 	 * @return true if the implementation was registered and is now unregistered, false otherwise
 	 */
 	public abstract boolean unregister(UUIDVaultRegistration registration);

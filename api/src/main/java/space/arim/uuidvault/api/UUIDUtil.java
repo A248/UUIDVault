@@ -149,7 +149,7 @@ public class UUIDUtil {
 	}
 	
 	/**
-	 * Converts to a UUID from a byte array. This is the inverse operation of {@link #byteArrayFromUUID(UUID)}.
+	 * Converts to a UUID from a byte array. This is the inverse operation of {@link #toByteArray(UUID)}.
 	 * 
 	 * @param data the byte array, should be of length 16
 	 * @return the UUID

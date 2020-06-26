@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 
 public class UUIDUtilTest {
 	
-	private static final UUID uuid = UUID.randomUUID();
+	private final UUID uuid = UUID.randomUUID();
 	
 	@Test
 	public void testUUIDStringConversions() {

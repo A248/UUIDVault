@@ -38,7 +38,7 @@ public abstract class ImplementationHelper extends UUIDVault {
 	}
 	
 	private static boolean fastEscapeInvalidNameArgument(String name) {
-		return name.isEmpty() || name.indexOf(' ') != -1;
+		return name.isEmpty() || name.length() > 16 || name.indexOf(' ') != -1;
 	}
 	
 	@Override
@@ -65,7 +65,7 @@ public abstract class ImplementationHelper extends UUIDVault {
 			return CompletableFuture.completedFuture(null);
 		}
 
-		UUID immediate = resolveImmediately(name);
+		UUID immediate = resolveImmediatelyFromRegistered(name);
 		return (immediate != null) ? CompletableFuture.completedFuture(immediate)
 				: resolveLaterFromRegistered(name);
 	}
@@ -84,7 +84,7 @@ public abstract class ImplementationHelper extends UUIDVault {
 	public CompletableFuture<String> resolve(UUID uuid) {
 		Objects.requireNonNull(uuid, "UUID must not be null");
 
-		String immediate = resolveImmediately(uuid);
+		String immediate = resolveImmediatelyFromRegistered(uuid);
 		return (immediate != null) ? CompletableFuture.completedFuture(immediate)
 				: resolveLaterFromRegistered(uuid);
 	}

@@ -18,10 +18,7 @@
  */
 package space.arim.uuidvault.plugin.spigot;
 
-import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import space.arim.uuidvault.api.UUIDVault;
 
 public class UUIDVaultSpigotPlugin extends JavaPlugin {
 	
@@ -29,7 +26,6 @@ public class UUIDVaultSpigotPlugin extends JavaPlugin {
 	public void onLoad() {
 		UUIDVaultSpigot uvs = new UUIDVaultSpigot(this);
 		uvs.setInstance();
-		getServer().getServicesManager().register(UUIDVault.class, uvs, this, ServicePriority.Low);
 	}
 	
 }

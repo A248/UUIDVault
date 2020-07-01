@@ -125,6 +125,7 @@
 	</build>
 	
 	<modules>
+		<module>util</module>
 		<module>api</module>
 		<module>plugin</module>
 		<module>spigot</module>
@@ -153,6 +154,11 @@
 				<version>${universal.version}</version>
 			</dependency>
 			<!-- Core API and implementation -->
+			<dependency>
+				<groupId>space.arim.uuidvault</groupId>
+				<artifactId>util</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>space.arim.uuidvault</groupId>
 				<artifactId>api</artifactId>

@@ -65,11 +65,11 @@ public abstract class UUIDVault implements BaseUUIDResolver {
 				}
 			}
 		}
-		throw new IllegalStateException("Only 1 UUIDVault implementation allowed!");
+		throw new IllegalStateException("Only 1 UUIDVault global instance allowed!");
 	}
 	
 	/**
-	 * Returns the instance of UUIDVault
+	 * Returns the global instance of UUIDVault
 	 * 
 	 * @return the instance
 	 */

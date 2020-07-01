@@ -28,13 +28,26 @@ import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.profile.GameProfile;
 
+import space.arim.uuidvault.api.UUIDVault;
 import space.arim.uuidvault.plugin.SimpleImplementation;
 
-public class UUIDVaultSponge extends SimpleImplementation {
+/**
+ * Implementation of {@link UUIDVault} on the Sponge platform
+ * 
+ * @author A248
+ *
+ */
+public final class UUIDVaultSponge extends SimpleImplementation {
 
 	private final Logger logger;
 	
-	UUIDVaultSponge(PluginContainer plugin) {
+	/**
+	 * Creates the instance. Use {@link #setInstance()} to set this instance
+	 * as the global instance
+	 * 
+	 * @param plugin the sponge plugin to use
+	 */
+	public UUIDVaultSponge(PluginContainer plugin) {
 		super(true);
 		logger = plugin.getLogger();
 	}
@@ -91,9 +104,14 @@ public class UUIDVaultSponge extends SimpleImplementation {
 		return (profile == null) ? null : profile.getName().orElse(null);
 	}
 	
-	// Re-overriding this ensures it is visible
+	/**
+	 * Sets the global UUIDVault instance, retrievable by {@link UUIDVault#get()}, to this instance. <br>
+	 * <br>
+	 * If the global instance is already set, an unchecked exception is thrown.
+	 * 
+	 */
 	@Override
-	protected void setInstance() {
+	public void setInstance() {
 		super.setInstance();
 	}
 	

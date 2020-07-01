@@ -28,14 +28,28 @@ import com.velocitypowered.api.plugin.PluginDescription;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 
+import space.arim.uuidvault.api.UUIDVault;
 import space.arim.uuidvault.plugin.SimpleImplementation;
 
-public class UUIDVaultVelocity extends SimpleImplementation {
+/**
+ * Implementation of {@link UUIDVault} on the Velocity platform
+ * 
+ * @author A248
+ *
+ */
+public final class UUIDVaultVelocity extends SimpleImplementation {
 
 	private final ProxyServer server;
 	private final Logger logger;
 	
-	UUIDVaultVelocity(ProxyServer server, Logger logger) {
+	/**
+	 * Creates the instance. Use {@link #setInstance()} to set this instance
+	 * as the global instance
+	 * 
+	 * @param server the velocity server
+	 * @param logger the logger from a velocity plugin
+	 */
+	public UUIDVaultVelocity(ProxyServer server, Logger logger) {
 		super(false);
 		this.server = server;
 		this.logger = logger;
@@ -84,9 +98,14 @@ public class UUIDVaultVelocity extends SimpleImplementation {
 		return (player == null) ? null : player.getUsername();
 	}
 	
-	// Re-overriding this ensures it is visible
+	/**
+	 * Sets the global UUIDVault instance, retrievable by {@link UUIDVault#get()}, to this instance. <br>
+	 * <br>
+	 * If the global instance is already set, an unchecked exception is thrown.
+	 * 
+	 */
 	@Override
-	protected void setInstance() {
+	public void setInstance() {
 		super.setInstance();
 	}
 

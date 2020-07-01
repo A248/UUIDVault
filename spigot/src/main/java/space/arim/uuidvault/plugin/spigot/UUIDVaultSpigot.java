@@ -29,12 +29,25 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import space.arim.uuidvault.api.UUIDVault;
 import space.arim.uuidvault.plugin.SimpleImplementation;
 
-public class UUIDVaultSpigot extends SimpleImplementation {
+/**
+ * Implementation of {@link UUIDVault} on the Spigot platform
+ * 
+ * @author A248
+ *
+ */
+public final class UUIDVaultSpigot extends SimpleImplementation {
 
 	private final Logger logger;
 	
+	/**
+	 * Creates the instance. Use {@link #setInstance()} to set this instance
+	 * as the global instance
+	 * 
+	 * @param plugin the bukkit plugin to use
+	 */
 	UUIDVaultSpigot(JavaPlugin plugin) {
 		super(true);
 		logger = plugin.getLogger();
@@ -101,9 +114,14 @@ public class UUIDVaultSpigot extends SimpleImplementation {
 		return null;
 	}
 	
-	// Re-overriding this ensures it is visible
+	/**
+	 * Sets the global UUIDVault instance, retrievable by {@link UUIDVault#get()}, to this instance. <br>
+	 * <br>
+	 * If the global instance is already set, an unchecked exception is thrown.
+	 * 
+	 */
 	@Override
-	protected void setInstance() {
+	public void setInstance() {
 		super.setInstance();
 	}
 

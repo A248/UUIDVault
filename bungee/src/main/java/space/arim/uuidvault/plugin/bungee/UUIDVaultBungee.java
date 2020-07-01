@@ -28,12 +28,25 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginDescription;
 
+import space.arim.uuidvault.api.UUIDVault;
 import space.arim.uuidvault.plugin.SimpleImplementation;
 
-public class UUIDVaultBungee extends SimpleImplementation {
+/**
+ * Implementation of {@link UUIDVault} on the BungeeCord platform
+ * 
+ * @author A248
+ *
+ */
+public final class UUIDVaultBungee extends SimpleImplementation {
 
 	private final Logger logger;
 	
+	/**
+	 * Creates the instance. Use {@link #setInstance()} to set this instance
+	 * as the global instance
+	 * 
+	 * @param plugin the bungee plugin to use
+	 */
 	UUIDVaultBungee(Plugin plugin) {
 		super(false);
 		logger = plugin.getLogger();
@@ -82,9 +95,14 @@ public class UUIDVaultBungee extends SimpleImplementation {
 		return (player == null) ? null : player.getName();
 	}
 	
-	// Re-overriding this ensures it is visible
+	/**
+	 * Sets the global UUIDVault instance, retrievable by {@link UUIDVault#get()}, to this instance. <br>
+	 * <br>
+	 * If the global instance is already set, an unchecked exception is thrown.
+	 * 
+	 */
 	@Override
-	protected void setInstance() {
+	public void setInstance() {
 		super.setInstance();
 	}
 

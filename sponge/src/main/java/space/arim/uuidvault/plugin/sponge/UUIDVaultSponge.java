@@ -26,7 +26,6 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
-import org.spongepowered.api.profile.GameProfile;
 
 import space.arim.uuidvault.api.UUIDVault;
 import space.arim.uuidvault.plugin.SimpleImplementation;
@@ -86,22 +85,14 @@ public final class UUIDVaultSponge extends SimpleImplementation {
 	protected UUID resolveNativelyDirectly(String name) {
 
 		Player player = Sponge.getServer().getPlayer(name).orElse(null);
-		if (player != null) {
-			return player.getUniqueId();
-		}
-		GameProfile profile = Sponge.getServer().getGameProfileManager().getCache().getByName(name).orElse(null);
-		return (profile == null) ? null : profile.getUniqueId();
+		return (player == null) ? null : player.getUniqueId();
 	}
 
 	@Override
 	protected String resolveNativelyDirectly(UUID uuid) {
 
 		Player player = Sponge.getServer().getPlayer(uuid).orElse(null);
-		if (player != null) {
-			return player.getName();
-		}
-		GameProfile profile = Sponge.getServer().getGameProfileManager().getCache().getById(uuid).orElse(null);
-		return (profile == null) ? null : profile.getName().orElse(null);
+		return (player == null) ? null : player.getName();
 	}
 	
 	/**

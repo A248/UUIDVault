@@ -24,7 +24,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -88,30 +87,14 @@ public final class UUIDVaultSpigot extends SimpleImplementation {
 	protected UUID resolveNativelyDirectly(String name) {
 
 		Player player = Bukkit.getPlayerExact(name);
-		if (player != null) {
-			return player.getUniqueId();
-		}
-		for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
-			if (offlinePlayer.getName().equalsIgnoreCase(name)) {
-				return offlinePlayer.getUniqueId();
-			}
-		}
-		return null;
+		return (player == null) ? null : player.getUniqueId();
 	}
 
 	@Override
 	protected String resolveNativelyDirectly(UUID uuid) {
 
 		Player player = Bukkit.getPlayer(uuid);
-		if (player != null) {
-			return player.getName();
-		}
-		for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
-			if (offlinePlayer.getUniqueId().equals(uuid)) {
-				return offlinePlayer.getName();
-			}
-		}
-		return null;
+		return (player == null) ? null : player.getName();
 	}
 	
 	/**

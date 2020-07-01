@@ -6,7 +6,7 @@
 	<groupId>space.arim.uuidvault</groupId>
 	<artifactId>parent</artifactId>
 	<!-- Remember to update versions in all child modules -->
-	<version>0.4.2-SNAPSHOT</version>
+	<version>0.4.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
 	<name>${plugin.name}</name>

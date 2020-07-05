@@ -98,14 +98,21 @@ public final class UUIDVaultSpigot extends SimpleImplementation {
 	}
 	
 	/**
-	 * Sets the global UUIDVault instance, retrievable by {@link UUIDVault#get()}, to this instance. <br>
-	 * <br>
-	 * If the global instance is already set, an unchecked exception is thrown.
+	 * {@inheritDoc}
 	 * 
 	 */
 	@Override
 	public void setInstance() {
 		super.setInstance();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
+	@Override
+	public boolean setInstancePassive() {
+		return super.setInstancePassive();
 	}
 
 }

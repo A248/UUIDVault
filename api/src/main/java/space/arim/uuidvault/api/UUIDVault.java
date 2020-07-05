@@ -52,20 +52,36 @@ public abstract class UUIDVault implements BaseUUIDResolver {
 	}
 	
 	/**
-	 * Sets the main instance of UUIDVault to this instance. <br>
-	 * Throws an unchecked exception if the instance is already set
+	 * Sets the global instance of UUIDVault to this instance. <br>
+	 * Throws {@code IllegalStateException} if the instance is already set
 	 * 
 	 */
 	protected void setInstance() {
+		if (!setInstance0()) {
+			throw new IllegalStateException("Only 1 UUIDVault global instance allowed!");
+		}
+	}
+	
+	private boolean setInstance0() {
 		if (inst == null) {
 			synchronized (UUIDVault.class) {
 				if (inst == null) {
 					inst = this;
-					return;
+					return true;
 				}
 			}
 		}
-		throw new IllegalStateException("Only 1 UUIDVault global instance allowed!");
+		return false;
+	}
+	
+	/**
+	 * If there is no global instance, sets the global instance of UUIDVault. <br>
+	 * Otherwise, this is a no-op.
+	 * 
+	 * @return true if the instance was set, false if there is already one
+	 */
+	protected boolean setInstancePassive() {
+		return setInstance0();
 	}
 	
 	/**

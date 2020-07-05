@@ -47,7 +47,7 @@ public final class UUIDVaultSpigot extends SimpleImplementation {
 	 * 
 	 * @param plugin the bukkit plugin to use
 	 */
-	UUIDVaultSpigot(JavaPlugin plugin) {
+	public UUIDVaultSpigot(JavaPlugin plugin) {
 		super(true);
 		logger = plugin.getLogger();
 	}

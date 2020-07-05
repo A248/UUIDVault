@@ -47,7 +47,7 @@ public final class UUIDVaultBungee extends SimpleImplementation {
 	 * 
 	 * @param plugin the bungee plugin to use
 	 */
-	UUIDVaultBungee(Plugin plugin) {
+	public UUIDVaultBungee(Plugin plugin) {
 		super(false);
 		logger = plugin.getLogger();
 	}

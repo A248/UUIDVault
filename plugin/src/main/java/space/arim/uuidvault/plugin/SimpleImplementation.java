@@ -24,6 +24,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 
+import space.arim.uuidvault.api.CollectiveUUIDResolver;
 import space.arim.uuidvault.api.UUIDResolver;
 import space.arim.uuidvault.api.UUIDVaultRegistration;
 
@@ -34,6 +35,12 @@ abstract class SimpleImplementation extends ImplementationHelper {
 	SimpleImplementation(boolean mustCallNativeResolutionSync) {
 		super(mustCallNativeResolutionSync);
 	}
+	
+	/*
+	 * 
+	 * Registration
+	 * 
+	 */
 	
 	@Override
 	public UUIDVaultRegistration register(UUIDResolver resolver, Class<?> pluginClass, byte defaultPriority, String name) {
@@ -49,7 +56,7 @@ abstract class SimpleImplementation extends ImplementationHelper {
 		do {
 			existing = registrations.get();
 			for (Registration registration : existing) {
-				if (registration.pluginClass == pluginClass) {
+				if (registration.pluginClass == pluginClass || registration.resolver == resolver) {
 					return null;
 				}
 			}
@@ -68,6 +75,7 @@ abstract class SimpleImplementation extends ImplementationHelper {
 	@Override
 	public boolean unregister(UUIDVaultRegistration registration) {
 		if (!(registration instanceof Registration)) {
+			// Null registration or foreign implementation - what is caller doing?
 			return false;
 		}
 		Registration[] existing;
@@ -87,6 +95,12 @@ abstract class SimpleImplementation extends ImplementationHelper {
 		return true;
 	}
 	
+	/*
+	 * 
+	 * Miscellaneous
+	 * 
+	 */
+	
 	abstract boolean verifyNativePluginClass(Class<?> pluginClass);
 	
 	abstract String getDescriptiveName(Class<?> pluginClass);
@@ -94,9 +108,31 @@ abstract class SimpleImplementation extends ImplementationHelper {
 	abstract void logException(String message, Throwable throwable);
 	
 	@Override
-	UUID resolveImmediatelyFromRegistered(String name) {
+	public CollectiveUUIDResolver createCollectiveResolverIgnoring(UUIDVaultRegistration registration) {
+		if (!(registration instanceof Registration)) {
+			if (registration == null) {
+				throw new NullPointerException("Registration must not be null");
+			}
+			// Foreign implementation - what is caller doing?
+			return this;
+		}
+		UUIDResolver skip = ((Registration) registration).resolver;
+		return new ExclusiveCollectiveResolver(this, skip);
+	}
+	
+	/*
+	 * 
+	 * Core resolution
+	 * 
+	 */
+	
+	@Override
+	UUID resolveImmediatelyFromRegistered(String name, UUIDResolver skip) {
 		for (Registration registration : registrations.get()) {
 			UUIDResolver resolver = registration.resolver;
+			if (skip == resolver) {
+				continue;
+			}
 
 			UUID uuid = resolver.resolveImmediately(name);
 			if (uuid != null) {
@@ -107,9 +143,12 @@ abstract class SimpleImplementation extends ImplementationHelper {
 	}
 	
 	@Override
-	String resolveImmediatelyFromRegistered(UUID uuid) {
+	String resolveImmediatelyFromRegistered(UUID uuid, UUIDResolver skip) {
 		for (Registration registration : registrations.get()) {
 			UUIDResolver resolver = registration.resolver;
+			if (skip == resolver) {
+				continue;
+			}
 
 			String name = resolver.resolveImmediately(uuid);
 			if (name != null) {
@@ -118,12 +157,15 @@ abstract class SimpleImplementation extends ImplementationHelper {
 		}
 		return null;
 	}
-
+	
 	@Override
-	CompletableFuture<UUID> resolveLaterFromRegistered(String name) {
+	CompletableFuture<UUID> resolveLaterFromRegistered(String name, UUIDResolver skip) {
 		CompletableFuture<UUID> result = null;
 		for (Registration registration : registrations.get()) {
 			UUIDResolver resolver = registration.resolver;
+			if (skip == resolver) {
+				continue;
+			}
 
 			if (result == null) {
 				result = safelyHandle(resolver.resolve(name), registration);
@@ -136,10 +178,13 @@ abstract class SimpleImplementation extends ImplementationHelper {
 	}
 	
 	@Override
-	CompletableFuture<String> resolveLaterFromRegistered(UUID uuid) {
+	CompletableFuture<String> resolveLaterFromRegistered(UUID uuid, UUIDResolver skip) {
 		CompletableFuture<String> result = null;
 		for (Registration registration : registrations.get()) {
 			UUIDResolver resolver = registration.resolver;
+			if (skip == resolver) {
+				continue;
+			}
 
 			if (result == null) {
 				result = safelyHandle(resolver.resolve(uuid), registration);
@@ -150,6 +195,12 @@ abstract class SimpleImplementation extends ImplementationHelper {
 		}
 		return wrapNullableAsCompletedNull(result);
 	}
+	
+	/*
+	 * 
+	 * Utils
+	 * 
+	 */
 	
 	private static <T> CompletableFuture<T> wrapNullableAsCompletedNull(CompletableFuture<T> nullableFuture) {
 		if (nullableFuture == null) {

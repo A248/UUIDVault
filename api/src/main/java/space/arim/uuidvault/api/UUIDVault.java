@@ -43,23 +43,12 @@ import java.util.concurrent.CompletableFuture;
  * @author A248
  *
  */
-public abstract class UUIDVault implements BaseUUIDResolver {
+public abstract class UUIDVault implements CollectiveUUIDResolver {
 
 	private static volatile UUIDVault inst;
 	
 	protected UUIDVault() {
 		
-	}
-	
-	/**
-	 * Sets the global instance of UUIDVault to this instance. <br>
-	 * Throws {@code IllegalStateException} if the instance is already set
-	 * 
-	 */
-	protected void setInstance() {
-		if (!setInstance0()) {
-			throw new IllegalStateException("Only 1 UUIDVault global instance allowed!");
-		}
 	}
 	
 	private boolean setInstance0() {
@@ -72,6 +61,17 @@ public abstract class UUIDVault implements BaseUUIDResolver {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Sets the global instance of UUIDVault to this instance. <br>
+	 * Throws {@code IllegalStateException} if the instance is already set
+	 * 
+	 */
+	protected void setInstance() {
+		if (!setInstance0()) {
+			throw new IllegalStateException("Only 1 UUIDVault global instance allowed!");
+		}
 	}
 	
 	/**
@@ -96,9 +96,9 @@ public abstract class UUIDVault implements BaseUUIDResolver {
 	/**
 	 * Registers a {@link UUIDResolver} implementation with the associated plugin's main class. <br>
 	 * <br>
-	 * The plugin class is used as an identifier and ensures that no duplicate implementations are registered. <br>
-	 * If there is already a registration using the same plugin class, the operation will fail and this will
-	 * return <code>null</code>. <br>
+	 * The plugin class is used as an identifier and helps ensure no duplicate implementations are registered. <br>
+	 * If there is already a registration using the same {@code UUIDResolver} instance or plugin class, the operation will fail
+	 * and this will return <code>null</code>. <br>
 	 * <br>
 	 * The specified name is optional; it may be null or empty. However, resolvers are encouraged to use an informative,
 	 * user{@literal -}friendly name, which is ideally similar to the name of the plugin. If the resolver generates
@@ -109,6 +109,7 @@ public abstract class UUIDVault implements BaseUUIDResolver {
 	 * @param defaultPriority the byte based priority of the resolver, higher priorities are queried first
 	 * @param name a user friendly name for the resolver, can be null or empty but an informative name is encouraged
 	 * @return a registration if successfully registered, null if the operation failed for some reason
+	 * @throws NullPointerException if either {@code resolver} or {@code pluginClazz} is null
 	 */
 	public abstract UUIDVaultRegistration register(UUIDResolver resolver, Class<?> pluginClazz, byte defaultPriority, String name);
 	
@@ -143,6 +144,7 @@ public abstract class UUIDVault implements BaseUUIDResolver {
 	 * 
 	 * @param name the name of the player whose uuid to find
 	 * @return a nonnull uuid if found, else <code>null</code>
+	 * @throws NullPointerException if {@code name} is null
 	 */
 	public abstract UUID resolveNatively(String name);
 	
@@ -156,63 +158,51 @@ public abstract class UUIDVault implements BaseUUIDResolver {
 	 * 
 	 * @param uuid the uuid of the player whose name to find
 	 * @return a nonnull name if found, else <code>null</code>
+	 * @throws NullPointerException if {@code uuid} is null
 	 */
 	public abstract String resolveNatively(UUID uuid);
 	
 	/**
-	 * Begins a full name lookup, checking all resolvers until one of them finds a result. <br>
-	 * <br>
-	 * The completable future, once completed, will produce <code>null</code> if no mapping was found.
-	 * The future <i>itself</i> will never be null. <br>
-	 * <br>
-	 * UUIDVault will draw information from its variety of registered resolvers.
+	 * {@inheritDoc}
 	 * 
-	 * @param name the name of the player whose uuid to find, must not be null
-	 * @return a nonnull completable future which returns a corresponding uuid or <code>null</code> if none was found
-	 */
-	@Override
-	public abstract CompletableFuture<UUID> resolve(String name);
-	
-	/**
-	 * Resolves a UUID immediately from in{@literal -}memory caches. <br>
-	 * UUIDVault will call each registered resolver's equivalent method
-	 * until it finds a result. <br>
-	 * <br>
-	 * Returns <code>null</code> to indicate not found; that is, if no resolver
-	 * was able to find a result.
-	 * 
-	 * @param name the name of the player whose uuid to find, must not be null
-	 * @return a corresponding uuid or <code>null</code> if not found
 	 */
 	@Override
 	public abstract UUID resolveImmediately(String name);
 	
 	/**
-	 * Begins a full uuid lookup, checking all resolvers until on of them finds a result. <br>
-	 * <br>
-	 * The completable future, once completed, will produce <code>null</code> if no mapping was found.
-	 * The future <i>itself</i> will never be null. <br>
-	 * <br>
-	 * UUIDVault will draw information from its variety of registered resolvers.
+	 * {@inheritDoc}
 	 * 
-	 * @param uuid the uuid of the player whose name to find, must not be null
-	 * @return a nonnull completable future which returns a corresponding name or <code>null</code> if none was found
+	 */
+	@Override
+	public abstract String resolveImmediately(UUID uuid);
+	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
+	@Override
+	public abstract CompletableFuture<UUID> resolve(String name);
+	
+	/**
+	 * {@inheritDoc}
+	 * 
 	 */
 	@Override
 	public abstract CompletableFuture<String> resolve(UUID uuid);
 	
 	/**
-	 * Resolves a name immediately from in{@literal -}memory caches. <br>
-	 * UUIDVault will call each registered resolver's equivalent method
-	 * until it finds a result. <br>
+	 * Creates a {@link CollectiveUUIDResolver} which resolves in the same fashion as UUIDVault would,
+	 * except that it will skip or ignore the specified registration. <br>
+	 * That is, the resolver of the specified registration will be excluded from the resolver list of
+	 * the {@code CollectiveResolver}. <br>
 	 * <br>
-	 * Returns <code>null</code> to indicate not found; that is, if no resolver
-	 * was able to find a result.
+	 * This is useful for callers who both register an implementation and query UUIDVault for results,
+	 * so that they may provide special handling for their own resolver.
 	 * 
-	 * @param uuid the uuid of the player whose name to find, must not be null
-	 * @return the corresponding playername or <code>null</code> if not found
+	 * @param registration the registration whose resolver to exclude from the collective resolver's resolvers
+	 * @return a collective resolver with all the resolvers of UUIDVault except that from the specified registration
+	 * @throws NullPointerException if {@code registration} is null
 	 */
-	@Override
-	public abstract String resolveImmediately(UUID uuid);
+	public abstract CollectiveUUIDResolver createCollectiveResolverIgnoring(UUIDVaultRegistration registration);
 	
 }

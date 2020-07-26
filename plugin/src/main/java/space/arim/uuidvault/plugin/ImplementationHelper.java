@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+import space.arim.uuidvault.api.UUIDResolver;
 import space.arim.uuidvault.api.UUIDVault;
 
 abstract class ImplementationHelper extends UUIDVault {
@@ -32,13 +33,19 @@ abstract class ImplementationHelper extends UUIDVault {
 		this.mustCallNativeResolutionSync = mustCallNativeResolutionSync;
 	}
 	
+	private static boolean fastEscapeInvalidNameArgument(String name) {
+		return name.isEmpty() || name.length() > 16 || name.indexOf(' ') != -1;
+	}
+	
+	/*
+	 * 
+	 * Native resolution
+	 * 
+	 */
+	
 	@Override
 	public boolean mustCallNativeResolutionSync() {
 		return mustCallNativeResolutionSync;
-	}
-	
-	private static boolean fastEscapeInvalidNameArgument(String name) {
-		return name.isEmpty() || name.length() > 16 || name.indexOf(' ') != -1;
 	}
 	
 	@Override
@@ -58,54 +65,76 @@ abstract class ImplementationHelper extends UUIDVault {
 		return resolveNativelyDirectly(uuid);
 	}
 	
-	@Override
-	public CompletableFuture<UUID> resolve(String name) {
-		Objects.requireNonNull(name, "Name must not be null");
-		if (fastEscapeInvalidNameArgument(name)) {
-			return CompletableFuture.completedFuture(null);
-		}
+	abstract UUID resolveNativelyDirectly(String name);
 
-		UUID immediate = resolveImmediatelyFromRegistered(name);
-		return (immediate != null) ? CompletableFuture.completedFuture(immediate)
-				: resolveLaterFromRegistered(name);
-	}
-
-	@Override
-	public UUID resolveImmediately(String name) {
+	abstract String resolveNativelyDirectly(UUID uuid);
+	
+	/*
+	 * 
+	 * Core resolution
+	 * 
+	 */
+	
+	UUID resolveImmediately(String name, UUIDResolver skip) {
 		Objects.requireNonNull(name, "Name must not be null");
 		if (fastEscapeInvalidNameArgument(name)) {
 			return null;
 		}
 
-		return resolveImmediatelyFromRegistered(name);
+		return resolveImmediatelyFromRegistered(name, skip);
+	}
+
+	@Override
+	public UUID resolveImmediately(String name) {
+		return resolveImmediately(name, null);
+	}
+	
+	String resolveImmediately(UUID uuid, UUIDResolver skip) {
+		Objects.requireNonNull(uuid, "UUID must not be null");
+
+		return resolveImmediatelyFromRegistered(uuid, skip);
+	}
+	
+	@Override
+	public String resolveImmediately(UUID uuid) {
+		return resolveImmediately(uuid, null);
+	}
+	
+	CompletableFuture<UUID> resolve(String name, UUIDResolver skip) {
+		Objects.requireNonNull(name, "Name must not be null");
+		if (fastEscapeInvalidNameArgument(name)) {
+			return CompletableFuture.completedFuture(null);
+		}
+
+		UUID immediate = resolveImmediatelyFromRegistered(name, skip);
+		return (immediate != null) ? CompletableFuture.completedFuture(immediate)
+				: resolveLaterFromRegistered(name, skip);
+	}
+	
+	@Override
+	public CompletableFuture<UUID> resolve(String name) {
+		return resolve(name, null);
+	}
+	
+	CompletableFuture<String> resolve(UUID uuid, UUIDResolver skip) {
+		Objects.requireNonNull(uuid, "UUID must not be null");
+
+		String immediate = resolveImmediatelyFromRegistered(uuid, skip);
+		return (immediate != null) ? CompletableFuture.completedFuture(immediate)
+				: resolveLaterFromRegistered(uuid, skip);
 	}
 
 	@Override
 	public CompletableFuture<String> resolve(UUID uuid) {
-		Objects.requireNonNull(uuid, "UUID must not be null");
-
-		String immediate = resolveImmediatelyFromRegistered(uuid);
-		return (immediate != null) ? CompletableFuture.completedFuture(immediate)
-				: resolveLaterFromRegistered(uuid);
+		return resolve(uuid, null);
 	}
 
-	@Override
-	public String resolveImmediately(UUID uuid) {
-		Objects.requireNonNull(uuid, "UUID must not be null");
+	abstract UUID resolveImmediatelyFromRegistered(String name, UUIDResolver skip);
 
-		return resolveImmediatelyFromRegistered(uuid);
-	}
+	abstract String resolveImmediatelyFromRegistered(UUID uuid, UUIDResolver skip);
 
-	abstract UUID resolveNativelyDirectly(String name);
+	abstract CompletableFuture<UUID> resolveLaterFromRegistered(String name, UUIDResolver skip);
 
-	abstract String resolveNativelyDirectly(UUID uuid);
-
-	abstract UUID resolveImmediatelyFromRegistered(String name);
-
-	abstract String resolveImmediatelyFromRegistered(UUID uuid);
-
-	abstract CompletableFuture<UUID> resolveLaterFromRegistered(String name);
-
-	abstract CompletableFuture<String> resolveLaterFromRegistered(UUID uuid);
+	abstract CompletableFuture<String> resolveLaterFromRegistered(UUID uuid, UUIDResolver skip);
 
 }

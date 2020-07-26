@@ -16,21 +16,21 @@
  * along with UUIDVault-sponge. If not, see <https://www.gnu.org/licenses/>
  * and navigate to version 3 of the GNU General Public License.
  */
-package space.arim.uuidvault.plugin.sponge;
+package space.arim.uuidvault.plugin;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
 import org.spongepowered.api.plugin.Plugin;
 
-@Plugin(id = "${plugin.annotationId}", name = "${plugin.name}", version = "${plugin.version}", authors = {
-		"${plugin.author}" }, url = "${plugin.url}", description = "${plugin.description}")
+@Plugin(id = PluginInfo.ANNOTATION_ID, name = PluginInfo.NAME, version = PluginInfo.VERSION, authors = {
+		"A248" }, url = PluginInfo.URL, description = PluginInfo.DESCRIPTION)
 public class UUIDVaultSpongePlugin {
 	
 	@Listener
 	public void onEnable(@SuppressWarnings("unused") GamePostInitializationEvent evt) {
 		UUIDVaultSponge uvs = new UUIDVaultSponge(Sponge.getPluginManager().fromInstance(this).get());
-		uvs.setInstance();
+		uvs.setInstance1();
 	}
 	
 }

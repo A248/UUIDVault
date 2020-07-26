@@ -27,11 +27,11 @@ import java.util.concurrent.atomic.AtomicReference;
 import space.arim.uuidvault.api.UUIDResolver;
 import space.arim.uuidvault.api.UUIDVaultRegistration;
 
-public abstract class SimpleImplementation extends ImplementationHelper {
+abstract class SimpleImplementation extends ImplementationHelper {
 	
 	private final AtomicReference<Registration[]> registrations = new AtomicReference<>(new Registration[] {});
 	
-	protected SimpleImplementation(boolean mustCallNativeResolutionSync) {
+	SimpleImplementation(boolean mustCallNativeResolutionSync) {
 		super(mustCallNativeResolutionSync);
 	}
 	
@@ -87,11 +87,11 @@ public abstract class SimpleImplementation extends ImplementationHelper {
 		return true;
 	}
 	
-	protected abstract boolean verifyNativePluginClass(Class<?> pluginClass);
+	abstract boolean verifyNativePluginClass(Class<?> pluginClass);
 	
-	protected abstract String getDescriptiveName(Class<?> pluginClass);
+	abstract String getDescriptiveName(Class<?> pluginClass);
 	
-	protected abstract void logException(String message, Throwable throwable);
+	abstract void logException(String message, Throwable throwable);
 	
 	@Override
 	UUID resolveImmediatelyFromRegistered(String name) {

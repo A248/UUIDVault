@@ -16,7 +16,7 @@
  * along with UUIDVault-spigot. If not, see <https://www.gnu.org/licenses/>
  * and navigate to version 3 of the GNU General Public License.
  */
-package space.arim.uuidvault.plugin.spigot;
+package space.arim.uuidvault.plugin;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,7 +25,7 @@ public class UUIDVaultSpigotPlugin extends JavaPlugin {
 	@Override
 	public void onLoad() {
 		UUIDVaultSpigot uvs = new UUIDVaultSpigot(this);
-		uvs.setInstance();
+		uvs.setInstance1();
 	}
 	
 }

@@ -16,7 +16,7 @@
  * along with UUIDVault-sponge. If not, see <https://www.gnu.org/licenses/>
  * and navigate to version 3 of the GNU General Public License.
  */
-package space.arim.uuidvault.plugin.sponge;
+package space.arim.uuidvault.plugin;
 
 import java.util.UUID;
 
@@ -36,13 +36,12 @@ import space.arim.uuidvault.plugin.SimpleImplementation;
  * @author A248
  *
  */
-public final class UUIDVaultSponge extends SimpleImplementation {
+public class UUIDVaultSponge extends SimpleImplementation {
 
 	private final Logger logger;
 	
 	/**
-	 * Creates the instance. Use {@link #setInstance()} to set this instance
-	 * as the global instance
+	 * Creates the instance
 	 * 
 	 * @param plugin the sponge plugin to use
 	 */
@@ -62,12 +61,12 @@ public final class UUIDVaultSponge extends SimpleImplementation {
 	}
 	
 	@Override
-	protected boolean verifyNativePluginClass(Class<?> pluginClass) {
+	boolean verifyNativePluginClass(Class<?> pluginClass) {
 		return pluginClass.getDeclaredAnnotation(Plugin.class) != null && getPluginFor(pluginClass) != null;
 	}
 
 	@Override
-	protected String getDescriptiveName(Class<?> pluginClass) {
+	String getDescriptiveName(Class<?> pluginClass) {
 		PluginContainer plugin = getPluginFor(pluginClass);
 		if (plugin == null) {
 			// plugin was unloaded?
@@ -77,40 +76,26 @@ public final class UUIDVaultSponge extends SimpleImplementation {
 	}
 
 	@Override
-	protected void logException(String message, Throwable throwable) {
+	void logException(String message, Throwable throwable) {
 		logger.warn(message, throwable);
 	}
 
 	@Override
-	protected UUID resolveNativelyDirectly(String name) {
+	UUID resolveNativelyDirectly(String name) {
 
 		Player player = Sponge.getServer().getPlayer(name).orElse(null);
 		return (player == null) ? null : player.getUniqueId();
 	}
 
 	@Override
-	protected String resolveNativelyDirectly(UUID uuid) {
+	String resolveNativelyDirectly(UUID uuid) {
 
 		Player player = Sponge.getServer().getPlayer(uuid).orElse(null);
 		return (player == null) ? null : player.getName();
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 */
-	@Override
-	public void setInstance() {
-		super.setInstance();
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 */
-	@Override
-	public boolean setInstancePassive() {
-		return super.setInstancePassive();
+	void setInstance1() {
+		setInstance();
 	}
 	
 }

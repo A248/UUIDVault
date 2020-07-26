@@ -16,7 +16,7 @@
  * along with UUIDVault-spigot. If not, see <https://www.gnu.org/licenses/>
  * and navigate to version 3 of the GNU General Public License.
  */
-package space.arim.uuidvault.plugin.spigot;
+package space.arim.uuidvault.plugin;
 
 import java.lang.reflect.Modifier;
 import java.util.UUID;
@@ -37,13 +37,12 @@ import space.arim.uuidvault.plugin.SimpleImplementation;
  * @author A248
  *
  */
-public final class UUIDVaultSpigot extends SimpleImplementation {
+public class UUIDVaultSpigot extends SimpleImplementation {
 
 	private final Logger logger;
 	
 	/**
-	 * Creates the instance. Use {@link #setInstance()} to set this instance
-	 * as the global instance
+	 * Creates the instance
 	 * 
 	 * @param plugin the bukkit plugin to use
 	 */
@@ -63,13 +62,13 @@ public final class UUIDVaultSpigot extends SimpleImplementation {
 	}
 	
 	@Override
-	protected boolean verifyNativePluginClass(Class<?> pluginClass) {
+	boolean verifyNativePluginClass(Class<?> pluginClass) {
 		return !JavaPlugin.class.equals(pluginClass) && JavaPlugin.class.isAssignableFrom(pluginClass)
 				&& !Modifier.isAbstract(pluginClass.getModifiers()) && getPluginFor(pluginClass) != null;
 	}
 	
 	@Override
-	protected String getDescriptiveName(Class<?> pluginClass) {
+	String getDescriptiveName(Class<?> pluginClass) {
 		JavaPlugin plugin = getPluginFor(pluginClass);
 		if (plugin == null) {
 			// plugin was unloaded?
@@ -79,40 +78,26 @@ public final class UUIDVaultSpigot extends SimpleImplementation {
 	}
 	
 	@Override
-	protected void logException(String message, Throwable throwable) {
+	void logException(String message, Throwable throwable) {
 		logger.log(Level.WARNING, message, throwable);
 	}
 	
 	@Override
-	protected UUID resolveNativelyDirectly(String name) {
+	UUID resolveNativelyDirectly(String name) {
 
 		Player player = Bukkit.getPlayerExact(name);
 		return (player == null) ? null : player.getUniqueId();
 	}
 
 	@Override
-	protected String resolveNativelyDirectly(UUID uuid) {
+	String resolveNativelyDirectly(UUID uuid) {
 
 		Player player = Bukkit.getPlayer(uuid);
 		return (player == null) ? null : player.getName();
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 */
-	@Override
-	public void setInstance() {
-		super.setInstance();
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 */
-	@Override
-	public boolean setInstancePassive() {
-		return super.setInstancePassive();
+	void setInstance1() {
+		setInstance();
 	}
 
 }

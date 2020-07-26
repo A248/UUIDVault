@@ -16,7 +16,7 @@
  * along with UUIDVault-bungee. If not, see <https://www.gnu.org/licenses/>
  * and navigate to version 3 of the GNU General Public License.
  */
-package space.arim.uuidvault.plugin.bungee;
+package space.arim.uuidvault.plugin;
 
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -26,7 +26,7 @@ public class UUIDVaultBungeePlugin extends Plugin implements Listener {
 	@Override
 	public void onLoad() {
 		UUIDVaultBungee uvb = new UUIDVaultBungee(this);
-		uvb.setInstance();
+		uvb.setInstance1();
 	}
 	
 }

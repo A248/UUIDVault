@@ -16,7 +16,7 @@
  * along with UUIDVault-bungee. If not, see <https://www.gnu.org/licenses/>
  * and navigate to version 3 of the GNU General Public License.
  */
-package space.arim.uuidvault.plugin.bungee;
+package space.arim.uuidvault.plugin;
 
 import java.lang.reflect.Modifier;
 import java.util.UUID;
@@ -37,13 +37,12 @@ import space.arim.uuidvault.plugin.SimpleImplementation;
  * @author A248
  *
  */
-public final class UUIDVaultBungee extends SimpleImplementation {
+public class UUIDVaultBungee extends SimpleImplementation {
 
 	private final Logger logger;
 	
 	/**
-	 * Creates the instance. Use {@link #setInstance()} to set this instance
-	 * as the global instance
+	 * Creates the instance
 	 * 
 	 * @param plugin the bungee plugin to use
 	 */
@@ -62,13 +61,13 @@ public final class UUIDVaultBungee extends SimpleImplementation {
 	}
 	
 	@Override
-	protected boolean verifyNativePluginClass(Class<?> pluginClass) {
+	boolean verifyNativePluginClass(Class<?> pluginClass) {
 		return !Plugin.class.equals(pluginClass) && Plugin.class.isAssignableFrom(pluginClass)
 				&& !Modifier.isAbstract(pluginClass.getModifiers()) && getPluginFor(pluginClass) != null;
 	}
 
 	@Override
-	protected String getDescriptiveName(Class<?> pluginClass) {
+	String getDescriptiveName(Class<?> pluginClass) {
 		Plugin plugin = getPluginFor(pluginClass);
 		if (plugin == null) {
 			// plugin was unloaded?
@@ -79,38 +78,24 @@ public final class UUIDVaultBungee extends SimpleImplementation {
 	}
 	
 	@Override
-	protected void logException(String message, Throwable throwable) {
+	void logException(String message, Throwable throwable) {
 		logger.log(Level.WARNING, message, throwable);
 	}
 
 	@Override
-	protected UUID resolveNativelyDirectly(String name) {
+	UUID resolveNativelyDirectly(String name) {
 		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(name);
 		return (player == null) ? null : player.getUniqueId();
 	}
 
 	@Override
-	protected String resolveNativelyDirectly(UUID uuid) {
+	String resolveNativelyDirectly(UUID uuid) {
 		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
 		return (player == null) ? null : player.getName();
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 */
-	@Override
-	public void setInstance() {
-		super.setInstance();
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 */
-	@Override
-	public boolean setInstancePassive() {
-		return super.setInstancePassive();
+	void setInstance1() {
+		setInstance();
 	}
 
 }

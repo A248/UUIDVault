@@ -1,7 +1,7 @@
 name: UUIDVault
-main: ${project.groupId}.plugin.spigot.UUIDVaultSpigotPlugin
+main: ${project.groupId}.plugin.UUIDVaultSpigotPlugin
 version: ${plugin.version}
-author: ${plugin.author}
+author: A248
 website: ${plugin.url}
 description: ${plugin.description}
 load: STARTUP

@@ -14,24 +14,6 @@
 	<name>UUIDVault-sponge</name>
 	<description>Sponge component of UUIDVault.</description>
 	
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>templating-maven-plugin</artifactId>
-				<version>1.0.0</version>
-				<executions>
-					<execution>
-						<id>add-sponge-info</id>
-						<goals>
-							<goal>filter-sources</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
-	
 	<dependencies>
 		<dependency>
 			<groupId>space.arim.uuidvault</groupId>

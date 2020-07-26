@@ -29,7 +29,6 @@
 		<plugin.name>UUIDVault</plugin.name>
 		<plugin.annotationId>uuidvault</plugin.annotationId>
 		<plugin.version>${project.version}</plugin.version>
-		<plugin.author>A248</plugin.author>
 		<plugin.url>https://github.com/A248/UUIDVault</plugin.url>
 		<plugin.description>Many MC plugins store UUID-name mappings. It is about time this practice was consolidated.</plugin.description>
 	</properties>

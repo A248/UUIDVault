@@ -16,7 +16,7 @@
  * along with UUIDVault-velocity. If not, see <https://www.gnu.org/licenses/>
  * and navigate to version 3 of the GNU General Public License.
  */
-package space.arim.uuidvault.plugin.velocity;
+package space.arim.uuidvault.plugin;
 
 import org.slf4j.Logger;
 
@@ -24,14 +24,14 @@ import com.google.inject.Inject;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
 
-@Plugin(id = "${plugin.annotationId}", name = "${plugin.name}", version = "${plugin.version}", authors = {
-		"${plugin.author}" }, url = "${plugin.url}", description = "${plugin.description}")
+@Plugin(id = PluginInfo.ANNOTATION_ID, name = PluginInfo.NAME, version = PluginInfo.VERSION, authors = {
+		"A248" }, url = PluginInfo.URL, description = PluginInfo.DESCRIPTION)
 public class UUIDVaultVelocityPlugin {
 	
 	@Inject
 	public UUIDVaultVelocityPlugin(ProxyServer server, Logger logger) {
 		UUIDVaultVelocity uvv = new UUIDVaultVelocity(server, logger);
-		uvv.setInstance();
+		uvv.setInstance1();
 	}
 	
 }

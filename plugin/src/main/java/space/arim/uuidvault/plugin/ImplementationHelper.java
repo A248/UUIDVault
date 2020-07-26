@@ -24,7 +24,7 @@ import java.util.concurrent.CompletableFuture;
 
 import space.arim.uuidvault.api.UUIDVault;
 
-public abstract class ImplementationHelper extends UUIDVault {
+abstract class ImplementationHelper extends UUIDVault {
 
 	private final boolean mustCallNativeResolutionSync;
 
@@ -96,9 +96,9 @@ public abstract class ImplementationHelper extends UUIDVault {
 		return resolveImmediatelyFromRegistered(uuid);
 	}
 
-	protected abstract UUID resolveNativelyDirectly(String name);
+	abstract UUID resolveNativelyDirectly(String name);
 
-	protected abstract String resolveNativelyDirectly(UUID uuid);
+	abstract String resolveNativelyDirectly(UUID uuid);
 
 	abstract UUID resolveImmediatelyFromRegistered(String name);
 

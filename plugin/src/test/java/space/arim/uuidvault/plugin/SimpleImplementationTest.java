@@ -21,12 +21,11 @@ package space.arim.uuidvault.plugin;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.LockSupport;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,24 +48,24 @@ public class SimpleImplementationTest {
 	@Test
 	public void testSamePriority() {
 		byte priority = randomPriority();
-		UUIDVaultRegistration nullResolver = impl.register(new NullResolver(), NullResolver.class, priority, null);
-		UUIDVaultRegistration emptyResolver = impl.register(new EmptyResolver(), EmptyResolver.class, priority, "");
+		UUIDVaultRegistration nullResolver = NullResolver.register(impl, priority);
+		UUIDVaultRegistration emptyResolver = EmptyResolver.register(impl, priority);
 		assertNotNull(nullResolver, "Original registration should be nonnull");
 		assertNotNull(emptyResolver, "Original registration should be nonnull");
 	}
 	
 	@Test
 	public void testDuplicateRegistrationsAndNullFutures() {
-		UUIDVaultRegistration nullResolver = impl.register(new NullResolver(), NullResolver.class, randomPriority(), null);
-		UUIDVaultRegistration emptyResolver = impl.register(new EmptyResolver(), EmptyResolver.class, randomPriority(), "");
+		UUIDVaultRegistration nullResolver = NullResolver.register(impl, randomPriority());
+		UUIDVaultRegistration emptyResolver = EmptyResolver.register(impl, randomPriority());
 		assertNotNull(nullResolver, "Original registration should be nonnull");
 		assertNotNull(emptyResolver, "Original registration should be nonnull");
 
 		assertNotNull(impl.resolve("A248"), "#resolve should return a completed null instead of null future");
 		assertNotNull(impl.resolve(new UUID(0, 0)), "#resolve should return a completed null instead of null future");
 
-		UUIDVaultRegistration duplicateNullResolver = impl.register(new NullResolver(), NullResolver.class, randomPriority(), null);
-		UUIDVaultRegistration duplicateEmptyResolver = impl.register(new EmptyResolver(), EmptyResolver.class, randomPriority(), "");
+		UUIDVaultRegistration duplicateNullResolver = NullResolver.register(impl, randomPriority());
+		UUIDVaultRegistration duplicateEmptyResolver = EmptyResolver.register(impl, randomPriority());
 		assertNull(duplicateNullResolver, "Duplicate registration should be null");
 		assertNull(duplicateEmptyResolver, "Duplicate registration should be null");
 		
@@ -79,7 +78,7 @@ public class SimpleImplementationTest {
 		UUID uuid = UUID.fromString("ed5f12cd-6007-45d9-a4b9-940524ddaecf");
 		String name = "A248";
 		SingleImmediateResolver resolver = new SingleImmediateResolver(uuid, name);
-		UUIDVaultRegistration registration = impl.register(resolver, SingleImmediateResolver.class, randomPriority(), "");
+		UUIDVaultRegistration registration = impl.register(resolver, SingleImmediateResolver.class, randomPriority(), "SingleImmediateResolver");
 		assertEquals(uuid, impl.resolveImmediately(name), "Must immediately resolve to correct uuid");
 		assertEquals(name, impl.resolveImmediately(uuid), "Must immediately resolve to correct name");
 		assertEquals(uuid, impl.resolve(name).getNow(null), "Must immediately resolve to correct uuid");
@@ -93,22 +92,23 @@ public class SimpleImplementationTest {
 	
 	@Test
 	public void testConcurrentRegistrationUnregistration() {
-		int NUM_THREADS = 20;
-		ExecutorService executor = Executors.newFixedThreadPool(NUM_THREADS);
+		final int numThreads = 20;
+		ExecutorService executor = Executors.newFixedThreadPool(numThreads);
 
-		final AtomicBoolean start = new AtomicBoolean(false);
-		for (int n = 0; n < NUM_THREADS; n++) {
+		final CountDownLatch latch = new CountDownLatch(1);
+		for (int n = 0; n < numThreads; n++) {
 
 			executor.execute(() -> {
 				NullResolver resolver = new NullResolver();
 				UUIDVaultRegistration regis = null;
-				while (!start.get()) {
-					LockSupport.parkNanos(1L);
+				try {
+					latch.await();
+				} catch (InterruptedException ex) {
+					fail(ex);
 				}
-
 				for (int iteration = 0; iteration < 30; iteration++) {
 					if (regis == null) {
-						regis = impl.register(resolver, NullResolver.class, randomPriority(), null);
+						regis = impl.register(resolver, NullResolver.class, randomPriority(), "NullResolver");
 					} else {
 						impl.unregister(regis);
 						regis = null;
@@ -116,10 +116,10 @@ public class SimpleImplementationTest {
 				}
 			});
 		}
-		start.set(true);
+		latch.countDown();
 		try {
 			executor.shutdown();
-			assertTrue(executor.awaitTermination(10L, TimeUnit.SECONDS), "Executor service used for testing must not timeout");
+			assertTrue(executor.awaitTermination(10L, TimeUnit.SECONDS), "Executor service used for testing should not timeout");
 		} catch (InterruptedException ex) {
 			fail(ex);
 		}

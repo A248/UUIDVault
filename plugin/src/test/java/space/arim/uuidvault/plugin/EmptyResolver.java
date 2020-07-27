@@ -22,9 +22,15 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import space.arim.uuidvault.api.UUIDResolver;
+import space.arim.uuidvault.api.UUIDVault;
+import space.arim.uuidvault.api.UUIDVaultRegistration;
 
 public class EmptyResolver implements UUIDResolver {
 
+	static UUIDVaultRegistration register(UUIDVault uuidVault, byte priority) {
+		return uuidVault.register(new EmptyResolver(), EmptyResolver.class, priority, "EmptyResolver");
+	}
+	
 	@Override
 	public CompletableFuture<UUID> resolve(String name) {
 		return CompletableFuture.completedFuture(null);

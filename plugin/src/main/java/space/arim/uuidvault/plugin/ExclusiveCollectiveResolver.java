@@ -53,5 +53,31 @@ class ExclusiveCollectiveResolver implements CollectiveUUIDResolver {
 	public CompletableFuture<String> resolve(UUID uuid) {
 		return plugin.resolve(uuid, skip);
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + System.identityHashCode(plugin);
+		result = prime * result + System.identityHashCode(skip);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (this == object) {
+			return true;
+		}
+		if (!(object instanceof ExclusiveCollectiveResolver)) {
+			return false;
+		}
+		ExclusiveCollectiveResolver other = (ExclusiveCollectiveResolver) object;
+		return plugin == other.plugin && skip == other.skip;
+	}
+
+	@Override
+	public String toString() {
+		return "ExclusiveCollectiveResolver [plugin=" + plugin + ", skip=" + skip + "]";
+	}
 	
 }

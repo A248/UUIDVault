@@ -47,7 +47,6 @@ public class UUIDVaultSpigot extends SimpleImplementation {
 	 * @param plugin the bukkit plugin to use
 	 */
 	public UUIDVaultSpigot(JavaPlugin plugin) {
-		super(true);
 		logger = plugin.getLogger();
 	}
 	
@@ -80,6 +79,11 @@ public class UUIDVaultSpigot extends SimpleImplementation {
 	@Override
 	void logException(String message, Throwable throwable) {
 		logger.log(Level.WARNING, message, throwable);
+	}
+	
+	@Override
+	public boolean mustCallNativeResolutionSync() {
+		return true;
 	}
 	
 	@Override

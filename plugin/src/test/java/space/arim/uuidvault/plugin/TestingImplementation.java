@@ -22,8 +22,8 @@ import java.util.UUID;
 
 public class TestingImplementation extends SimpleImplementation {
 
-	protected TestingImplementation() {
-		super(false);
+	TestingImplementation() {
+
 	}
 
 	@Override

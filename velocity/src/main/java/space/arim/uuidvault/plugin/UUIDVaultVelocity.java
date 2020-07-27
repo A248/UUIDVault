@@ -49,7 +49,6 @@ public class UUIDVaultVelocity extends SimpleImplementation {
 	 * @param logger the logger from a velocity plugin
 	 */
 	public UUIDVaultVelocity(ProxyServer server, Logger logger) {
-		super(false);
 		this.server = server;
 		this.logger = logger;
 	}

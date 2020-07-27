@@ -27,10 +27,8 @@ import space.arim.uuidvault.api.UUIDVault;
 
 abstract class ImplementationHelper extends UUIDVault {
 
-	private final boolean mustCallNativeResolutionSync;
+	ImplementationHelper() {
 
-	ImplementationHelper(boolean mustCallNativeResolutionSync) {
-		this.mustCallNativeResolutionSync = mustCallNativeResolutionSync;
 	}
 	
 	private static boolean fastEscapeInvalidNameArgument(String name) {
@@ -45,7 +43,8 @@ abstract class ImplementationHelper extends UUIDVault {
 	
 	@Override
 	public boolean mustCallNativeResolutionSync() {
-		return mustCallNativeResolutionSync;
+		// False by default, overriden for Spigot and Sponge
+		return false;
 	}
 	
 	@Override

@@ -32,8 +32,8 @@ abstract class SimpleImplementation extends ImplementationHelper {
 	
 	private final AtomicReference<Registration[]> registrations = new AtomicReference<>(new Registration[] {});
 	
-	SimpleImplementation(boolean mustCallNativeResolutionSync) {
-		super(mustCallNativeResolutionSync);
+	SimpleImplementation() {
+
 	}
 	
 	/*

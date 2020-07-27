@@ -46,7 +46,6 @@ public class UUIDVaultSponge extends SimpleImplementation {
 	 * @param plugin the sponge plugin to use
 	 */
 	public UUIDVaultSponge(PluginContainer plugin) {
-		super(true);
 		logger = plugin.getLogger();
 	}
 	
@@ -78,6 +77,11 @@ public class UUIDVaultSponge extends SimpleImplementation {
 	@Override
 	void logException(String message, Throwable throwable) {
 		logger.warn(message, throwable);
+	}
+	
+	@Override
+	public boolean mustCallNativeResolutionSync() {
+		return true;
 	}
 
 	@Override

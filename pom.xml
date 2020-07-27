@@ -18,7 +18,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
     	<maven.compiler.target>1.8</maven.compiler.target>
-		<universal.version>0.10.2-SNAPSHOT</universal.version>
 		<junit.version>5.6.2</junit.version>
 		
 		<spigot.version>1.8.8-R0.1-SNAPSHOT</spigot.version>
@@ -152,11 +151,6 @@
 	
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<groupId>space.arim</groupId>
-				<artifactId>universal-gpl</artifactId>
-				<version>${universal.version}</version>
-			</dependency>
 			<!-- Core API and implementation -->
 			<dependency>
 				<groupId>space.arim.uuidvault</groupId>
@@ -228,11 +222,4 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	
-	<repositories>
-		<repository>
-			<id>arim-repo</id>
-			<url>https://www.arim.space/maven/</url>
-		</repository>
-	</repositories>
 </project>

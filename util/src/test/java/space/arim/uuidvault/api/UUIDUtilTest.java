@@ -21,6 +21,7 @@ package space.arim.uuidvault.api;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.Test;
 
@@ -48,6 +49,14 @@ public class UUIDUtilTest {
 		byte[] byteArray = UUIDUtil.toByteArray(uuid);
 		assertTrue(byteArray.length == 16);
 		assertEquals(uuid, UUIDUtil.fromByteArray(byteArray));
+	}
+	
+	@Test
+	public void testUUIDByteArrayOffsetConversions() {
+		int offset = ThreadLocalRandom.current().nextInt(32);
+		byte[] byteArray = new byte[16 + offset];
+		UUIDUtil.toByteArray(uuid, byteArray, offset);
+		assertEquals(uuid, UUIDUtil.fromByteArray(byteArray, offset));
 	}
 	
 }

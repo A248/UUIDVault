@@ -97,7 +97,7 @@ public class UUIDUtil {
 	 */
 	
 	/**
-	 * Converts a {@code UUID} to its short form string representation. Inverse operation of
+	 * Converts a {@code UUID} to its short form string representation. This is the inverse operation of
 	 * {@link #fromShortString(String)}
 	 * 
 	 * @param uuid the UUID
@@ -113,7 +113,7 @@ public class UUIDUtil {
 	}
 	
 	/**
-	 * Converts a short form uuid string to a {@code UUID}. Inverse operation of {@link #toShortString(UUID)}
+	 * Converts a short form uuid string to a {@code UUID}. This is the inverse operation of {@link #toShortString(UUID)}
 	 * 
 	 * @param shortUuid the short uuid string
 	 * @return the UUID
@@ -131,38 +131,67 @@ public class UUIDUtil {
 	 */
 	
 	/**
-	 * Converts a UUID to a byte array. To convert back, see {@link #fromByteArray(byte[])}.
+	 * Creates a byte array and writes a UUID to it. This would be the inverse operation of
+	 * {@link #fromByteArray(byte[])}
 	 * 
 	 * @param uuid the UUID
 	 * @return the byte array, will always be length 16
 	 */
 	public static byte[] toByteArray(UUID uuid) {
-		return byteArrayFrom2Longs(uuid.getMostSignificantBits(), uuid.getLeastSignificantBits());
-	}
-	
-	private static byte[] byteArrayFrom2Longs(long msb, long lsb) {
 		byte[] result = new byte[16];
-		for (int i = 7; i >= 0; i--) {
-			result[i] = (byte) (msb & 0xffL);
-			msb >>= 8;
-		}
-		for (int i = 15; i >= 8; i--) {
-			result[i] = (byte) (lsb & 0xffL);
-			lsb >>= 8;
-		}
+		toByteArray(uuid, result, 0);
 		return result;
 	}
 	
 	/**
-	 * Converts to a UUID from a byte array. This is the inverse operation of {@link #toByteArray(UUID)}.
+	 * Writes a UUID to a byte array at the specified offset. This would be the inverse operation of
+	 * {@link #fromByteArray(byte[], int)}
 	 * 
-	 * @param data the byte array, should be of length 16
+	 * @param uuid the UUID
+	 * @param byteArray the byte array to write to, must be at least of length (offset + 16)
+	 * @param offset the offset in the byte array after which to write bytes
+	 */
+	public static void toByteArray(UUID uuid, byte[] byteArray, int offset) {
+		long msb = uuid.getMostSignificantBits();
+		long lsb = uuid.getLeastSignificantBits();
+
+		for (int i = 7; i >= 0; i--) {
+			byteArray[offset + i] = (byte) (msb & 0xffL);
+			msb >>= 8;
+		}
+		for (int i = 15; i >= 8; i--) {
+			byteArray[offset + i] = (byte) (lsb & 0xffL);
+			lsb >>= 8;
+		}
+	}
+	
+	/**
+	 * Reads a UUID from a byte array. This is the inverse operation of {@link #toByteArray(UUID)}.
+	 * 
+	 * @param byteArray the byte array to read from, must be at least of length 16
 	 * @return the UUID
 	 */
-	public static UUID fromByteArray(byte[] data) {
+	public static UUID fromByteArray(byte[] byteArray) {
 		return new UUID(
-				longFromBytes(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7]),
-				longFromBytes(data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15]));
+				longFromBytes(byteArray[0], byteArray[1], byteArray[2], byteArray[3], byteArray[4], byteArray[5], byteArray[6], byteArray[7]),
+				longFromBytes(byteArray[8], byteArray[9], byteArray[10], byteArray[11], byteArray[12], byteArray[13], byteArray[14], byteArray[15]));
+	}
+	
+	/**
+	 * Reads a UUID from a byte array with a specified offset. This is the inverse operation of {@link #toByteArray(UUID, byte[], int)}
+	 * 
+	 * @param byteArray the byte array to read from, must be at least of length (offset + 16)
+	 * @param offset the offset after which to begin reading bytes
+	 * @return the UUID
+	 */
+	public static UUID fromByteArray(byte[] byteArray, int offset) {
+		return new UUID(
+				longFromBytes(
+						byteArray[offset], byteArray[offset + 1], byteArray[offset + 2], byteArray[offset + 3],
+						byteArray[offset + 4], byteArray[offset + 5], byteArray[offset + 6], byteArray[offset + 7]),
+				longFromBytes(
+						byteArray[offset + 8], byteArray[offset + 9], byteArray[offset + 10], byteArray[offset + 11],
+						byteArray[offset + 12], byteArray[offset + 13], byteArray[offset + 14], byteArray[offset + 15]));
 	}
 	
 	private static long longFromBytes(byte b1, byte b2, byte b3, byte b4, byte b5, byte b6, byte b7, byte b8) {

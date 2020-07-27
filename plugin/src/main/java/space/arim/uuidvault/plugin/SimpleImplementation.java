@@ -46,6 +46,7 @@ abstract class SimpleImplementation extends ImplementationHelper {
 	public UUIDVaultRegistration register(UUIDResolver resolver, Class<?> pluginClass, byte defaultPriority, String name) {
 		Objects.requireNonNull(resolver, "Resolver must not be null");
 		Objects.requireNonNull(pluginClass, "Plugin class must not be null");
+		Objects.requireNonNull(name, "Name must not be null");
 
 		if (!verifyNativePluginClass(pluginClass)) {
 			throw new IllegalArgumentException("Plugin class is invalid!");

@@ -67,7 +67,7 @@ public interface UUIDResolver extends BaseUUIDResolver {
 	 * If no mapping was found, the returned future or its result may be null.
 	 * 
 	 * @param name the name of the player whose uuid to find, will never be null
-	 * @return a nullable completable future which returns a corresponding uuid or <code>null</code> if it did not find one
+	 * @return a nullable completable future which returns a corresponding uuid or {@code null} if it did not find one
 	 */
 	@Override
 	CompletableFuture<UUID> resolve(String name);
@@ -76,14 +76,14 @@ public interface UUIDResolver extends BaseUUIDResolver {
 	 * Avoids blocking operations and directly resolves the uuid
 	 * from an in-memory cache. This method should never block. <br>
 	 * <br>
-	 * <b>If an implementation fails to find a uuid immediately, it should simply return <code>null</code>
+	 * <b>If an implementation fails to find a uuid immediately, it should simply return {@code null}
 	 * and stop all execution.</b> <br>
 	 * Implementations SHOULD NOT attempt to continue finding a mapping (e.g., in an async thread)
 	 * after returning a null result. If every implementation did this, a single call to UUIDVault
 	 * would trigger a burst of thread creation.
 	 * 
 	 * @param name the name of the player whose uuid to find, will never be null
-	 * @return a corresponding uuid or <code>null</code> if not found without blocking
+	 * @return a corresponding uuid or {@code null} if not found without blocking
 	 */
 	@Override
 	UUID resolveImmediately(String name);
@@ -100,7 +100,7 @@ public interface UUIDResolver extends BaseUUIDResolver {
 	 * If no mapping was found, the returned future OR its result may be null.
 	 * 
 	 * @param uuid the uuid of the player whose name to find, will never be null
-	 * @return a nullable completable future which returns the corresponding playername or <code>null</code> if it did not find one
+	 * @return a nullable completable future which returns the corresponding playername or {@code null} if it did not find one
 	 */
 	@Override
 	CompletableFuture<String> resolve(UUID uuid);
@@ -109,14 +109,14 @@ public interface UUIDResolver extends BaseUUIDResolver {
 	 * Avoids blocking operations and directly resolves the name
 	 * from an in-memory cache. This method should never block. <br>
 	 * <br>
-	 * <b>If an implementation fails to find a name immediately, it should simply return <code>null</code>
+	 * <b>If an implementation fails to find a name immediately, it should simply return {@code null}
 	 * and stop all execution.</b> <br>
 	 * Implementations SHOULD NOT attempt to continue finding a mapping (e.g., in an async thread)
 	 * after returning a null result. If every implementation did this, a single call to UUIDVault
 	 * would trigger a burst of thread creation.
 	 * 
 	 * @param uuid the uuid of the player whose name to find, will never be null
-	 * @return the corresponding playername or <code>null</code> if not found without blocking
+	 * @return the corresponding playername or {@code null} if not found without blocking
 	 */
 	@Override
 	String resolveImmediately(UUID uuid);

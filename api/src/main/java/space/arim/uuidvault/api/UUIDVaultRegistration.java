@@ -19,7 +19,7 @@
 package space.arim.uuidvault.api;
 
 /**
- * Represents a successfully registered UUIDResolver implementation. <br>
+ * Marks a successfully registered UUIDResolver implementation. <br>
  * See {@link UUIDVault#register(UUIDResolver, Class, byte, String)}.
  * 
  * @author A248
@@ -27,17 +27,5 @@ package space.arim.uuidvault.api;
  */
 public interface UUIDVaultRegistration {
 
-	/**
-	 * Unregisters the implementation. If the implementation was registered, it will be unregistered.
-	 * Otherwise, nothing will happen and <code>false</code> will be returned.
-	 * 
-	 * @return true if the implementation was registered and is now unregistered, false otherwise
-	 * 
-	 * @deprecated Use {@link UUIDVault#unregister(UUIDVaultRegistration)} with this object as an argument instead
-	 */
-	@Deprecated
-	default boolean unregister() {
-		return UUIDVault.get().unregister(this);
-	}
-	
+
 }

@@ -98,18 +98,17 @@ public abstract class UUIDVault implements CollectiveUUIDResolver {
 	 * <br>
 	 * The plugin class is used as an identifier and helps ensure no duplicate implementations are registered. <br>
 	 * If there is already a registration using the same {@code UUIDResolver} instance or plugin class, the operation will fail
-	 * and this will return <code>null</code>. <br>
+	 * and this will return {@code null}. <br>
 	 * <br>
-	 * The specified name is optional; it may be null or empty. However, resolvers are encouraged to use an informative,
-	 * user{@literal -}friendly name, which is ideally similar to the name of the plugin. If the resolver generates
+	 * The specified display name should be informative and ideally similar to the name of the plugin. If the resolver generates
 	 * an exception, this name will be used in log messages.
 	 * 
 	 * @param resolver the resolution implementation, must not be null
 	 * @param pluginClazz the main class of the associated plugin which stores the mappings, must not be null
 	 * @param defaultPriority the byte based priority of the resolver, higher priorities are queried first
-	 * @param name a user friendly name for the resolver, can be null or empty but an informative name is encouraged
+	 * @param name a display name for the resolver, must not be null
 	 * @return a registration if successfully registered, null if the operation failed for some reason
-	 * @throws NullPointerException if either {@code resolver} or {@code pluginClazz} is null
+	 * @throws NullPointerException if either {@code resolver}, {@code pluginClazz}, or {@code name} is null
 	 */
 	public abstract UUIDVaultRegistration register(UUIDResolver resolver, Class<?> pluginClazz, byte defaultPriority, String name);
 	
@@ -117,7 +116,7 @@ public abstract class UUIDVault implements CollectiveUUIDResolver {
 	 * Unregisters a resolver. The registration to unregister must have been obtained
 	 * with {@link #register(UUIDResolver, Class, byte, String)}. <br>
 	 * <br>
-	 * If the registration is already unregistered, <code>false</code> will be returned.
+	 * If the registration is already unregistered, {@code false} will be returned.
 	 * 
 	 * @param registration the resolver registration to unregister
 	 * @return true if the implementation was registered and is now unregistered, false otherwise
@@ -128,7 +127,7 @@ public abstract class UUIDVault implements CollectiveUUIDResolver {
 	 * Whether the resolveNatively methods must be called from the server's main thread. <br>
 	 * See {@link #resolveNatively(String)} and {@link #resolveNatively(UUID)} <br>
 	 * <br>
-	 * Will return <code>false</code> on servers which allow safe <i>asynchronous</i> calls to the necessary APIs.
+	 * Will return {@code false} on servers which allow safe <i>asynchronous</i> calls to the necessary APIs.
 	 * 
 	 * @return true if resolveNatively methods must be called <i>synchronously</i>, false otherwise
 	 */
@@ -137,13 +136,13 @@ public abstract class UUIDVault implements CollectiveUUIDResolver {
 	/**
 	 * Checks online players, and the offline player cache if applicable,
 	 * for players matching the specified name. <br>
-	 * If a player is found, the UUID is returned. Else, <code>null</code> is returned. <br>
+	 * If a player is found, the UUID is returned. Else, {@code null} is returned. <br>
 	 * <br>
 	 * <b>Must be called from the main thread if {@link #mustCallNativeResolutionSync()} is true</b> <br>
 	 * Note that the offline player cache is not available on proxy servers.
 	 * 
 	 * @param name the name of the player whose uuid to find
-	 * @return a nonnull uuid if found, else <code>null</code>
+	 * @return a nonnull uuid if found, else {@code null}
 	 * @throws NullPointerException if {@code name} is null
 	 */
 	public abstract UUID resolveNatively(String name);
@@ -151,13 +150,13 @@ public abstract class UUIDVault implements CollectiveUUIDResolver {
 	/**
 	 * Checks online players, and the offline player cache if applicable,
 	 * for players matching the specified UUID. <br>
-	 * If a player is found, the name is returned. Else, <code>null</code> is returned. <br>
+	 * If a player is found, the name is returned. Else, {@code null} is returned. <br>
 	 * <br>
 	 * <b>Must be called from the main thread if {@link #mustCallNativeResolutionSync()} is true</b>. <br>
 	 * Note that the offline player cache is not available on proxy servers.
 	 * 
 	 * @param uuid the uuid of the player whose name to find
-	 * @return a nonnull name if found, else <code>null</code>
+	 * @return a nonnull name if found, else {@code null}
 	 * @throws NullPointerException if {@code uuid} is null
 	 */
 	public abstract String resolveNatively(UUID uuid);

@@ -34,7 +34,7 @@ public interface BaseUUIDResolver {
 	 * See respective subinterfaces.
 	 * 
 	 * @param name the name of the player whose uuid to find
-	 * @return a completable future which returns a corresponding uuid or <code>null</code> if it did not find one
+	 * @return a completable future which returns a corresponding uuid or {@code null} if it did not find one
 	 */
 	CompletableFuture<UUID> resolve(String name);
 	
@@ -42,7 +42,7 @@ public interface BaseUUIDResolver {
 	 * See respective subinterfaces.
 	 * 
 	 * @param name the name of the player whose uuid to find
-	 * @return a corresponding uuid or <code>null</code> if not found
+	 * @return a corresponding uuid or {@code null} if not found
 	 */
 	UUID resolveImmediately(String name);
 	
@@ -50,7 +50,7 @@ public interface BaseUUIDResolver {
 	 * See respective subinterfaces.
 	 * 
 	 * @param uuid the uuid of the player whose name to find
-	 * @return a completable future which returns the corresponding playername or <code>null</code> if it did not find one
+	 * @return a completable future which returns the corresponding playername or {@code null} if it did not find one
 	 */
 	CompletableFuture<String> resolve(UUID uuid);
 	
@@ -58,7 +58,7 @@ public interface BaseUUIDResolver {
 	 * See respective subinterfaces.
 	 * 
 	 * @param uuid the uuid of the player whose name to find
-	 * @return the corresponding playername or <code>null</code> if not found
+	 * @return the corresponding playername or {@code null} if not found
 	 */
 	String resolveImmediately(UUID uuid);
 	

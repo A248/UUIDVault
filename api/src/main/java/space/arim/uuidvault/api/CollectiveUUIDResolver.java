@@ -35,11 +35,11 @@ public interface CollectiveUUIDResolver extends BaseUUIDResolver {
 	 * UUIDVault will call each registered resolver's equivalent method
 	 * until it finds a result. <br>
 	 * <br>
-	 * Returns <code>null</code> to indicate not found; that is, if no resolver
+	 * Returns {@code null} to indicate not found; that is, if no resolver
 	 * was able to find a result.
 	 * 
 	 * @param name the name of the player whose uuid to find, must not be null
-	 * @return a corresponding uuid or <code>null</code> if not found
+	 * @return a corresponding uuid or {@code null} if not found
 	 * @throws NullPointerException if {@code name} is null
 	 */
 	@Override
@@ -50,11 +50,11 @@ public interface CollectiveUUIDResolver extends BaseUUIDResolver {
 	 * UUIDVault will call each registered resolver's equivalent method
 	 * until it finds a result. <br>
 	 * <br>
-	 * Returns <code>null</code> to indicate not found; that is, if no resolver
+	 * Returns {@code null} to indicate not found; that is, if no resolver
 	 * was able to find a result.
 	 * 
 	 * @param uuid the uuid of the player whose name to find, must not be null
-	 * @return the corresponding playername or <code>null</code> if not found
+	 * @return the corresponding playername or {@code null} if not found
 	 * @throws NullPointerException if {@code uuid} is null
 	 */
 	@Override
@@ -63,13 +63,13 @@ public interface CollectiveUUIDResolver extends BaseUUIDResolver {
 	/**
 	 * Begins a full name lookup, checking all resolvers until one of them finds a result. <br>
 	 * <br>
-	 * The completable future, once completed, will produce <code>null</code> if no mapping was found.
+	 * The completable future, once completed, will produce {@code null} if no mapping was found.
 	 * The future <i>itself</i> will never be null. <br>
 	 * <br>
 	 * UUIDVault will draw information from its variety of registered resolvers.
 	 * 
 	 * @param name the name of the player whose uuid to find, must not be null
-	 * @return a nonnull completable future which returns a corresponding uuid or <code>null</code> if none was found
+	 * @return a nonnull completable future which returns a corresponding uuid or {@code null} if none was found
 	 * @throws NullPointerException if {@code name} is null
 	 */
 	@Override
@@ -78,13 +78,13 @@ public interface CollectiveUUIDResolver extends BaseUUIDResolver {
 	/**
 	 * Begins a full uuid lookup, checking all resolvers until on of them finds a result. <br>
 	 * <br>
-	 * The completable future, once completed, will produce <code>null</code> if no mapping was found.
+	 * The completable future, once completed, will produce {@code null} if no mapping was found.
 	 * The future <i>itself</i> will never be null. <br>
 	 * <br>
 	 * UUIDVault will draw information from its variety of registered resolvers.
 	 * 
 	 * @param uuid the uuid of the player whose name to find, must not be null
-	 * @return a nonnull completable future which returns a corresponding name or <code>null</code> if none was found
+	 * @return a nonnull completable future which returns a corresponding name or {@code null} if none was found
 	 * @throws NullPointerException if {@code uuid} is null
 	 */
 	@Override

@@ -34,10 +34,9 @@
 	
 	<licenses>
 		<license>
-			<name>GNU General Public License, Version 3</name>
-			<url>https://www.gnu.org/licenses/</url>
+			<name>GNU Lesser General Public License, Version 3</name>
+			<url>https://www.gnu.org/licenses/lgpl-3.0-standalone.html</url>
 			<distribution>repo</distribution>
-			<comments>Strong copyleft license, commonly known as the GNU GPL v3</comments>
 		</license>
 	</licenses>
 	
@@ -140,12 +139,12 @@
 	
 	<distributionManagement>
 		<repository>
-			<id>arim-repo</id>
-			<url>https://maven.cloudsmith.io/anand-beh/arim-repo/</url>
+			<id>cloudsmith-deploy</id>
+			<url>https://maven.cloudsmith.io/anand-beh/lesser-gpl3/</url>
 		</repository>
 		<snapshotRepository>
-			<id>arim-repo</id>
-			<url>https://maven.cloudsmith.io/anand-beh/arim-repo/</url>
+			<id>cloudsmith-deploy</id>
+			<url>https://maven.cloudsmith.io/anand-beh/lesser-gpl3/</url>
 		</snapshotRepository>
 	</distributionManagement>
 	

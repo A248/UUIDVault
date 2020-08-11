@@ -37,5 +37,4 @@ to ensure it is up-to-date. If this is the case, feel free to create a Github is
 
 ## License
 
-See the file LICENSE.txt for the full GNU General Public License v3.
-The license applies to this entire repository and is copied into binaries as LICENSE.txt.
+This project is licensed under the GNU Lesser GPL v3. See the LICENSE.txt file for more information.

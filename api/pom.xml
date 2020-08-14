@@ -32,11 +32,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	
-	<dependencies>
-		<dependency>
-			<groupId>space.arim.uuidvault</groupId>
-			<artifactId>util</artifactId>
-		</dependency>
-	</dependencies>
 </project>

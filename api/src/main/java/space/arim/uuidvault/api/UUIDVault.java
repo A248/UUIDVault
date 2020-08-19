@@ -52,12 +52,10 @@ public abstract class UUIDVault implements CollectiveUUIDResolver {
 	}
 	
 	private boolean setInstance0() {
-		if (inst == null) {
-			synchronized (UUIDVault.class) {
-				if (inst == null) {
-					inst = this;
-					return true;
-				}
+		synchronized (UUIDVault.class) {
+			if (inst == null) {
+				inst = this;
+				return true;
 			}
 		}
 		return false;

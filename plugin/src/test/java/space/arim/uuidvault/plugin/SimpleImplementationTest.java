@@ -30,15 +30,16 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import space.arim.uuidvault.api.UUIDVault;
 import space.arim.uuidvault.api.UUIDVaultRegistration;
 
 public class SimpleImplementationTest {
 	
-	private SimpleImplementation impl;
+	private UUIDVault impl;
 	
 	@BeforeEach
 	public void setup() {
-		impl = new TestingImplementation();
+		impl = new TestableUUIDVault();
 	}
 	
 	private byte randomPriority() {

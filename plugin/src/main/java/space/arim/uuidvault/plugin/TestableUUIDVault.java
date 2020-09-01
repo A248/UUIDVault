@@ -20,42 +20,58 @@ package space.arim.uuidvault.plugin;
 
 import java.util.UUID;
 
-public class TestingImplementation extends SimpleImplementation {
+/**
+ * Implementation of UUIDVault ideal for testing purposes
+ * 
+ * @author A248
+ *
+ */
+public class TestableUUIDVault extends SimpleImplementation {
 
-	TestingImplementation() {
-
+	/**
+	 * Creates the instance
+	 * 
+	 */
+	public TestableUUIDVault() {
+		
 	}
 
 	@Override
-	protected boolean verifyNativePluginClass(Class<?> pluginClass) {
+	boolean verifyNativePluginClass(Class<?> pluginClass) {
 		return true;
 	}
 
 	@Override
-	protected String getDescriptiveName(Class<?> pluginClass) {
-		return "Plugin v1.0";
+	String getDescriptiveName(Class<?> pluginClass) {
+		return "Plugin " + pluginClass;
 	}
 
 	@Override
-	protected void logException(String message, Throwable throwable) {
+	void logException(String message, Throwable throwable) {
 		System.err.println(message);
 		throwable.printStackTrace();
 	}
 
 	@Override
-	protected UUID resolveNativelyDirectly(String name) {
+	UUID resolveNativelyDirectly(String name) {
 		return null;
 	}
 
 	@Override
-	protected String resolveNativelyDirectly(UUID uuid) {
+	String resolveNativelyDirectly(UUID uuid) {
 		return null;
 	}
 	
-	// Re-overriding this ensures it is visible
+	// Re-overriding these ensure they are visible
+	
 	@Override
-	protected void setInstance() {
+	public void setInstance() {
 		super.setInstance();
+	}
+	
+	@Override
+	public boolean setInstancePassive() {
+		return super.setInstancePassive();
 	}
 	
 }

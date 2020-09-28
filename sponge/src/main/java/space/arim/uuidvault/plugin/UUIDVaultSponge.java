@@ -28,7 +28,6 @@ import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 
 import space.arim.uuidvault.api.UUIDVault;
-import space.arim.uuidvault.plugin.SimpleImplementation;
 
 /**
  * Implementation of {@link UUIDVault} on the Sponge platform

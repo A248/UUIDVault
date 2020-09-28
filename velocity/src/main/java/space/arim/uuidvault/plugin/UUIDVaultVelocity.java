@@ -29,7 +29,6 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 
 import space.arim.uuidvault.api.UUIDVault;
-import space.arim.uuidvault.plugin.SimpleImplementation;
 
 /**
  * Implementation of {@link UUIDVault} on the Velocity platform

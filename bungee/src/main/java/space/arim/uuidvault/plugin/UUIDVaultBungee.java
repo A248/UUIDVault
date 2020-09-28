@@ -29,7 +29,6 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginDescription;
 
 import space.arim.uuidvault.api.UUIDVault;
-import space.arim.uuidvault.plugin.SimpleImplementation;
 
 /**
  * Implementation of {@link UUIDVault} on the BungeeCord platform

@@ -29,7 +29,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import space.arim.uuidvault.api.UUIDVault;
-import space.arim.uuidvault.plugin.SimpleImplementation;
 
 /**
  * Implementation of {@link UUIDVault} on the Spigot platform
